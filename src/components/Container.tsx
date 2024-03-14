@@ -10,7 +10,7 @@ const Container: FC<ContainerProps> = ({
 	width = '1180px'
 }) => {
 	return (
-		<div className={`max-w-[${width}px] mx-auto`}>
+		<div className={`mx-auto`} style={{ maxWidth: width }}>
 			{children}
 		</div>
 	);

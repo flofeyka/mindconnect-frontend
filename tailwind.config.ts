@@ -10,12 +10,17 @@ const config: Config = {
   ],
   theme: {
     extend: {},
-    colors: {
-      'primary': '#1CA66F'
-    }
   },
   darkMode: "class",
-  plugins: [nextui()]
+  plugins: [nextui({
+    themes: {
+      light: {
+        colors: {
+          primary: '#1CA66F'
+        }
+      }
+    }
+  })]
 };
 
 export default config;
