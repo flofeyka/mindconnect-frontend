@@ -7,11 +7,11 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
 		<div>
 			<Container>
 				<header>
-					<Logo />
+					Header
 				</header>
 				<main>{children}</main>
 			</Container>
-			<footer></footer>
+			<footer>Footer</footer>
 		</div>
 	);
 }
