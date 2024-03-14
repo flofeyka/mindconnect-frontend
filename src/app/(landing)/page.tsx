@@ -1,8 +1,11 @@
-import { Spinner } from '@nextui-org/react';
+import { Checkbox, Spinner } from '@nextui-org/react';
 
 const RootPage = () => {
 	return (
-		<Spinner label="Loading..." />
+		<div>
+			<Spinner label="Loading..." />
+			<Checkbox>Option</Checkbox>
+		</div>
 	)
 }
 
