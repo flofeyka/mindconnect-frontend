@@ -10,6 +10,9 @@ const config: Config = {
   ],
   theme: {
     extend: {},
+    colors: {
+      'primary': '#1CA66F'
+    }
   },
   darkMode: "class",
   plugins: [nextui()]

@@ -6,3 +6,11 @@ body {
   background-color: #101010;
   color: #FFFFFF;
 }
+
+.icon {
+  @apply flex shrink-0 aspect-square;
+
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+}
