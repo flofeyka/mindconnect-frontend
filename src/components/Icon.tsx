@@ -1,5 +1,6 @@
-import cm from '@/helpers/classMerge';
 import type { FC } from 'react';
+
+import cn from '@helpers/cn';
 
 interface IconProps {
 	width: string;
@@ -16,7 +17,7 @@ const Icon: FC<IconProps> = ({
 }) => {
 	return (
 		<div 
-			className={cm(`icon`, color.charAt(0) !== '#' ? color : '')}
+			className={cn(`icon`, color.charAt(0) !== '#' ? color : '')}
 			style={{ 
 				maskImage: `url("${path}")`,
 				backgroundColor: color.charAt(0) === '#' ? color : '',
