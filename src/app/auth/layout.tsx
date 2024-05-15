@@ -1,5 +1,5 @@
-import Container from '@/components/Container';
-import type { ReactNode } from 'react';
+import Container from '@components/Container'
+import type { ReactNode } from 'react'
 
 const AuthLayout = ({ children }: { children: ReactNode }) => {
 	return (
@@ -7,7 +7,7 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
 			<header>logo</header>
 			<main>{children}</main>
 		</div>
-	);
+	)
 }
 
-export default AuthLayout;
+export default AuthLayout
