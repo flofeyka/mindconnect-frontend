@@ -1,6 +1,6 @@
 "use client";
 
-import { makeStore } from "@libs/redux/store";
+import { makeStore } from "@lib/redux/store";
 import { NextUIProvider } from "@nextui-org/react";
 import { Provider } from "react-redux";
 
