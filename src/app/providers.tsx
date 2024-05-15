@@ -1,13 +1,15 @@
-'use client';
+"use client";
 
-import { NextUIProvider } from '@nextui-org/react';
+import { makeStore } from "@libs/redux/store";
+import { NextUIProvider } from "@nextui-org/react";
+import { Provider } from "react-redux";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
-	return (
-    <NextUIProvider>
-      {children}
-    </NextUIProvider>
+  return (
+    <Provider store={makeStore()}>
+      <NextUIProvider>{children}</NextUIProvider>
+    </Provider>
   );
-}
+};
 
 export default Providers;

@@ -1,13 +1,13 @@
-import Container from '@components/Container'
-import type { ReactNode } from 'react'
+import React from "react";
 
-const AuthLayout = ({ children }: { children: ReactNode }) => {
-	return (
-		<div>
-			<header>logo</header>
-			<main>{children}</main>
-		</div>
-	)
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col h-screen justify-center items-center">
+      {children}
+    </div>
+  );
 }
-
-export default AuthLayout
