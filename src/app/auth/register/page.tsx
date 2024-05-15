@@ -1,13 +1,13 @@
 "use client";
 
 import Icon from "@components/Icon";
-import { useAppDispatch, useAppSelector } from "@libs/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 import { Button, Input } from "@nextui-org/react";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
 import InputForm from "@components/InputForm";
 import InputCheckBox from "@components/InputCheckBox";
-import { getAuthUserData, signUp } from "@libs/redux/auth/authSlice";
+import { getAuthUserData, signUp } from "@lib/redux/auth/authSlice";
 
 export default function Register() {
   const captchaUrl = useAppSelector((state) => state.auth.captchaUrl);
