@@ -1,3 +1,4 @@
+import { usersDataType } from "@lib/types";
 import axios from "axios";
 
 const instance = axios.create({
@@ -8,12 +9,12 @@ export const authAPI = {
   // googleSignIn(data: any) {
   //     return instance.post("api/auth/googlesignin", data)
   // },
-  async login(data: { email: string; password: string }) {
+  async login(data: { email: string; password: string }) : Promise<usersDataType> {
     const Response = await instance.post("auth/signin", data);
     localStorage.setItem("token", Response.data.token);
     return Response.data.user;
   },
-  async register(data: { firstName: string; email: string; password: string }) {
+  async register(data: { firstName: string; email: string; password: string }) : Promise<usersDataType> {
     const Response = await axios.post("auth/signup", {
       ...data,
     });
@@ -24,7 +25,7 @@ export const authAPI = {
     const Response = await axios.post("auth/logout");
     return Response.data;
   },
-  async getUsersData() {
+  async getUsersData() : Promise<usersDataType> {
     const Response = await axios.get("auth/current", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
