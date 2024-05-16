@@ -1,31 +1,33 @@
-import type { FC } from 'react';
+import type { FC } from 'react'
 
-import cn from '@helpers/cn';
+import cn from '@helpers/cn'
 
 interface IconProps {
-	width: string;
-	height: string;
-	color?: string;
-	path: string;
+	width: string
+	height: string
+	color?: string
+	path: string
+	className?: string
 }
 
-const Icon: FC<IconProps> = ({ 
+const Icon: FC<IconProps> = ({
 	width,
+	className = '',
 	height,
-  color = '#FFFFFF',
-  path
+	color = '#FFFFFF',
+	path,
 }) => {
 	return (
-		<div 
-			className={cn(`icon`, color.charAt(0) !== '#' ? color : '')}
-			style={{ 
+		<div
+			className={cn(`icon`, className, color.charAt(0) !== '#' ? color : '')}
+			style={{
 				maskImage: `url("${path}")`,
 				backgroundColor: color.charAt(0) === '#' ? color : '',
-				width, 
-				height
+				width,
+				height,
 			}}
 		></div>
-	);
+	)
 }
 
-export default Icon;
+export default Icon
