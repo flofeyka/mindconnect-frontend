@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { Button, Checkbox, Input } from "@nextui-org/react";
 import Link from "next/link";
 import InputForm from "@components/InputForm";
-import { getAuthUserData, signIn } from "@lib/redux/auth/authSlice";
+import { signIn } from "@lib/redux/auth/authSlice";
 
 export default function Login() {
   const captchaUrl = useAppSelector((state) => state.auth.captchaUrl);

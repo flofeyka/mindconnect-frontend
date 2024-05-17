@@ -2,12 +2,12 @@
 
 import Icon from "@components/Icon";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Link } from "@nextui-org/react";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
 import InputForm from "@components/InputForm";
 import InputCheckBox from "@components/InputCheckBox";
-import { getAuthUserData, signUp } from "@lib/redux/auth/authSlice";
+import { signUp } from "@lib/redux/auth/authSlice";
 
 export default function Register() {
   const captchaUrl = useAppSelector((state) => state.auth.captchaUrl);
@@ -137,6 +137,8 @@ export default function Register() {
                 Create an account
               </Button>
             </div>
+            <div>Already have an account? <Link href="/auth/login"> Sign in</Link></div>
+
           </div>
         </div>
         <div>

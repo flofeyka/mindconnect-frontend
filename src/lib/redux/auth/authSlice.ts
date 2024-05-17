@@ -1,5 +1,6 @@
 import { authAPI } from "@lib/API/api";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { authType, usersDataType } from "@lib/types";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const authSlice = createSlice({
   name: "auth",
@@ -13,31 +14,40 @@ const authSlice = createSlice({
       number: number;
       image: string;
     },
-  },
+  } as authType,
   reducers: {
-    setUser(state, action) {
+    setUser(state, action: PayloadAction<usersDataType>) {
       state.usersData = action.payload;
     },
-    setCaptchaUrl(state, action) {
+    setCaptchaUrl(state, action: PayloadAction<string>) {
       state.captchaUrl = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(signIn.fulfilled, (state, action) => {
-      state.isAuth = true;
-      state.usersData = action.payload;
-    });
-    builder.addCase(signUp.fulfilled, (state, action) => {
-      state.isAuth = true;
-      state.usersData = action.payload;
-    });
-    builder.addCase(logout.fulfilled, (state, action) => {
+    builder.addCase(
+      signIn.fulfilled,
+      (state, action: PayloadAction<usersDataType>) => {
+        state.isAuth = true;
+        state.usersData = action.payload;
+      }
+    );
+    builder.addCase(
+      signUp.fulfilled,
+      (state, action: PayloadAction<usersDataType>) => {
+        state.isAuth = true;
+        state.usersData = action.payload;
+      }
+    );
+    builder.addCase(logout.fulfilled, (state, action: PayloadAction) => {
       state.isAuth = false;
     });
-    builder.addCase(getAuthUserData.fulfilled, (state, action) => {
-      state.usersData = action.payload;
-      state.isAuth = true;
-    });
+    builder.addCase(
+      getAuthUserData.fulfilled,
+      (state, action: PayloadAction<usersDataType>) => {
+        state.usersData = action.payload;
+        state.isAuth = true;
+      }
+    );
   },
 });
 
@@ -46,8 +56,7 @@ export const { setUser, setCaptchaUrl } = authSlice.actions;
 export const getAuthUserData = createAsyncThunk(
   "auth/getAuthUserData",
   async () => {
-    const data = await authAPI.getUsersData();
-    console.log(data);
+    const data: usersDataType = await authAPI.getUsersData();
     return data;
   }
 );
@@ -55,7 +64,8 @@ export const getAuthUserData = createAsyncThunk(
 export const signIn = createAsyncThunk(
   "auth/login",
   async ({ email, password }: { email: string; password: string }) => {
-    return await authAPI.login({ email, password });
+    const data: usersDataType =  await authAPI.login({ email, password });
+    return data;
   }
 );
 
@@ -70,7 +80,8 @@ export const signUp = createAsyncThunk(
     email: string;
     password: string;
   }) => {
-    return await authAPI.register({ firstName, email, password });
+    const data: usersDataType = await authAPI.register({ firstName, email, password });
+    return data;
   }
 );
 
