@@ -3,49 +3,40 @@ import Icon from "./Icon";
 
 type Props = {
   name: string;
-  placeholder: string;
-  width: string;
-  height: string;
+  width: string | undefined;
+  height: string | undefined;
   InnerIconSrc: string;
   InnerIconWidth: string;
   InnerIconHeight: string;
-  onChange: any;
-  value: string;
-  type: string;
 };
 
 export default function InputForm({
   name,
-  placeholder,
-  InnerIconSrc,
-  InnerIconWidth,
+  InnerIconSrc = "",
+  InnerIconWidth = "",
   InnerIconHeight,
-  width,
-  height,
-  onChange,
-  value,
-  type,
+  width = "",
+  height = "", ...props
 }: Props) {
   return (
-    <div className="mb-[14px]">
+    <div>
       <Input
         classNames={{
-          base: `w-[${width}] h-[${height}] b-white`,
+          base: `w-[${width}] h-[${height}] b-gray-100`,
           inputWrapper: [
-            "focus-within:dark:border-gray-500 border-solid-2",
-            "focus-within:dark:bg-[#333]",
-            "dark:text-white dark:bg-[#333]",
+            "focus-within:dark:border-gray-200 border-solid-1",
+            "focus-within:dark:bg-[#222]",
+            "dark:text-white dark:bg-[#222]",
           ],
           input: [
             "placeholder:text-default-700/50",
             "dark:placeholder:text-gray-400",
             "dark:text-white",
           ],
-          innerWrapper: ["focus-within:dark:border-gray-400 border-solid-2"],
+          innerWrapper: ["focus-within:dark:border-gray-200 border-solid-1"],
         }}
         variant="bordered"
         name={name}
-        placeholder={placeholder}
         isRequired
         startContent={
           <Icon
@@ -54,9 +45,7 @@ export default function InputForm({
             path={InnerIconSrc}
           />
         }
-        onChange={onChange}
-        value={value}
-        type={type}
+        {...props}
       />
     </div>
   );

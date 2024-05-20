@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import InputForm from "@components/InputForm";
 import InputCheckBox from "@components/InputCheckBox";
 import { signUp } from "@lib/redux/auth/authSlice";
+import Vector from "@components/Vector";
 
 export default function Register() {
   const captchaUrl = useAppSelector((state) => state.auth.captchaUrl);
@@ -53,43 +54,43 @@ export default function Register() {
             </div>
           </div>
           <div className="min-w-[100px] w-[55%]">
-            <div>
+            <div className={"mb-[10px]"}>
               <InputForm
                 name="firstName"
                 value={formik.values.firstName}
                 onChange={formik.handleChange}
                 placeholder="Full name"
                 type="text"
-                InnerIconSrc="/icon/auth/Fullname.svg"
-                InnerIconWidth="21.5px"
+                InnerIconSrc="/user.svg"
+                InnerIconWidth="20px"
                 InnerIconHeight="21px"
                 width="350px"
                 height="50px"
               />
             </div>
-            <div>
+            <div className={"mb-[10px]"}>
               <InputForm
                 name="email"
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 placeholder="Email"
                 type="email"
-                InnerIconSrc="/icon/auth/Email.svg"
-                InnerIconWidth="24.5px"
-                InnerIconHeight="17px"
+                InnerIconSrc="/email.svg"
+                InnerIconWidth="20px"
+                InnerIconHeight="24px"
                 width="350px"
                 height="50px"
               />
             </div>
-            <div>
+            <div className={"mb-[10px]"}>
               <InputForm
                 name="password"
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 placeholder="Password"
                 type="password"
-                InnerIconSrc="/icon/auth/Password.svg"
-                InnerIconWidth="24.5px"
+                InnerIconSrc="/password.svg"
+                InnerIconWidth="20px"
                 InnerIconHeight="21px"
                 width="350px"
                 height="50px"
@@ -102,9 +103,9 @@ export default function Register() {
                 onChange={formik.handleChange}
                 placeholder="Repeat password"
                 type="password"
-                InnerIconSrc="/icon/auth/Password.svg"
-                InnerIconWidth="24.5px"
-                InnerIconHeight="20.8px"
+                InnerIconSrc="/password.svg"
+                InnerIconWidth="20px"
+                InnerIconHeight="21px"
                 width="350px"
                 height="50px"
               />
@@ -121,13 +122,8 @@ export default function Register() {
               </InputCheckBox>
             </div>
             <div className="flex">
-              <Button className="w-[1%] ml-1">
-                <Icon
-                  path="/icon/auth/Vector.svg"
-                  color="#1a1a1a"
-                  width="10px"
-                  height="10px"
-                />
+              <Button onClick={() => window.history.back()}>
+                <Vector/>
               </Button>
               <Button
                 className="w-[100%] text-white font-bold border-green-600 border-1"
@@ -137,7 +133,7 @@ export default function Register() {
                 Create an account
               </Button>
             </div>
-            <div>Already have an account? <Link href="/auth/login"> Sign in</Link></div>
+            <div>Already have an account? <Link href="/auth/login" className={"font-simebold"}> Sign in</Link></div>
 
           </div>
         </div>

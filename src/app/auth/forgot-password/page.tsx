@@ -1,10 +1,11 @@
 'use client'
 
-import InputForm from "@/components/Input/InputForm";
-import Vector from "@/components/Vector/Vector";
+import InputForm from "@components/InputForm";
+import Vector from "@components/Vector";
 import { Button } from "@nextui-org/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import email from "/email.svg"
 
 export default function ForgotPassword() {
   const formik = useFormik({
@@ -21,20 +22,20 @@ export default function ForgotPassword() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <div className="text-center max-w-[300px]">
-        <div className="mb-2 font-bold text-2xl">Forgot Password</div>
-        <div>
-          If you don't have an account, you can create one in a few clicks
+      <div className="text-center max-w-[300px] mb-[20px]">
+        <div className="font-bold text-[26px] mb-[12px]">Forgot Password</div>
+        <div className={"text-sm"}>
+          If you do not have an account, you can create one in a few clicks
         </div>
       </div>
-      <div>
+      <div className={"mt-2 mb-[15px]"}>
         <InputForm
           name="email"
-          placeholder="E-mail"
-          width="15"
-          height="15"
+          placeholder="Email"
+          width="320px"
+          height="30px"
           InnerIconHeight="20"
-          InnerIconSrc=""
+          InnerIconSrc="/email.svg"
           InnerIconWidth="20"
           type="text"
           onChange={formik.handleChange}
@@ -42,10 +43,10 @@ export default function ForgotPassword() {
         />
       </div>
       <div className="flex">
-        <Button>
-          <Vector color="#1a1a1a" className="rotate-180" />{" "}
+        <Button className={"w-[50px] mr-[12px]"}>
+          <Vector color="#ffffff" className="rotate-180" />{" "}
         </Button>
-        <Button color="success" className="text-white font-semibold w-[150px]">
+        <Button color="success" className="text-white border-solid border-green-100 font-semibold w-[220px]">
           Next
         </Button>
       </div>

@@ -29,39 +29,44 @@ export default function Auth() {
       <div className="text-center max-w-[350px] mb-2">
         <div className="text-2xl font-bold mb-2">Log in to your account</div>
         <div>
-          If you don't have an account, you can create one in a few clicks
+          If you do not have an account, you can create one in a few clicks
         </div>
       </div>
-      <div className="w-[300px]">
+      <div className="w-[300px] my-3">
         <InputForm
           name="email"
-          placeholder="email"
+          placeholder="Email"
           onChange={formik.handleChange}
           value={formik.values.email}
-          InnerIconSrc="/icon/Email.svg"
+          InnerIconSrc="/email.svg"
           InnerIconHeight="22px"
           InnerIconWidth="21px"
           height="30px"
-          width="250px"
+          width="300px"
           type="email"
         />
       </div>
       <div className="flex mb-3">
         <Button className="w-[50px]">
           <Image
-            src="/icon/auth/Google.svg"
+            src="google.svg"
             alt="cool"
             width={23}
             height={23}
           />
         </Button>
         <Button color="success" className="text-white font-medium w-[220px]">
-          Sign in <Vector className="rotate-180" color="1a1a1a" />
+          <div className={"flex"}>
+            Sign in <Vector className="rotate-180" color="1a1a1a" />
+          </div>
         </Button>
       </div>
       <div className="flex dark:text-white">
-        <Link href="/auth/register">
-          Create an account <Vector className="rotate-180" color="#1a1a1a" />
+        <Link href="/auth/register" className={"flex items-center font-semibold"}>
+          Create an account
+          <div className={"rotate-180 mx-2 hover:pr-2 flex"} >
+            <Vector/>
+          </div>
         </Link>
       </div>
     </form>
