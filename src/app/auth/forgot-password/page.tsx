@@ -1,5 +1,6 @@
 'use client'
 
+
 import InputForm from "@components/InputForm";
 import Vector from "@components/Vector";
 import { Button } from "@nextui-org/react";
@@ -8,17 +9,18 @@ import * as Yup from "yup";
 import email from "/email.svg"
 
 export default function ForgotPassword() {
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-    },
-    validationSchema: Yup.object().shape({
-      email: Yup.string().email("Invalid email address").required("Required"),
-    }),
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  });
+	const formik = useFormik({
+		initialValues: {
+			email: '',
+		},
+		validationSchema: Yup.object().shape({
+			email: Yup.string().email('Invalid email address').required('Required'),
+		}),
+		onSubmit: values => {
+			console.log(values)
+		},
+	})
+
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">

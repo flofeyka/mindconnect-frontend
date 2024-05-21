@@ -17,13 +17,19 @@ const ProblemSolution: FC = () => {
 					{ProblemData.map((data, i) => (
 						<div key={i} className='mb-[40px]'>
 							<button
-								className={`flex text-[18px] items-center gap-2 font-semibold ${
-									selected === i ? 'text-green-500' : ''
+								className={`flex text-[18px] items-center gap-2 font-semibold transition duration-400 ${
+									selected === i ? 'text-primary' : ''
 								}`}
 								onClick={() => setSelected(i)}
 							>
 								{data.title}
-								<Icon width='20px' height='20px' path='/icons/arrow.svg' />
+								<Icon
+									className='transition duration-400'
+									color={selected === i ? '#1CA66F' : undefined}
+									width='20px'
+									height='20px'
+									path='/icons/arrow.svg'
+								/>
 							</button>
 							<p className={`w-[480px] text-[14px] mt-4 opacity-70`}>
 								{data.text}
@@ -53,7 +59,7 @@ const ProblemSolution: FC = () => {
 									initial={{ opacity: 0, y: -20 }}
 									animate={{ opacity: 1, y: 0 }}
 									exit={{ opacity: 0, y: 20 }}
-									transition={{ duration: 0.3 }}
+									transition={{ duration: 0.4 }}
 								>
 									<h5 className='text-[16px] font-semibold'>
 										{ProblemData[selected].title}
