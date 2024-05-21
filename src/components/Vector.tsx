@@ -1,7 +1,7 @@
 import Icon from "./Icon";
 
 export default function Vector({
-  className,
+  className = "",
   color,
 }: {
   className?: string;
@@ -10,10 +10,10 @@ export default function Vector({
   return (
     <span className={className}>
       <Icon
-        path="../../../public/icon/auth/Vector.svg"
+        path="/icons/Vector.svg"
         color={color}
-        width="13"
-        height="13"
+        width="15px"
+        height="15px"
       />
     </span>
   );

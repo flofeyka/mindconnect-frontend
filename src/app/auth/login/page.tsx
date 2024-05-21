@@ -7,6 +7,7 @@ import { Button, Checkbox, Input } from "@nextui-org/react";
 import Link from "next/link";
 import InputForm from "@components/InputForm";
 import { signIn } from "@lib/redux/auth/authSlice";
+import Vector from "@components/Vector";
 
 export default function Login() {
   const captchaUrl = useAppSelector((state) => state.auth.captchaUrl);
@@ -37,37 +38,37 @@ export default function Login() {
             Log in
           </div>
           <div>
-            If you don't have an account, you can create one in a few clicks
+            If you do not have an account, you can create one in a few clicks
           </div>
         </div>
 
         <div className="w-[300px]">
-          <div>
+          <div className={"mb-[10px]"}>
             <InputForm
               name="email"
               placeholder="Email"
               value={formik.values.email}
               onChange={formik.handleChange}
               type="email"
-              InnerIconSrc="/icon/auth/Email.svg"
-              InnerIconHeight="23"
-              InnerIconWidth="22"
-              width="250px"
-              height="30px"
+              InnerIconSrc="/email.svg"
+              InnerIconHeight="23px"
+              InnerIconWidth="22px"
+              width="300px"
+              height="40px"
             />
           </div>
-          <div>
+          <div className={"mb-[10px]"}>
             <InputForm
               name="password"
               placeholder="Password"
               value={formik.values.password}
               onChange={formik.handleChange}
               type="password"
-              InnerIconSrc="/icon/auth/Password.svg"
-              InnerIconHeight="23"
-              InnerIconWidth="22"
-              width="250px"
-              height="30px"
+              InnerIconSrc="/password.svg"
+              InnerIconHeight="23px"
+              InnerIconWidth="22px"
+              width="300px"
+              height="40px"
             />
           </div>
           <div className="flex justify-start">
@@ -75,7 +76,7 @@ export default function Login() {
               Remember me
             </Checkbox>
             <div className="ml-auto">
-              <Link href="#" className="text-[13px]">
+              <Link href="/auth/forgot-password" className="text-[13px]">
                 Forgot password?
               </Link>
             </div>
@@ -87,9 +88,10 @@ export default function Login() {
             <Input />
           </div>
         )}
-        <div className="flex justify-center align-center h-[25%]">
+        <div className="flex justify-center align-center items-center mt-2">
+            <Button onClick={() => window.history.back()}><Vector/></Button>
           <Button
-            className="mt-2 w-[300px] text-white "
+            className="w-[225px] text-white font-semibold"
             color="success"
             type="submit"
           >

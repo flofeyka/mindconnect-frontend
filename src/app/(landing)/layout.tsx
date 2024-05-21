@@ -34,7 +34,9 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
             >
               Quick support
             </CustomButton>
-            <CustomButton color="primary">Sign in</CustomButton>
+            <Link href={"/auth/login"}>
+              <CustomButton color="primary">Sign in</CustomButton>
+            </Link>
           </div>
         </header>
         <main>
