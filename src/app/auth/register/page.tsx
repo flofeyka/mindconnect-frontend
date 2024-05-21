@@ -37,7 +37,6 @@ export default function Register() {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <div className="flex flex-col items-center h-screen">
         <div className="flex h-[10vh] items-center">
           <Icon
             path="/icon/auth/logo-sm.svg"
@@ -46,7 +45,7 @@ export default function Register() {
             width="190px"
           />
         </div>
-        <div className="flex flex-col items-center justify-center h-[100%]">
+        <div className="flex flex-col items-center justify-center">
           <div className="text-center max-w-[80%] mb-7">
             <div className="text-2xl font-bold mb-3">Registration</div>
             <div>
@@ -62,9 +61,7 @@ export default function Register() {
                 placeholder="Full name"
                 type="text"
                 InnerIconSrc="/user.svg"
-                InnerIconWidth="20px"
-                InnerIconHeight="21px"
-                width="350px"
+                width="300px"
                 height="50px"
               />
             </div>
@@ -76,9 +73,7 @@ export default function Register() {
                 placeholder="Email"
                 type="email"
                 InnerIconSrc="/email.svg"
-                InnerIconWidth="20px"
-                InnerIconHeight="24px"
-                width="350px"
+                width="300px"
                 height="50px"
               />
             </div>
@@ -90,9 +85,7 @@ export default function Register() {
                 placeholder="Password"
                 type="password"
                 InnerIconSrc="/password.svg"
-                InnerIconWidth="20px"
-                InnerIconHeight="21px"
-                width="350px"
+                width="300px"
                 height="50px"
               />
             </div>
@@ -104,9 +97,7 @@ export default function Register() {
                 placeholder="Repeat password"
                 type="password"
                 InnerIconSrc="/password.svg"
-                InnerIconWidth="20px"
-                InnerIconHeight="21px"
-                width="350px"
+                width="300px"
                 height="50px"
               />
             </div>
@@ -126,7 +117,7 @@ export default function Register() {
                 <Vector/>
               </Button>
               <Button
-                className="w-[100%] text-white font-bold border-green-600 border-1"
+                className="w-[225px] text-white font-bold border-green-600 border-1"
                 color="success"
                 type="submit"
               >
@@ -145,7 +136,6 @@ export default function Register() {
             </div>
           )}
         </div>
-      </div>
     </form>
   );
 }
