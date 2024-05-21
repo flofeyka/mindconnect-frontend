@@ -1,5 +1,6 @@
 'use client'
 
+
 import InputForm from "@components/InputForm";
 import Vector from "@components/Vector";
 import { Button } from "@nextui-org/react";
@@ -9,15 +10,18 @@ import {useAppDispatch} from "@lib/redux/hooks";
 import {sendRequestToChangePassword} from "@lib/redux/auth/authSlice";
 
 export default function ForgotPassword() {
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-    },
-    validationSchema: Yup.object().shape({
-      email: Yup.string().required("Required")
-    }),
-    onSubmit: (values: FormikValues) => dispatch(sendRequestToChangePassword({email: values.email}))
-  });
+	const formik = useFormik({
+		initialValues: {
+			email: '',
+		},
+		validationSchema: Yup.object().shape({
+			email: Yup.string().email('Invalid email address').required('Required'),
+		}),
+		onSubmit: values => {
+			console.log(values)
+		},
+	})
+
 
   const dispatch = useAppDispatch();
 

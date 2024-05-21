@@ -1,6 +1,7 @@
-import type { FC } from "react";
 
-import cn from "@helpers/cn";
+import type { FC } from 'react'
+
+import cn from '@helpers/cn'
 
 interface IconProps {
   width?: string;
@@ -23,4 +24,4 @@ const Icon: FC<IconProps> = ({ width = "20px", height = "21px", color = "#FFFFFF
   );
 };
 
-export default Icon;
+export default Icon
