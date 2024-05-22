@@ -1,14 +1,15 @@
 import { Input } from "@nextui-org/react";
 import Icon from "./Icon";
+import React, {HTMLAttributes, HTMLProps} from "react";
 
-type Props = {
+interface Props extends React.PropsWithChildren<any> {
   name: string;
   width: string | undefined;
   height: string | undefined;
   InnerIconSrc: string;
-  InnerIconWidth: string;
-  InnerIconHeight: string;
-};
+  InnerIconWidth?: string;
+  InnerIconHeight?: string;
+}
 
 export default function InputForm({
   name,
@@ -22,18 +23,9 @@ export default function InputForm({
     <div>
       <Input
         classNames={{
-          base: `w-[${width}] h-[${height}] b-gray-100`,
-          inputWrapper: [
-            "focus-within:dark:border-gray-200 border-solid-1",
-            "focus-within:dark:bg-[#222]",
-            "dark:text-white dark:bg-[#222]",
-          ],
-          input: [
-            "placeholder:text-default-700/50",
-            "dark:placeholder:text-gray-400",
-            "dark:text-white",
-          ],
-          innerWrapper: ["focus-within:dark:border-gray-200 border-solid-1"],
+          base: `w-[${width}] h-[${height}] border-gray-100`,
+            inputWrapper: "bg-[#222] focus-within:border-white/5",
+            input: "focus-within:border-gray-100"
         }}
         variant="bordered"
         name={name}

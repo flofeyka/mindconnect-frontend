@@ -7,6 +7,9 @@ import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import Vector from "@components/Vector";
+import {useAppDispatch, useAppSelector} from "@lib/redux/hooks";
+import {googleSignIn} from "@lib/redux/auth/authSlice";
+import {redirect} from "next/navigation";
 
 export default function Auth() {
   const formik = useFormik({
@@ -20,6 +23,12 @@ export default function Auth() {
       console.log(values);
     },
   });
+
+  const dispatch = useAppDispatch();
+  const googleUrl = useAppSelector(state => state.auth.googleUrl);
+  if(googleUrl) {
+    redirect(googleUrl);
+  }
 
   return (
     <form
@@ -39,15 +48,13 @@ export default function Auth() {
           onChange={formik.handleChange}
           value={formik.values.email}
           InnerIconSrc="/email.svg"
-          InnerIconHeight="22px"
-          InnerIconWidth="21px"
           height="30px"
           width="300px"
           type="email"
         />
       </div>
       <div className="flex mb-3">
-        <Button className="w-[50px]">
+        <Button className="w-[50px]" onClick={() => dispatch(googleSignIn())}>
           <Image
             src="google.svg"
             alt="cool"

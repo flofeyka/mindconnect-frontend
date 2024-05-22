@@ -4,9 +4,10 @@
 import InputForm from "@components/InputForm";
 import Vector from "@components/Vector";
 import { Button } from "@nextui-org/react";
-import { useFormik } from "formik";
+import {FormikValues, useFormik} from "formik";
 import * as Yup from "yup";
-import email from "/email.svg"
+import {useAppDispatch} from "@lib/redux/hooks";
+import {sendRequestToChangePassword} from "@lib/redux/auth/authSlice";
 
 export default function ForgotPassword() {
 	const formik = useFormik({
@@ -22,8 +23,10 @@ export default function ForgotPassword() {
 	})
 
 
+  const dispatch = useAppDispatch();
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <form onSubmit={formik.handleSubmit} className="flex flex-col items-center justify-center h-screen">
       <div className="text-center max-w-[300px] mb-[20px]">
         <div className="font-bold text-[26px] mb-[12px]">Forgot Password</div>
         <div className={"text-sm"}>
@@ -34,24 +37,22 @@ export default function ForgotPassword() {
         <InputForm
           name="email"
           placeholder="Email"
-          width="320px"
+          width="300px"
           height="30px"
-          InnerIconHeight="20"
           InnerIconSrc="/email.svg"
-          InnerIconWidth="20"
           type="text"
           onChange={formik.handleChange}
           value={formik.values.email}
         />
       </div>
       <div className="flex">
-        <Button className={"w-[50px] mr-[12px]"}>
-          <Vector color="#ffffff" className="rotate-180" />{" "}
+        <Button className={"w-[50px]"} onClick={() => window.history.back()}>
+          <Vector/>
         </Button>
-        <Button color="success" className="text-white border-solid border-green-100 font-semibold w-[220px]">
+        <Button type="submit" color="success" className="text-white border-solid border-green-100 font-semibold w-[220px]">
           Next
         </Button>
       </div>
-    </div>
+    </form>
   );
 }

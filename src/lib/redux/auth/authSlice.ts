@@ -14,6 +14,9 @@ const authSlice = createSlice({
       number: number;
       image: string;
     },
+      tokenIsValid: null,
+      isPending: true,
+      googleUrl: null
   } as authType,
   reducers: {
     setUser(state, action: PayloadAction<usersDataType>) {
@@ -29,6 +32,7 @@ const authSlice = createSlice({
       (state, action: PayloadAction<usersDataType>) => {
         state.isAuth = true;
         state.usersData = action.payload;
+        state.isPending = false;
       }
     );
     builder.addCase(
@@ -36,18 +40,29 @@ const authSlice = createSlice({
       (state, action: PayloadAction<usersDataType>) => {
         state.isAuth = true;
         state.usersData = action.payload;
+        state.isPending = false;
       }
     );
     builder.addCase(logout.fulfilled, (state, action: PayloadAction) => {
       state.isAuth = false;
+      state.isPending = false;
     });
     builder.addCase(
       getAuthUserData.fulfilled,
       (state, action: PayloadAction<usersDataType>) => {
         state.usersData = action.payload;
         state.isAuth = true;
+        state.isPending = false;
       }
     );
+    builder.addCase(checkVerifyToken.fulfilled, (state, action) => {
+        state.tokenIsValid = action.payload;
+        state.isPending = false;
+    });
+    builder.addCase(googleSignIn.fulfilled, (state, action) => {
+        state.isPending = false;
+        state.googleUrl = action.payload.url;
+    })
   },
 });
 
@@ -60,6 +75,11 @@ export const getAuthUserData = createAsyncThunk(
     return data;
   }
 );
+
+export const checkVerifyToken = createAsyncThunk("auth/verify-token", async (payload: {token: string}) => {
+    const data = await authAPI.verifyToken(payload.token);
+    return data.status === 200;
+})
 
 export const signIn = createAsyncThunk(
   "auth/login",
@@ -85,8 +105,29 @@ export const signUp = createAsyncThunk(
   }
 );
 
+export const googleSignIn = createAsyncThunk("auth/googleSignIn", async () => {
+    const data = await authAPI.googleSignIn();
+    if(data.status === 200) {
+        return data.data;
+    }
+});
+
 export const logout = createAsyncThunk("auth/logout", async () => {
   return await authAPI.logout();
 });
+
+export const sendRequestToChangePassword = createAsyncThunk("auth/requestChangePassword", async (payload: {email: string}) => {
+    const data = await authAPI.requestResetPassword(payload.email);
+    if(data.status === 200) {
+        return data.data;
+    }
+});
+
+export const resetPasswordSystem = createAsyncThunk("auth/resetPassword", async (payload: {token: string, newPassword: string}) => {
+    const data = await authAPI.resetPassword(payload.token, payload.newPassword);
+    if(data.status === 200) {
+        return data.data;
+    }
+})
 
 export default authSlice.reducer;

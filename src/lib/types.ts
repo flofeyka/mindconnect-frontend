@@ -1,7 +1,10 @@
 export type authType = {
   isAuth: boolean;
-  captchaUrl: null | string
-  usersData: usersDataType
+  captchaUrl: null | string;
+  usersData: usersDataType;
+  tokenIsValid: boolean | null;
+  isPending: boolean;
+  googleUrl: null | string
 };
 
 export type usersDataType = {
