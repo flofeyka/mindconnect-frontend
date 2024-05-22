@@ -1,5 +1,6 @@
 @tailwind base;
 @tailwind components;
+@tailwind components;
 @tailwind utilities;
 body {
   background-color: #101010;
@@ -27,6 +28,7 @@ body {
   );
 
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   -moz-background-clip: text;
   -moz-text-fill-color: transparent;

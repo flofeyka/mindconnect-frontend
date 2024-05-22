@@ -1,6 +1,5 @@
-import cn from '@helpers/cn'
-import React, { FC } from 'react'
-
+import cn from "@helpers/cn";
+import React, { FC } from "react";
 
 const FunctionalCard: FC = () => {
   return (
@@ -8,8 +7,8 @@ const FunctionalCard: FC = () => {
       <div className="flex gap-6 mb-5">
         <div
           className={cn(
-            'bg-[url(/images/psychologists-bg.png)] bg-cover bg-no-repeat',
-            'w-[780px] h-[280px] rounded-[22px] border border-[#ffff]/5 bg-[#141414] flex '
+            "bg-[url(/images/psychologists-bg.png)] bg-cover bg-no-repeat",
+            "w-[780px] h-[280px] rounded-[22px] border border-[#ffff]/5 bg-[#141414] flex "
           )}
         >
           <div className="p-[42px]">
@@ -64,8 +63,8 @@ const FunctionalCard: FC = () => {
 
         <div
           className={cn(
-            'bg-[url(/images/support-bg.png)] bg-cover bg-no-repeat',
-            'w-[780px] h-[280px] rounded-[22px] border border-[#ffff]/5 bg-[#141414] flex '
+            "bg-[url(/images/support-bg.png)] bg-cover bg-no-repeat",
+            "w-[780px] h-[280px] rounded-[22px] border border-[#ffff]/5 bg-[#141414] flex "
           )}
         >
           <div className="p-[42px]">
@@ -86,7 +85,7 @@ const FunctionalCard: FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FunctionalCard
+export default FunctionalCard;

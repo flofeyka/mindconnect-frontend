@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC } from "react";
 
 const TitleHero: FC = () => {
   return (
@@ -12,7 +12,7 @@ const TitleHero: FC = () => {
         functionality.
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default TitleHero
+export default TitleHero;

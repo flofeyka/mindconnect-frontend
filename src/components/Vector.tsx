@@ -9,12 +9,7 @@ export default function Vector({
 }) {
   return (
     <span className={className}>
-      <Icon
-        path="/icons/Vector.svg"
-        color={color}
-        width="15px"
-        height="15px"
-      />
+      <Icon path="/icons/Vector.svg" color={color} width="15px" height="15px" />
     </span>
   );
 }

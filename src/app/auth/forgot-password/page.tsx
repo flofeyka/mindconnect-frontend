@@ -17,8 +17,8 @@ export default function ForgotPassword() {
 		validationSchema: Yup.object().shape({
 			email: Yup.string().email('Invalid email address').required('Required'),
 		}),
-		onSubmit: values => {
-			console.log(values)
+		onSubmit: (values: FormikValues) => {
+			dispatch(sendRequestToChangePassword({email: values.email}));
 		},
 	})
 

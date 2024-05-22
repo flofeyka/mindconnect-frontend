@@ -1,10 +1,10 @@
-'use client'
-import Link from 'next/link'
-import {  useSearchParams } from 'next/navigation'
+"use client";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const HeaderHav: React.FC = () => {
-  const searchParams = useSearchParams()
-  console.log(searchParams.getAll('q'))
+  const searchParams = useSearchParams();
+  console.log(searchParams.getAll("q"));
   return (
     <nav className="ml-[78px]">
       <ul className="flex items-center gap-[32px] text-[14px]">
@@ -22,7 +22,7 @@ const HeaderHav: React.FC = () => {
         </li>
       </ul>
     </nav>
-  )
-}
+  );
+};
 
-export default HeaderHav
+export default HeaderHav;

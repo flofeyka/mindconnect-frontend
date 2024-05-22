@@ -8,6 +8,7 @@ import Link from "next/link";
 import InputForm from "@components/InputForm";
 import { signIn } from "@lib/redux/auth/authSlice";
 import Vector from "@components/Vector";
+import Title from "@components/Title";
 
 export default function Login() {
   const captchaUrl = useAppSelector((state) => state.auth.captchaUrl);
@@ -33,10 +34,10 @@ export default function Login() {
     >
       <div className="max-w-[300px]">
         <div className="text-center mb-5">
-          <div className="text-5xl relative font-bold mb-3">
+          <Title>
             Log in
-          </div>
-          <div>
+          </Title>
+          <div className="text-[14px]">
             If you do not have an account, you can create one in a few clicks
           </div>
         </div>

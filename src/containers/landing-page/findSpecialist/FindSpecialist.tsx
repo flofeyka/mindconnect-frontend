@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
-import CustomButton from '@components/CustomButton'
+import React, { FC } from "react";
+import CustomButton from "@components/CustomButton";
 
 const FindSpecialist: FC = () => {
   return (
@@ -13,7 +13,7 @@ const FindSpecialist: FC = () => {
       </p>
       <CustomButton color="primary">List of specialists</CustomButton>
     </div>
-  )
-}
+  );
+};
 
-export default FindSpecialist
+export default FindSpecialist;

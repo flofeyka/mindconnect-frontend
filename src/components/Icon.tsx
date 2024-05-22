@@ -1,7 +1,6 @@
+import type { FC } from "react";
 
-import type { FC } from 'react'
-
-import cn from '@helpers/cn'
+import cn from "@helpers/cn";
 
 interface IconProps {
   width?: string;
@@ -10,7 +9,12 @@ interface IconProps {
   path: string;
 }
 
-const Icon: FC<IconProps> = ({ width = "20px", height = "21px", color = "#FFFFFF", path }) => {
+const Icon: FC<IconProps> = ({
+  width = "20px",
+  height = "21px",
+  color = "#FFFFFF",
+  path,
+}) => {
   return (
     <div
       className={cn(`icon`, color.charAt(0) !== "#" ? color : "")}
@@ -24,4 +28,4 @@ const Icon: FC<IconProps> = ({ width = "20px", height = "21px", color = "#FFFFFF
   );
 };
 
-export default Icon
+export default Icon;
