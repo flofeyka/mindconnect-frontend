@@ -1,10 +1,10 @@
 import React from "react";
-import {Metadata} from "next";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Authorization",
-  description: "Identify yourself"
-}
+  description: "Identify yourself",
+};
 
 export default function AuthLayout({
   children,

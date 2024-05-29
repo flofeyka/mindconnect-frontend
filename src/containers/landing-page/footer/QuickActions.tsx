@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import React, { FC } from 'react'
+import Link from "next/link";
+import React, { FC } from "react";
 
 const QuickActions: FC = () => {
   return (
@@ -59,7 +59,7 @@ const QuickActions: FC = () => {
         </ul>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default QuickActions
+export default QuickActions;

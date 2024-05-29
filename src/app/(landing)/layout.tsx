@@ -1,15 +1,15 @@
-import Container from '@components/Container'
-import CustomButton from '@components/CustomButton'
-import Icon from '@components/Icon'
-import Logo from '@components/Logo'
-import HeaderHav from '@containers/landing-page/header/HeaderNav'
-import TotalVolunteers from '@containers/landing-page/header/TotalVolunteers'
-import Link from 'next/link'
-import type { ReactNode } from 'react'
-import LandingPage from './page'
-import QuickActions from '@containers/landing-page/footer/QuickActions'
-import FooterBottom from '@containers/landing-page/footer/FooterBottom'
-import ContentOver from '@containers/landing-page/content-over/ContentOver'
+import Container from "@components/Container";
+import CustomButton from "@components/CustomButton";
+import Icon from "@components/Icon";
+import Logo from "@components/Logo";
+import HeaderHav from "@containers/landing-page/header/HeaderNav";
+import TotalVolunteers from "@containers/landing-page/header/TotalVolunteers";
+import Link from "next/link";
+import type { ReactNode } from "react";
+import LandingPage from "./page";
+import QuickActions from "@containers/landing-page/footer/QuickActions";
+import FooterBottom from "@containers/landing-page/footer/FooterBottom";
+import ContentOver from "@containers/landing-page/content-over/ContentOver";
 
 const LandingLayout = ({ children }: { children: ReactNode }) => {
   return (
@@ -63,7 +63,7 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
         </Container>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default LandingLayout
+export default LandingLayout;

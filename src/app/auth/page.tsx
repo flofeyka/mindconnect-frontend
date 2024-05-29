@@ -7,9 +7,9 @@ import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import Vector from "@components/Vector";
-import {useAppDispatch, useAppSelector} from "@lib/redux/hooks";
-import {googleSignIn} from "@lib/redux/auth/authSlice";
-import {redirect} from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
+import { googleSignIn } from "@lib/redux/auth/authSlice";
+import { redirect } from "next/navigation";
 
 export default function Auth() {
   const formik = useFormik({
@@ -25,8 +25,8 @@ export default function Auth() {
   });
 
   const dispatch = useAppDispatch();
-  const googleUrl = useAppSelector(state => state.auth.googleUrl);
-  if(googleUrl) {
+  const googleUrl = useAppSelector((state) => state.auth.googleUrl);
+  if (googleUrl) {
     redirect(googleUrl);
   }
 
@@ -55,12 +55,7 @@ export default function Auth() {
       </div>
       <div className="flex mb-3">
         <Button className="w-[50px]" onClick={() => dispatch(googleSignIn())}>
-          <Image
-            src="google.svg"
-            alt="cool"
-            width={23}
-            height={23}
-          />
+          <Image src="google.svg" alt="cool" width={23} height={23} />
         </Button>
         <Button color="success" className="text-white font-medium w-[220px]">
           <div className={"flex"}>
@@ -69,10 +64,13 @@ export default function Auth() {
         </Button>
       </div>
       <div className="flex dark:text-white">
-        <Link href="/auth/register" className={"flex items-center font-semibold"}>
+        <Link
+          href="/auth/register"
+          className={"flex items-center font-semibold"}
+        >
           Create an account
-          <div className={"rotate-180 mx-2 hover:pr-2 flex"} >
-            <Vector/>
+          <div className={"rotate-180 mx-2 hover:pr-2 flex"}>
+            <Vector />
           </div>
         </Link>
       </div>

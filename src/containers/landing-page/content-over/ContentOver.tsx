@@ -1,16 +1,13 @@
-'use client'
-import React, { FC } from 'react'
-import { useDisclosure } from '@nextui-org/react'
-import Image from 'next/image'
-import CustomModal from '@components/CustomModal'
-import ContentOverModal from './ContentOverModal'
-import cn from '@helpers/cn'
-
-
-
+"use client";
+import React, { FC } from "react";
+import { useDisclosure } from "@nextui-org/react";
+import Image from "next/image";
+import CustomModal from "@components/CustomModal";
+import ContentOverModal from "./ContentOverModal";
+import cn from "@helpers/cn";
 
 const ContentOver: FC = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <div className="relative">
       <CustomModal
@@ -25,9 +22,9 @@ const ContentOver: FC = () => {
           <button
             onClick={onOpen}
             className={cn(
-              'text-[26px] font-semibold mb-[25px] text-left relative',
+              "text-[26px] font-semibold mb-[25px] text-left relative",
               "after:content-[''] after:bg-[url(/icons/arrow.svg)] after:inline-block after:w-6 after:h-6 after:absolute after:bottom-[7px] after:ml-1",
-              'hover:after:translate-x-2 after:transition-all'
+              "hover:after:translate-x-2 after:transition-all"
             )}
           >
             Get in touch with us in a <br /> couple of clicks
@@ -51,7 +48,7 @@ const ContentOver: FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ContentOver
+export default ContentOver;

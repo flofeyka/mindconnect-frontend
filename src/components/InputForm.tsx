@@ -1,6 +1,6 @@
 import { Input } from "@nextui-org/react";
 import Icon from "./Icon";
-import React, {HTMLAttributes, HTMLProps} from "react";
+import React, { HTMLAttributes, HTMLProps } from "react";
 
 interface Props extends React.PropsWithChildren<any> {
   name: string;
@@ -17,15 +17,16 @@ export default function InputForm({
   InnerIconWidth = "",
   InnerIconHeight,
   width = "",
-  height = "", ...props
+  height = "",
+  ...props
 }: Props) {
   return (
     <div>
       <Input
         classNames={{
           base: `w-[${width}] h-[${height}] border-gray-100`,
-            inputWrapper: "bg-[#222] focus-within:border-white/5",
-            input: "focus-within:border-gray-100"
+          inputWrapper: "bg-[#222] focus-within:border-white/5",
+          input: "focus-within:border-gray-100",
         }}
         variant="bordered"
         name={name}

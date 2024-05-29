@@ -4,7 +4,7 @@ export type authType = {
   usersData: usersDataType;
   tokenIsValid: boolean | null;
   isPending: boolean;
-  googleUrl: null | string
+  googleUrl: null | string;
 };
 
 export type usersDataType = {

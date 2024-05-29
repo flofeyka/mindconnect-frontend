@@ -1,5 +1,5 @@
-import { Input, Textarea } from '@nextui-org/react'
-import React, { FC } from 'react'
+import { Input, Textarea } from "@nextui-org/react";
+import React, { FC } from "react";
 
 const ContentOverModal: FC = () => {
   return (
@@ -10,7 +10,7 @@ const ContentOverModal: FC = () => {
           label="Your name"
           classNames={{
             inputWrapper: [
-              'border-solid border-1  border-[#ffff]/5 bg-[#FFFFFF]/5',
+              "border-solid border-1  border-[#ffff]/5 bg-[#FFFFFF]/5",
             ],
           }}
         />
@@ -19,7 +19,7 @@ const ContentOverModal: FC = () => {
           label="Subject"
           classNames={{
             inputWrapper: [
-              'border-solid border-1  border-[#ffff]/5 bg-[#FFFFFF]/5',
+              "border-solid border-1  border-[#ffff]/5 bg-[#FFFFFF]/5",
             ],
           }}
         />
@@ -30,7 +30,7 @@ const ContentOverModal: FC = () => {
         className="py-[14px]"
         classNames={{
           inputWrapper: [
-            'border-solid border-1  border-[#ffff]/5 bg-[#FFFFFF]/5',
+            "border-solid border-1  border-[#ffff]/5 bg-[#FFFFFF]/5",
           ],
         }}
       />
@@ -39,12 +39,12 @@ const ContentOverModal: FC = () => {
         className="w-full "
         classNames={{
           inputWrapper: [
-            'border-solid border-1  border-[#ffff]/5 bg-[#FFFFFF]/5 h-full',
+            "border-solid border-1  border-[#ffff]/5 bg-[#FFFFFF]/5 h-full",
           ],
         }}
       />
     </div>
-  )
-}
+  );
+};
 
-export default ContentOverModal
+export default ContentOverModal;
