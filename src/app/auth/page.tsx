@@ -25,7 +25,7 @@ export default function Auth() {
   });
 
   const dispatch = useAppDispatch();
-  const googleUrl = useAppSelector((state) => state.auth.googleUrl);
+  const googleUrl = useAppSelector((state) => state.Auth.googleUrl);
   if (googleUrl) {
     redirect(googleUrl);
   }

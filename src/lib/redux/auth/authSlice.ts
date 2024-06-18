@@ -28,64 +28,33 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(
-      signIn.pending,
-      (state: authType, action: PayloadAction) => {
-        state.isPending = true;
-      }
-    );
-    builder.addCase(
       signIn.fulfilled,
       (state: authType, action: PayloadAction<usersDataType>) => {
-        state.isAuth = true;
-        state.usersData = action.payload;
-        state.isPending = false;
-      }
-    );
-    builder.addCase(
-      signUp.pending,
-      (state: authType, action: PayloadAction) => {
-        state.isPending = true;
+        if (action.payload) {
+          state.isAuth = true;
+          state.usersData = action.payload;
+          state.isPending = false;
+        }
       }
     );
     builder.addCase(
       signUp.fulfilled,
       (state: authType, action: PayloadAction<usersDataType>) => {
-        state.isAuth = true;
-        state.usersData = action.payload;
-        state.isPending = false;
-      }
-    );
-    builder.addCase(
-      logout.pending,
-      (state: authType, action: PayloadAction) => {
-        state.isPending = true;
-      }
-    );
-    builder.addCase(
-      logout.fulfilled,
-      (state: authType, action: PayloadAction) => {
-        state.isAuth = false;
-        state.isPending = false;
-      }
-    );
-    builder.addCase(
-      getAuthUserData.pending,
-      (state: authType, action: PayloadAction) => {
-        state.isPending = true;
+        if (action.payload) {
+          state.isAuth = true;
+          state.usersData = action.payload;
+          state.isPending = false;
+        }
       }
     );
     builder.addCase(
       getAuthUserData.fulfilled,
       (state: authType, action: PayloadAction<usersDataType>) => {
-        state.usersData = action.payload;
-        state.isAuth = true;
-        state.isPending = false;
-      }
-    );
-    builder.addCase(
-      checkVerifyToken.pending,
-      (state: authType, action: PayloadAction) => {
-        state.isPending = true;
+        if (action.payload) {
+          state.usersData = action.payload;
+          state.isAuth = true;
+          state.isPending = false;
+        }
       }
     );
     builder.addCase(
@@ -93,12 +62,6 @@ const authSlice = createSlice({
       (state: authType, action: PayloadAction<boolean>) => {
         state.tokenIsValid = action.payload;
         state.isPending = false;
-      }
-    );
-    builder.addCase(
-      googleSignIn.pending,
-      (state: authType, action: PayloadAction) => {
-        state.isPending = true;
       }
     );
     builder.addCase(
@@ -116,8 +79,11 @@ export const { setUser, setCaptchaUrl } = authSlice.actions;
 export const getAuthUserData = createAsyncThunk(
   "auth/getAuthUserData",
   async () => {
-    const data: usersDataType = await authAPI.getUsersData();
-    return data;
+    const tokenUpdated = await authAPI.refresh();
+    if(tokenUpdated.status === 200) {
+      const data = await authAPI.getUsersData();
+      return data.user;
+    }
   }
 );
 

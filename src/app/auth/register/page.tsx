@@ -11,8 +11,7 @@ import { signUp } from "@lib/redux/auth/authSlice";
 import Vector from "@components/Vector";
 import Title from "@components/Title";
 
-export default function Register() {
-  const captchaUrl = useAppSelector((state) => state.auth.captchaUrl);
+function Register() {
   const dispatch = useAppDispatch();
   const formik = useFormik({
     initialValues: {
@@ -33,6 +32,7 @@ export default function Register() {
     onSubmit: (values: FormikValues) => {
       const { firstName, email, password } = values;
       dispatch(signUp({ firstName, email, password }));
+      window.open("/test", "_self");
     },
   });
 
@@ -53,7 +53,7 @@ export default function Register() {
             If you do not have an account, you can create one in a few clicks
           </div>
         </div>
-        <div className="min-w-[100px] w-[55%]">
+        <div>
           <div className={"mb-[10px]"}>
             <InputForm
               name="firstName"
@@ -62,7 +62,6 @@ export default function Register() {
               placeholder="Full name"
               type="text"
               InnerIconSrc="/user.svg"
-              width="300px"
               height="50px"
             />
           </div>
@@ -74,7 +73,6 @@ export default function Register() {
               placeholder="Email"
               type="email"
               InnerIconSrc="/email.svg"
-              width="300px"
               height="50px"
             />
           </div>
@@ -86,7 +84,6 @@ export default function Register() {
               placeholder="Password"
               type="password"
               InnerIconSrc="/password.svg"
-              width="300px"
               height="50px"
             />
           </div>
@@ -98,7 +95,6 @@ export default function Register() {
               placeholder="Repeat password"
               type="password"
               InnerIconSrc="/password.svg"
-              width="300px"
               height="50px"
             />
           </div>
@@ -125,7 +121,7 @@ export default function Register() {
               Create an account
             </Button>
           </div>
-          <div>
+          <div className="text-center">
             Already have an account?{" "}
             <Link href="/auth/login" className={"font-simebold"}>
               {" "}
@@ -133,14 +129,6 @@ export default function Register() {
             </Link>
           </div>
         </div>
-      </div>
-      <div>
-        {captchaUrl != null && (
-          <div>
-            <label>Captcha</label>
-            <Input variant="underlined" />
-          </div>
-        )}
       </div>
     </form>
   );

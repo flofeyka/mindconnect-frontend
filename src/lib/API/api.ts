@@ -45,10 +45,26 @@ export const authAPI = {
     const Response = await instance.post("auth/logout");
     return Response.data;
   },
-  async getUsersData(): Promise<usersDataType> {
-    const Response = await instance.get("auth/current");
+  async getUsersData(): Promise<{ user: usersDataType; status: number }> {
+    const Response = await instance.get("auth/current", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return {
+      user: Response.data,
+      status: Response.status,
+    };
+  },
+  async refresh(): Promise<{ status: number }> {
+    const Response = await instance.get("auth/refreshToken", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      withCredentials: true,
+    });
     localStorage.setItem("token", Response.data.token);
-    return Response.data.user;
+    return { status: Response.status };
   },
 
   async requestResetPassword(email: string) {
