@@ -4,7 +4,7 @@ import React, { HTMLAttributes, HTMLProps } from "react";
 
 interface Props extends React.PropsWithChildren<any> {
   name: string;
-  width: string | undefined;
+  width?: string | undefined;
   height: string | undefined;
   InnerIconSrc: string;
   InnerIconWidth?: string;
@@ -16,7 +16,7 @@ export default function InputForm({
   InnerIconSrc = "",
   InnerIconWidth = "",
   InnerIconHeight,
-  width = "",
+  width = "100%",
   height = "",
   ...props
 }: Props) {
