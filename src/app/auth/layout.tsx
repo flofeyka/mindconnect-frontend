@@ -1,19 +1,19 @@
-import React from "react";
-import { Metadata } from "next";
+import React from 'react'
+import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Authorization",
-  description: "Identify yourself",
-};
+	title: 'Authorization',
+	description: 'Identify yourself',
+}
 
 export default function AuthLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode
 }) {
-  return (
-    <div className="flex flex-col h-screen justify-center items-center">
-      {children}
-    </div>
-  );
+	return (
+		<div className='flex flex-col h-screen justify-center items-center'>
+			{children}
+		</div>
+	)
 }
