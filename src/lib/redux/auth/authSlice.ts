@@ -14,7 +14,7 @@ const authSlice = createSlice({
 			number: number
 			image: string
 		},
-		emails: [] as Array<string>,
+		emails: [] as string[],
 		tokenIsValid: null,
 		isPending: true,
 		googleUrl: null,
@@ -51,11 +51,9 @@ const authSlice = createSlice({
 		builder.addCase(
 			getAuthUserData.fulfilled,
 			(state: authType, action: PayloadAction<usersDataType>) => {
-				if (action.payload) {
-					state.usersData = action.payload
-					state.isAuth = true
-					state.isPending = false
-				}
+				state.usersData = action.payload
+				state.isAuth = true
+				state.isPending = false
 			}
 		)
 		builder.addCase(
@@ -164,11 +162,9 @@ export const resetPasswordSystem = createAsyncThunk(
 
 export const findUsersByEmails = createAsyncThunk(
 	'auth/usersByEmails',
-	async (payload: { emails: Array<string> }) => {
-		const data = await authAPI.findUsersByEmails(payload.emails)
-		if (data.status === 200) {
-			return data.data
-		}
+	async (emails: string[]) => {
+		const data = await authAPI.findUsersByEmails(emails)
+		return data
 	}
 )
 
