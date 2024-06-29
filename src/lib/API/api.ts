@@ -1,3 +1,4 @@
+import { getToken } from '@app/actions'
 import { usersDataType } from '@lib/types'
 import axios from 'axios'
 
@@ -5,6 +6,19 @@ const instance = axios.create({
 	withCredentials: true,
 	baseURL: 'https://mindconnect-vebk.onrender.com/api/',
 })
+
+instance.interceptors.request.use(
+	config => {
+		const token = localStorage.getItem('token')
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`
+		}
+		return config
+	},
+	error => {
+		return Promise.reject(error)
+	}
+)
 
 export const authAPI = {
 	async googleSignIn() {
@@ -95,13 +109,10 @@ export const authAPI = {
 		}
 	},
 
-	async findUsersByEmails(emails: Array<string>) {
-		const Response = await instance.get('auth/users-by-emails', {
-			data: { emails },
+	async findUsersByEmails(emails: string[]) {
+		const Response = await instance.post('auth/users-by-emails', {
+			emails: emails,
 		})
-		return {
-			status: Response.status,
-			data: Response.data,
-		}
+		return Response.data.userIds
 	},
 }

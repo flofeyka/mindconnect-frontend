@@ -5,7 +5,7 @@ export type authType = {
 	tokenIsValid: boolean | null
 	isPending: boolean
 	googleUrl: null | string
-	emails: Array<string>
+	emails: string[]
 }
 
 export type usersDataType = {

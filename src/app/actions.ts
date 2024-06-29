@@ -21,5 +21,3 @@ export async function getToken(userId: string) {
 
 	return token
 }
-
-export async function getUsersIds(emailAddresses: string[]) {}

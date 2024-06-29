@@ -1,5 +1,6 @@
 'use client'
 
+import CustomButton from '@components/CustomButton'
 import { authAPI } from '@lib/API/api'
 import { findUsersByEmails, getAuthUserData } from '@lib/redux/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
@@ -8,7 +9,8 @@ import {
 	Call,
 	MemberRequest,
 } from '@stream-io/video-react-sdk'
-import { Loader2 } from 'lucide-react'
+import { Copy, Loader2 } from 'lucide-react'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function CreateMeetingPage() {
@@ -37,13 +39,15 @@ export default function CreateMeetingPage() {
 
 			const call = client.call(callType, id)
 
-			const memberEmails = participantsInput
+			const memberEmails: string[] = participantsInput
 				.split(',')
 				.map(email => email.trim())
+			console.log(memberEmails)
 
-			const memberIds = await authAPI.findUsersByEmails(memberEmails)
+			const resultAction = await dispatch(findUsersByEmails(memberEmails))
+			const memberIds: string[] = resultAction.payload as string[]
 
-			const members: MemberRequest[] = memberIds.data
+			const members: MemberRequest[] = memberIds
 				.map((id: string) => ({
 					user_id: id,
 					role: 'call_member',
@@ -86,9 +90,9 @@ export default function CreateMeetingPage() {
 					value={participantsInput}
 					onChange={setParticipantsInput}
 				/>
-				<button onClick={createMeeting} className='w-full'>
+				<CustomButton onClick={createMeeting} className='w-full'>
 					Create meeting
-				</button>
+				</CustomButton>
 			</div>
 			{call && <MeetingLink call={call} />}
 		</div>
@@ -236,5 +240,61 @@ interface MeetingLinkProps {
 function MeetingLink({ call }: MeetingLinkProps) {
 	const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/fast-connect/meeting/${call.id}`
 
-	return <div className='text-center'>{meetingLink}</div>
+	return (
+		<div className='text-center flex flex-col items-center gap-3'>
+			<div className='flex items-center gap-3'>
+				<span>Invitation link: </span>
+				<Link target='_blank' href={meetingLink} className='font-medium'>
+					{meetingLink}
+				</Link>
+				<button
+					title='Copy invitation link'
+					onClick={() => {
+						navigator.clipboard.writeText(meetingLink)
+						alert('Copied to clipboard')
+					}}
+				>
+					<Copy />
+				</button>
+			</div>
+			<a
+				href={getMailToLink(
+					meetingLink,
+					call.state.startsAt,
+					call.state.custom.description
+				)}
+				target='_blank'
+				className='text-blue-500 hover:underline'
+			>
+				Send email invitation
+			</a>
+		</div>
+	)
+}
+
+function getMailToLink(
+	meetingLink: string,
+	startsAt?: Date,
+	description?: string
+) {
+	const startDateFormatted = startsAt
+		? startsAt.toLocaleString('en-US', {
+				dateStyle: 'full',
+				timeStyle: 'short',
+		  })
+		: undefined
+
+	const subject =
+		'Join my meeting' + (startDateFormatted ? ` at ${startDateFormatted}` : '')
+
+	const body =
+		`Join my meeting at ${meetingLink}.` +
+		(startDateFormatted
+			? `\n\nThe meeting starts at ${startDateFormatted}.`
+			: '') +
+		(description ? `\n\nDescription: ${description}` : '')
+
+	return `mailto:?subject=${encodeURIComponent(
+		subject
+	)}&body=${encodeURIComponent(body)}`
 }
