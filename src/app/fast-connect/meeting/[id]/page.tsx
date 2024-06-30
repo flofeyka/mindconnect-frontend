@@ -11,6 +11,7 @@ export function generateMetadata({ params: { id } }: PageProps): Metadata {
 	}
 }
 
-export default function Page({ params: { id } }: PageProps) {
+export default async function Page({ params: { id } }: PageProps) {
+	// Если не зарег то сделать чето в виде рега
 	return <MeetingPage id={id} />
 }
