@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation'
 type CallLayout = 'speaker-vert' | 'speaker-horiz' | 'grid'
 
 export default function FlexibleCallLayout() {
-	const [layout, setLayout] = useState<CallLayout>('speaker-vert')
+	const [layout, setLayout] = useState<CallLayout>('speaker-horiz')
 
 	const call = useStreamCall()
 
@@ -27,7 +27,7 @@ export default function FlexibleCallLayout() {
 			<CalllLayoutButtons layout={layout} setLayout={setLayout} />
 			<CallLayoutView layout={layout} />
 			<CallControls
-				onLeave={() => router.push(`/fast-connect/${call.id}/left`)}
+				onLeave={() => router.push(`/fast-connect/meeting/${call.id}/left`)}
 			/>
 			<EndCallButton />
 		</div>
@@ -68,7 +68,7 @@ function CallLayoutView({ layout }: CallLayoutViewProps) {
 		return <SpeakerLayout />
 	}
 
-	if ((layout = 'speaker-horiz')) {
+	if (layout === 'speaker-horiz') {
 		return <SpeakerLayout participantsBarPosition='right' />
 	}
 	if (layout === 'grid') {
