@@ -1,6 +1,6 @@
 'use client'
 
-import { getAuthUserData } from '@lib/redux/auth/authSlice'
+import { getAuthUserData } from '@lib/redux/slices/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
 import { useStreamVideoClient, Call } from '@stream-io/video-react-sdk'
 import { Loader2 } from 'lucide-react'

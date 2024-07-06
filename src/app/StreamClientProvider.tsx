@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
-import { getAuthUserData } from '@lib/redux/auth/authSlice'
+import { getAuthUserData } from '@lib/redux/slices/auth/authSlice'
 import {
 	StreamVideo,
 	StreamVideoClient,

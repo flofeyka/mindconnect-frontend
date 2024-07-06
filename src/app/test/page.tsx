@@ -1,6 +1,6 @@
 'use client'
 
-import { getAuthUserData } from "@lib/redux/auth/authSlice"
+import { getAuthUserData } from "@lib/redux/slices/auth/authSlice"
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks"
 import { memo, useEffect } from "react"
 

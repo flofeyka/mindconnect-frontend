@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Vector from "@components/Vector";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
-import { googleSignIn } from "@lib/redux/auth/authSlice";
+import { googleSignIn } from "@lib/redux/slices/auth/authSlice";
 import { redirect } from "next/navigation";
 
 export default function Auth() {

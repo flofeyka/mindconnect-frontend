@@ -7,7 +7,7 @@ import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
 import InputForm from "@components/InputForm";
 import InputCheckBox from "@components/InputCheckBox";
-import { signUp } from "@lib/redux/auth/authSlice";
+import { signUp } from "@lib/redux/slices/auth/authSlice";
 import Vector from "@components/Vector";
 import Title from "@components/Title";
 

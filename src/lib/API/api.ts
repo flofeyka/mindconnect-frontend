@@ -1,4 +1,3 @@
-import { getToken } from '@app/actions'
 import { usersDataType } from '@lib/types'
 import axios from 'axios'
 
@@ -115,4 +114,46 @@ export const authAPI = {
 		})
 		return Response.data.userIds
 	},
+}
+
+export const calendarAPI = {
+	async addCalendar(data: {
+		time: string
+		note: string
+	}) {
+		const Response = await instance.post(`add-calendar/?date=${data.time}`, {
+			...data,
+		})
+		return Response.data
+	},
+	async getCalendarByDates(data: {
+		startDate: string
+		endDate: string	
+	}) {
+		const Response = await instance.get(`dates-calendar?startDate=${data.startDate}&endDate=${data.endDate}`)
+		return Response.data
+	},
+	async deleteNote (data: {
+		time: string
+		noteId: string
+	}) {
+		const Response = await instance.delete(`delete-calendar/?date=${data.time}/notes/?note=${data.noteId}`)
+		return Response.data
+	},
+	async getOneCalendar (date: string) {
+		const Response = await instance.get(`one-calendar/?date=${date}`)
+		return Response.data
+	},
+	async updateNote (data: {
+		date: string
+		time: string
+		noteId: string
+		note: string
+	}) {
+		const Response = await instance.put(`update-calendar/?date=${data.time}/notes/?note=${data.noteId}`, {
+			...data,
+		})
+		return Response.data
+	},
+	
 }
