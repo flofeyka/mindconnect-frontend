@@ -7,7 +7,7 @@ import { Button } from "@nextui-org/react";
 import {FormikValues, useFormik} from "formik";
 import * as Yup from "yup";
 import {useAppDispatch} from "@lib/redux/hooks";
-import {sendRequestToChangePassword} from "@lib/redux/auth/authSlice";
+import {sendRequestToChangePassword} from "@lib/redux/slices/auth/authSlice";
 
 export default function ForgotPassword() {
 	const formik = useFormik({

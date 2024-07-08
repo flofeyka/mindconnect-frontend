@@ -1,15 +1,15 @@
 'use client'
 
-import Icon from '@components/Icon'
-import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
-import { Button, Input, Link } from '@nextui-org/react'
-import { FormikValues, useFormik } from 'formik'
-import * as Yup from 'yup'
-import InputForm from '@components/InputForm'
-import InputCheckBox from '@components/InputCheckBox'
-import { signUp } from '@lib/redux/auth/authSlice'
-import Vector from '@components/Vector'
-import Title from '@components/Title'
+import Icon from "@components/Icon";
+import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
+import { Button, Input, Link } from "@nextui-org/react";
+import { FormikValues, useFormik } from "formik";
+import * as Yup from "yup";
+import InputForm from "@components/InputForm";
+import InputCheckBox from "@components/InputCheckBox";
+import { signUp } from "@lib/redux/slices/auth/authSlice";
+import Vector from "@components/Vector";
+import Title from "@components/Title";
 
 function Register() {
 	const dispatch = useAppDispatch()

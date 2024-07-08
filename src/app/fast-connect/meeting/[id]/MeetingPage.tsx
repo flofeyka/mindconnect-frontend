@@ -6,7 +6,7 @@ import AudioVolumeIndicator from '@components/AudioVolumeIndicator'
 import CustomButton from '@components/CustomButton'
 import FlexibleCallLayout from '@components/FlexibleCallLayout'
 import PermissionPrompt from '@components/PermissionPrompt'
-import { getAuthUserData } from '@lib/redux/auth/authSlice'
+import { getAuthUserData } from '@lib/redux/slices/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
 import {
 	Call,

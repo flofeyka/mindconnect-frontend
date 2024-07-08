@@ -7,7 +7,7 @@ import { FormikValues, useFormik } from "formik";
 import {
   checkVerifyToken,
   resetPasswordSystem,
-} from "@lib/redux/auth/authSlice";
+} from "@lib/redux/slices/auth/authSlice";
 import InputForm from "@components/InputForm";
 import * as Yup from "yup";
 import Title from "@components/Title";
