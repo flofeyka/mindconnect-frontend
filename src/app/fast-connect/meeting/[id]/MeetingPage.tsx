@@ -59,11 +59,17 @@ export default function MeetingPage({ id }: MeetingPageProps) {
 	}
 
 	return (
-		<StreamCall call={call}>
-			<StreamTheme>
-				<MeetingScreen />
-			</StreamTheme>
-		</StreamCall>
+		<>
+			<p className='text-center mb-10 text-gray-500'>
+				This call is encrypted. Noone is able to acquire information from this
+				call.
+			</p>
+			<StreamCall call={call}>
+				<StreamTheme>
+					<MeetingScreen />
+				</StreamTheme>
+			</StreamCall>
+		</>
 	)
 }
 

@@ -9,6 +9,7 @@ export type authType = {
 }
 
 export type usersDataType = {
+	isDoctor: any
 	id: string
 	email: string
 	firstName: string

@@ -11,6 +11,8 @@ import {
 } from '@stream-io/video-react-sdk'
 import { Copy, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import router from 'next/router'
 import { useEffect, useState } from 'react'
 
 export default function CreateMeetingPage() {
@@ -27,6 +29,12 @@ export default function CreateMeetingPage() {
 	useEffect(() => {
 		dispatch(getAuthUserData())
 	}, [dispatch])
+
+	useEffect(() => {
+		if (Object.keys(user).length === 0) {
+			redirect('/auth/login')
+		}
+	}, [user])
 
 	async function createMeeting() {
 		if (!client) {
@@ -78,7 +86,9 @@ export default function CreateMeetingPage() {
 	}
 	return (
 		<div className='flex flex-col items-center space-y-6'>
-			<h1 className='text-2xl font-bold text-center'>Welcome guest</h1>
+			<h1 className='text-2xl font-bold text-center'>
+				Welcome {user.firstName}
+			</h1>
 			<div className='w-80 mx-auto space-y-6 rounded-md bg-black p-5'>
 				<h2 className='text-xl font-bold'>Create a new meeting</h2>
 				<DescriptionInput
@@ -90,9 +100,15 @@ export default function CreateMeetingPage() {
 					value={participantsInput}
 					onChange={setParticipantsInput}
 				/>
-				<CustomButton onClick={createMeeting} className='w-full'>
-					Create meeting
-				</CustomButton>
+				{user.isDoctor ? (
+					<CustomButton onClick={createMeeting} className='w-full'>
+						Create meeting
+					</CustomButton>
+				) : (
+					<CustomButton onClick={createMeeting} className='w-full'>
+						Enter meeting with doctor
+					</CustomButton>
+				)}
 			</div>
 			{call && <MeetingLink call={call} />}
 		</div>
@@ -106,8 +122,13 @@ interface DescriptionInputProps {
 
 function DescriptionInput({ value, onChange }: DescriptionInputProps) {
 	const [active, setActive] = useState(false)
+	const user = useAppSelector(state => state.Auth.usersData)
+	const dispatch = useAppDispatch()
+	useEffect(() => {
+		dispatch(getAuthUserData())
+	}, [dispatch])
 
-	return (
+	return user.isDoctor ? (
 		<div className='space-y-2'>
 			<div className='font-medium'>Meeting info</div>
 			<label className='flex items-center gap-1.5'>
@@ -133,7 +154,7 @@ function DescriptionInput({ value, onChange }: DescriptionInputProps) {
 				</label>
 			)}
 		</div>
-	)
+	) : null
 }
 
 interface StartTimeInputProps {
@@ -143,6 +164,11 @@ interface StartTimeInputProps {
 
 function StartTimeInput({ value, onChange }: StartTimeInputProps) {
 	const [active, setActive] = useState(false)
+	const user = useAppSelector(state => state.Auth.usersData)
+	const dispatch = useAppDispatch()
+	useEffect(() => {
+		dispatch(getAuthUserData())
+	}, [dispatch])
 
 	const dateTimeLocalNow = new Date(
 		new Date().getTime() - new Date().getTimezoneOffset() * 60_000
@@ -164,29 +190,33 @@ function StartTimeInput({ value, onChange }: StartTimeInputProps) {
 				/>
 				Start meeting immediately
 			</label>
-			<label className='flex items-center gap-1.5'>
-				<input
-					type='radio'
-					checked={active}
-					onChange={() => {
-						setActive(true)
-						onChange(dateTimeLocalNow)
-					}}
-				/>
-				Start meeting at date/time
-			</label>
-			{active && (
-				<label className='block space-y-1'>
-					<span className='font-medium'>Start time</span>
-					<input
-						className='w-full rounded-md border border-gray-300 p-2'
-						type='datetime-local'
-						value={value}
-						min={dateTimeLocalNow}
-						onChange={e => onChange(e.target.value)}
-					/>
-				</label>
-			)}
+			{user.isDoctor ? (
+				<>
+					<label className='flex items-center gap-1.5'>
+						<input
+							type='radio'
+							checked={active}
+							onChange={() => {
+								setActive(true)
+								onChange(dateTimeLocalNow)
+							}}
+						/>
+						Start meeting at date/time
+					</label>
+					{active && (
+						<label className='block space-y-1'>
+							<span className='font-medium'>Start time</span>
+							<input
+								className='w-full rounded-md border border-gray-300 p-2'
+								type='datetime-local'
+								value={value}
+								min={dateTimeLocalNow}
+								onChange={e => onChange(e.target.value)}
+							/>
+						</label>
+					)}
+				</>
+			) : null}
 		</div>
 	)
 }
@@ -198,6 +228,11 @@ interface ParticipantsInputProps {
 
 function ParticipantsInput({ value, onChange }: ParticipantsInputProps) {
 	const [active, setActive] = useState(false)
+	const user = useAppSelector(state => state.Auth.usersData)
+	const dispatch = useAppDispatch()
+	useEffect(() => {
+		dispatch(getAuthUserData())
+	}, [dispatch])
 
 	return (
 		<div className='space-y-2'>
@@ -214,21 +249,29 @@ function ParticipantsInput({ value, onChange }: ParticipantsInputProps) {
 				/>
 				Everyone with link can join
 			</label>
-			<label className='flex items-center gap-1.5'>
-				<input type='radio' checked={active} onChange={() => setActive(true)} />
-				Private meeting
-			</label>
-			{active && (
-				<label className='block space-y-1'>
-					<span className='font-medium'>Participants emails</span>
-					<textarea
-						className='w-full rounded-md border border-gray-300 p-2'
-						value={value}
-						onChange={e => onChange(e.target.value)}
-						placeholder='Enter participant email addresses separated by comas'
-					/>
-				</label>
-			)}
+			{user.isDoctor ? (
+				<>
+					<label className='flex items-center gap-1.5'>
+						<input
+							type='radio'
+							checked={active}
+							onChange={() => setActive(true)}
+						/>
+						Private meeting
+					</label>
+					{active && (
+						<label className='block space-y-1'>
+							<span className='font-medium'>Participants emails</span>
+							<textarea
+								className='w-full rounded-md border border-gray-300 p-2'
+								value={value}
+								onChange={e => onChange(e.target.value)}
+								placeholder='Enter participant email addresses separated by comas'
+							/>
+						</label>
+					)}
+				</>
+			) : null}
 		</div>
 	)
 }
@@ -238,7 +281,17 @@ interface MeetingLinkProps {
 }
 
 function MeetingLink({ call }: MeetingLinkProps) {
+	const user = useAppSelector(state => state.Auth.usersData)
+	const dispatch = useAppDispatch()
+	useEffect(() => {
+		dispatch(getAuthUserData())
+	}, [dispatch])
+
 	const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/fast-connect/meeting/${call.id}`
+
+	if (user.isDoctor !== true) {
+		redirect(`/fast-connect/meeting/${call.id}`)
+	}
 
 	return (
 		<div className='text-center flex flex-col items-center gap-3'>

@@ -9,9 +9,24 @@ import InputForm from '@components/InputForm'
 import { signIn } from '@lib/redux/slices/auth/authSlice'
 import Vector from '@components/Vector'
 import Title from '@components/Title'
+import { Notification } from '@mantine/core'
+import '@mantine/core/styles/Notification.css'
+import { redirect } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function Login() {
 	const dispatch = useAppDispatch()
+	const user = useAppSelector(state => state.Auth.usersData)
+	useEffect(() => {
+		dispatch(getAuthUserData())
+	}, [dispatch])
+
+	useEffect(() => {
+		if (Object.keys(user).length !== 0) {
+			redirect('/fast-connect')
+		}
+	}, [user])
+
 	const formik = useFormik({
 		initialValues: {
 			email: '',
@@ -28,61 +43,67 @@ export default function Login() {
 	})
 
 	return (
-		<form onSubmit={formik.handleSubmit}>
-			<div className='max-w-[300px]'>
-				<div className='text-center mb-5'>
-					<Title>Log in</Title>
-					<div className='text-[14px]'>
-						If you do not have an account, you can create one in a few clicks
+		<>
+			<Notification color='#1CA66F' withCloseButton={false} className='mb-10'>
+				{' '}
+				Register or login first. It will take up to 15 seconds.
+			</Notification>
+			<form onSubmit={formik.handleSubmit}>
+				<div className='max-w-[300px]'>
+					<div className='text-center mb-5'>
+						<Title>Log in</Title>
+						<div className='text-[14px]'>
+							If you do not have an account, you can create one in a few clicks
+						</div>
+					</div>
+					<div className={'mb-[10px]'}>
+						<InputForm
+							name='email'
+							placeholder='Email'
+							value={formik.values.email}
+							onChange={formik.handleChange}
+							type='email'
+							InnerIconSrc='/email.svg'
+							width='300px'
+							height='40px'
+						/>
+					</div>
+					<div className={'mb-[10px]'}>
+						<InputForm
+							name='password'
+							placeholder='Password'
+							value={formik.values.password}
+							onChange={formik.handleChange}
+							type='password'
+							InnerIconSrc='/password.svg'
+							width='300px'
+							height='40px'
+						/>
+					</div>
+					<div className='flex justify-start'>
+						<Checkbox color='success' size='sm'>
+							Remember me
+						</Checkbox>
+						<div className='ml-auto'>
+							<Link href='/auth/forgot-password' className='text-[13px]'>
+								Forgot password?
+							</Link>
+						</div>
 					</div>
 				</div>
-				<div className={'mb-[10px]'}>
-					<InputForm
-						name='email'
-						placeholder='Email'
-						value={formik.values.email}
-						onChange={formik.handleChange}
-						type='email'
-						InnerIconSrc='/email.svg'
-						width='300px'
-						height='40px'
-					/>
+				<div className='mt-2 flex'>
+					<Button onClick={() => window.history.back()}>
+						<Vector />
+					</Button>
+					<Button
+						className='w-[220px] text-white font-semibold'
+						color='success'
+						type='submit'
+					>
+						Log in account
+					</Button>
 				</div>
-				<div className={'mb-[10px]'}>
-					<InputForm
-						name='password'
-						placeholder='Password'
-						value={formik.values.password}
-						onChange={formik.handleChange}
-						type='password'
-						InnerIconSrc='/password.svg'
-						width='300px'
-						height='40px'
-					/>
-				</div>
-				<div className='flex justify-start'>
-					<Checkbox color='success' size='sm'>
-						Remember me
-					</Checkbox>
-					<div className='ml-auto'>
-						<Link href='/auth/forgot-password' className='text-[13px]'>
-							Forgot password?
-						</Link>
-					</div>
-				</div>
-			</div>
-			<div className='mt-2 flex'>
-				<Button onClick={() => window.history.back()}>
-					<Vector />
-				</Button>
-				<Button
-					className='w-[220px] text-white font-semibold'
-					color='success'
-					type='submit'
-				>
-					Log in account
-				</Button>
-			</div>
-		</form>
+			</form>
+		</>
 	)
 }
