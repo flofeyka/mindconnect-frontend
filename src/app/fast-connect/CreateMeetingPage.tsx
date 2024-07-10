@@ -2,7 +2,10 @@
 
 import CustomButton from '@components/CustomButton'
 import { authAPI } from '@lib/API/api'
-import { findUsersByEmails, getAuthUserData } from '@lib/redux/slices/auth/authSlice'
+import {
+	findUsersByEmails,
+	getAuthUserData,
+} from '@lib/redux/slices/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
 import {
 	useStreamVideoClient,

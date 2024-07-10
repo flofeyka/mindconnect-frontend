@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind components;
 @tailwind utilities;
+
+html {
+	data-mantine-color-scheme: udefined;
+}
+
 body {
 	background-color: #101010;
 	background-image: url(/images/hero-bg.png);

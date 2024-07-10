@@ -1,17 +1,17 @@
 'use client'
 
-import Icon from "@components/Icon";
-import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
-import { Button, Input, Link } from "@nextui-org/react";
-import { FormikValues, useFormik } from "formik";
-import * as Yup from "yup";
-import InputForm from "@components/InputForm";
-import InputCheckBox from "@components/InputCheckBox";
-import { signUp } from "@lib/redux/slices/auth/authSlice";
-import Vector from "@components/Vector";
-import Title from "@components/Title";
+import Icon from '@components/Icon'
+import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
+import { Button, Input, Link } from '@nextui-org/react'
+import { FormikValues, useFormik } from 'formik'
+import * as Yup from 'yup'
+import InputForm from '@components/InputForm'
+import InputCheckBox from '@components/InputCheckBox'
+import { signUp } from '@lib/redux/slices/auth/authSlice'
+import Vector from '@components/Vector'
+import Title from '@components/Title'
 
-function Register() {
+export default function Register() {
 	const dispatch = useAppDispatch()
 	const formik = useFormik({
 		initialValues: {
@@ -100,16 +100,16 @@ function Register() {
 					</div>
 					<div className='mb-[10px]'>
 						<InputCheckBox color='success'>
-							I agree to the{' '}
+							<span className='text-sm'>I agree to the </span>
 							<a
 								href='#'
-								className='underline decoration-green-600 text-green-600'
+								className='underline text-sm decoration-green-600 text-green-600'
 							>
 								privacy policy
 							</a>
 						</InputCheckBox>
 					</div>
-					<div className='flex'>
+					<div className='flex gap-2'>
 						<Button onClick={() => window.history.back()}>
 							<Vector />
 						</Button>
@@ -121,7 +121,7 @@ function Register() {
 							Create an account
 						</Button>
 					</div>
-					<div className='text-center'>
+					<div className='text-center mt-10'>
 						Already have an account?{' '}
 						<Link href='/auth/login' className={'font-simebold'}>
 							{' '}

@@ -3,10 +3,9 @@
 import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Button, Checkbox, Input } from '@nextui-org/react'
-import Link from 'next/link'
+import { Button, Checkbox, Input, Link } from '@nextui-org/react'
 import InputForm from '@components/InputForm'
-import { signIn } from '@lib/redux/slices/auth/authSlice'
+import { getAuthUserData, signIn } from '@lib/redux/slices/auth/authSlice'
 import Vector from '@components/Vector'
 import Title from '@components/Title'
 import { Notification } from '@mantine/core'
@@ -20,9 +19,10 @@ export default function Login() {
 	useEffect(() => {
 		dispatch(getAuthUserData())
 	}, [dispatch])
+	console.log(user)
 
 	useEffect(() => {
-		if (Object.keys(user).length !== 0) {
+		if (Object.keys(user).length !== 0 && user !== undefined) {
 			redirect('/fast-connect')
 		}
 	}, [user])
@@ -91,7 +91,7 @@ export default function Login() {
 						</div>
 					</div>
 				</div>
-				<div className='mt-2 flex'>
+				<div className='mt-2 flex gap-2'>
 					<Button onClick={() => window.history.back()}>
 						<Vector />
 					</Button>
@@ -102,6 +102,13 @@ export default function Login() {
 					>
 						Log in account
 					</Button>
+				</div>
+				<div className='text-center mt-10'>
+					Don't have an account?{' '}
+					<Link href='/auth/register' className={'font-simebold'}>
+						{' '}
+						Register
+					</Link>
 				</div>
 			</form>
 		</>
