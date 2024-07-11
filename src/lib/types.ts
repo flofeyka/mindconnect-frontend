@@ -42,3 +42,7 @@ export type calendarNoteType = {
 		$date: string
 	}
 }
+
+export type ResearchType = {
+	"@GROUP_ID": string
+}

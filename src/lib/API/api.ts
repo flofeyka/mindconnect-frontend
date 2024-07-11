@@ -157,3 +157,10 @@ export const calendarAPI = {
 	},
 	
 }
+
+export const researchAPI = {
+	async getResearch(data: string) {
+		const Response = await instance.get(`researches/get`)
+		return Response.data
+	},
+}
