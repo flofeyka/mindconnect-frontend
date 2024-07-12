@@ -43,6 +43,11 @@ export type calendarNoteType = {
 	}
 }
 
+export type ResearchDataType = {
+	page: number
+	limit: number
+}
+
 export type ResearchType = {
 	"@GROUP_ID": string
 }
