@@ -18,7 +18,7 @@ export default function Profile() {
 
 	return (
 		<>
-			<Card className='max-w-[640px] mx-auto h-48 mt-14 mb-14'>
+			<Card className='max-w-[836px] mx-auto h-48 mt-14 mb-14'>
 				<CardHeader className='justify-between'>
 					<div className='flex gap-5'>
 						<Avatar

@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 html {
-	data-mantine-color-scheme: udefined;
+	data-mantine-color-scheme: udnefined;
 }
 
 body {

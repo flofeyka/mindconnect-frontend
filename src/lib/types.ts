@@ -1,13 +1,3 @@
-export type authType = {
-	isAuth: boolean
-	captchaUrl: null | string
-	usersData: usersDataType
-	tokenIsValid: boolean | null
-	isPending: boolean
-	googleUrl: null | string
-	emails: string[]
-}
-
 export type usersDataType = {
 	id: string
 	email: string
@@ -16,6 +6,15 @@ export type usersDataType = {
 	number: number
 	image: string
 	isDoctor: boolean
+}
+export type authType = {
+	isAuth: boolean
+	captchaUrl: null | string
+	usersData: usersDataType
+	tokenIsValid: boolean | null
+	isPending: boolean
+	googleUrl: null | string
+	emails: string[]
 }
 
 export type calendarType = {

@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
-
 import Providers from './providers'
 import '../assets/styles/global.css'
-import '@mantine/core/styles/global.css'
 import React from 'react'
 
 const font = Poppins({
