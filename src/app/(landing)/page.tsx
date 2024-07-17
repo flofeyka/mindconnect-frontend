@@ -6,32 +6,31 @@ import FindSpecialist from '@containers/landing-page/findSpecialist/FindSpeciali
 import FunctionalCard from '@containers/landing-page/functional/FunctionalCard'
 import TitleHero from '@containers/landing-page/hero/TitleHero'
 import { FC } from 'react'
+import Link from 'next/link'
 
 const LandingPage: FC = () => {
-  return (
-    <div>
-      <TitleHero />
-      <div className="flex justify-center gap-4 mt-[45px]">
-        <CustomButton color="primary">Get a service</CustomButton>
-        <CustomButton
-          color="default"
-          startContent={
-            <Icon
-              width="16px"
-              height="17px"
-              path="icons/quick-support.svg"
-            />
-          }
-        >
-          Quick support
-        </CustomButton>
-      </div>
-      <AppScreen />
-      <ProblemSolution />
-      <FunctionalCard />
-      <FindSpecialist />
-    </div>
-  )
+	return (
+		<div>
+			<TitleHero />
+			<div className='flex justify-center gap-4 mt-[45px]'>
+				<CustomButton color='primary'>Get a service</CustomButton>
+				<Link href={'/fast-connect'}>
+					<CustomButton
+						color='default'
+						startContent={
+							<Icon width='16px' height='17px' path='icons/quick-support.svg' />
+						}
+					>
+						Quick support
+					</CustomButton>
+				</Link>
+			</div>
+			<AppScreen />
+			<ProblemSolution />
+			<FunctionalCard />
+			<FindSpecialist />
+		</div>
+	)
 }
 
 export default LandingPage

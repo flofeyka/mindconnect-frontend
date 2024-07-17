@@ -9,13 +9,13 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
-		"@mantine/core": "^7.11.1",
-		"@mantine/notifications": "^7.11.1",
+		"@lyket/react": "^2.1.0",
 		"@nextui-org/react": "^2.2.10",
 		"@reduxjs/toolkit": "^2.2.4",
 		"@stream-io/node-sdk": "^0.2.5",
 		"@stream-io/video-react-sdk": "^1.2.2",
 		"@types/react-redux": "^7.1.33",
+		"ai": "^3.2.22",
 		"axios": "^1.6.8",
 		"crypto": "^1.0.1",
 		"formik": "^2.4.6",

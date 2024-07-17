@@ -1,4 +1,7 @@
+'use client'
+
 import React from 'react'
+import { Provider, ClapButton } from '@lyket/react'
 import {
 	Image,
 	Card,
@@ -39,6 +42,9 @@ export default function Post() {
 					<p>Make beautiful websites regardless of your design experience.</p>
 				</CardBody>
 				<Divider />
+				<Provider apiKey='st_abdc0a40e610428e8dfdf59fe95a07'>
+					<ClapButton namespace='testing-react' id='everybody-clap-now' />
+				</Provider>
 				<CardFooter>
 					<Link href=''>View comments</Link>
 				</CardFooter>

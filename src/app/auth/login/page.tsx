@@ -8,8 +8,6 @@ import InputForm from '@components/InputForm'
 import { getAuthUserData, signIn } from '@lib/redux/slices/auth/authSlice'
 import Vector from '@components/Vector'
 import Title from '@components/Title'
-import { Notification } from '@mantine/core'
-import '@mantine/core/styles/Notification.css'
 import { redirect } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -44,10 +42,6 @@ export default function Login() {
 
 	return (
 		<>
-			<Notification color='#1CA66F' withCloseButton={false} className='mb-10'>
-				{' '}
-				Register or login first. It will take up to 15 seconds.
-			</Notification>
 			<form onSubmit={formik.handleSubmit}>
 				<div className='max-w-[300px]'>
 					<div className='text-center mb-5'>
