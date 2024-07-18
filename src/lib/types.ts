@@ -8,6 +8,7 @@ export type usersDataType = {
 	isDoctor: boolean
 }
 export type authType = {
+	user: any
 	isAuth: boolean
 	captchaUrl: null | string
 	usersData: usersDataType
@@ -48,5 +49,5 @@ export type ResearchDataType = {
 }
 
 export type ResearchType = {
-	"@GROUP_ID": string
+	'@GROUP_ID': string
 }
