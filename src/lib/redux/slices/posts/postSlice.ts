@@ -86,36 +86,6 @@ export const deletePost = createAsyncThunk(
 	}
 )
 
-export const likePost = createAsyncThunk(
-	'posts/likePost',
-	async (postId: string) => {
-		const response = await axios.patch(
-			`https://mindconnect-vebk.onrender.com/api/post/${postId}/like`,
-			{
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem('token')}`,
-				},
-			}
-		)
-		return response.data
-	}
-)
-
-export const unlikePost = createAsyncThunk(
-	'posts/unlikePost',
-	async (postId: string) => {
-		const response = await axios.patch(
-			`https://mindconnect-vebk.onrender.com/api/post/${postId}/unlike`,
-			{
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem('token')}`,
-				},
-			}
-		)
-		return response.data
-	}
-)
-
 export const addComment = createAsyncThunk(
 	'posts/addComment',
 	async ({ postId, content }: { postId: string; content: string }) => {
@@ -181,28 +151,6 @@ const postsSlice = createSlice({
 			.addCase(deletePost.fulfilled, (state, action: PayloadAction<string>) => {
 				state.posts = state.posts.filter(post => post._id !== action.payload)
 			})
-			.addCase(
-				likePost.fulfilled,
-				(state, action: PayloadAction<{ postId: string; userId: string }>) => {
-					const post = state.posts.find(
-						post => post._id === action.payload.postId
-					)
-					if (post) {
-						post.likes.push(action.payload.userId)
-					}
-				}
-			)
-			.addCase(
-				unlikePost.fulfilled,
-				(state, action: PayloadAction<{ postId: string; userId: string }>) => {
-					const post = state.posts.find(
-						post => post._id === action.payload.postId
-					)
-					if (post) {
-						post.likes = post.likes.filter(id => id !== action.payload.userId)
-					}
-				}
-			)
 			.addCase(addComment.fulfilled, (state, action) => {
 				const post = state.posts.find(
 					post => post._id === action.payload.postId

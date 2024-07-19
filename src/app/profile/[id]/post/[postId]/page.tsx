@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { Provider, ClapButton } from '@lyket/react'
+import { Provider, LikeButton } from '@lyket/react'
 import {
 	Image,
 	Card,
@@ -17,12 +17,18 @@ import { useParams } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
 import { fetchPostById } from '@lib/redux/slices/post/onePostslice'
 import { fetchDoctorProfileById } from '@lib/redux/slices/doctorprofile/doctorProfileSlice'
+import { getAuthUserData } from '@lib/redux/slices/auth/authSlice'
 
 export default function Post() {
 	const dispatch = useAppDispatch()
 	const { currentPost, loading, error } = useAppSelector(state => state.post)
 	const { profile } = useAppSelector(state => state.doctorProfile)
+	const currentUserId = useAppSelector(state => state.Auth.usersData.id)
 	const params = useParams()
+
+	useEffect(() => {
+		dispatch(getAuthUserData())
+	}, [dispatch])
 
 	useEffect(() => {
 		const doctorId = params.id as string
@@ -77,11 +83,23 @@ export default function Post() {
 					<p>{currentPost.description}</p>
 				</CardBody>
 				<Divider />
-				<Provider apiKey='st_abdc0a40e610428e8dfdf59fe95a07'>
-					<ClapButton namespace='testing-react' id='everybody-clap-now' />
+				<Provider
+					apiKey='st_abdc0a40e610428e8dfdf59fe95a07'
+					theme={{
+						colors: {
+							background: 'rgba(255, 255, 255, 0.3)',
+							text: 'text',
+							primary: '#1CA66F',
+						},
+					}}
+				>
+					<LikeButton
+						namespace='testing-react'
+						id='everybody-clap-now'
+						component={LikeButton.templates.Heart}
+					></LikeButton>
 				</Provider>
 				<CardFooter>
-					<p>Likes: {currentPost.likes.length}</p>
 					<p>Comments: {currentPost.comments.length}</p>
 					<p>Created at: {new Date(currentPost.createdAt).toLocaleString()}</p>
 				</CardFooter>
