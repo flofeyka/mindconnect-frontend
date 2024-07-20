@@ -10,6 +10,7 @@ import LandingPage from './page'
 import QuickActions from '@containers/landing-page/footer/QuickActions'
 import FooterBottom from '@containers/landing-page/footer/FooterBottom'
 import ContentOver from '@containers/landing-page/content-over/ContentOver'
+import LogoutButton from '@components/LogoutButton'
 
 const LandingLayout = ({ children }: { children: ReactNode }) => {
 	return (
@@ -41,6 +42,7 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
 						</Link>
 					</div>
 				</header>
+				<LogoutButton />
 				<main>
 					<LandingPage />
 				</main>
