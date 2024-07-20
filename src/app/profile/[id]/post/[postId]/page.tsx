@@ -70,7 +70,7 @@ export default function Post() {
 						<h2 className='text-lg'>{currentPost.title}</h2>
 						{/* link to author's profile: */}
 						<User
-							name={profile?.username}
+							name={profile?.firstName}
 							description={profile?.description}
 							avatarProps={{
 								src: `${profile?.image}`,

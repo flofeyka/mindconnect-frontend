@@ -4,7 +4,7 @@ import axios from 'axios'
 // Interfaces
 interface DoctorProfile {
 	_id: string
-	username: string
+	firstName: string
 	email: string
 	description: string
 	image: string

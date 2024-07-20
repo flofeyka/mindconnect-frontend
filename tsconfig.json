@@ -34,7 +34,8 @@
 		"**/*.ts",
 		"**/*.tsx",
 		".next/types/**/*.ts",
-		"src/data/ProblemData.ts"
+		"src/data/ProblemData.ts",
+		"src/app/doctors/specialities.js"
 	],
 	"exclude": ["node_modules"]
 }
