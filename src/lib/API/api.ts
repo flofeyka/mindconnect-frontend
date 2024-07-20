@@ -118,35 +118,34 @@ export const authAPI = {
 
 export const calendarAPI = {
   async addCalendar(data: { time: string; note: string }) {
-    const Response = await instance.post(`add-calendar/?date=${data.time}`, {
-      ...data,
-    });
+    const Response = await instance.post(
+      `calendar/add-calendar/?date=${data.time}`,
+      {
+        ...data,
+      }
+    );
     return Response.data;
   },
   async getCalendarByDates(data: { startDate: string; endDate: string }) {
     const Response = await instance.get(
-      `dates-calendar?startDate=${data.startDate}&endDate=${data.endDate}`
+      `calendar/dates-calendar?startDate=${data.startDate}&endDate=${data.endDate}`
     );
     return Response.data;
   },
   async deleteNote(data: { time: string; noteId: string }) {
     const Response = await instance.delete(
-      `delete-calendar/?date=${data.time}/notes/?note=${data.noteId}`
+      `calendar/delete-calendar/?date=${data.time}/notes/?note=${data.noteId}`
     );
     return Response.data;
   },
   async getOneCalendar(date: string) {
-    const Response = await instance.get(`one-calendar/?date=${date}`);
+    const Response = await instance.get(`calendar/one-calendar/${date}`);
+
     return Response.data;
   },
-  async updateNote(data: {
-    date: string;
-    time: string;
-    noteId: string;
-    note: string;
-  }) {
+  async updateNote(data: { date: string; noteId: string; note: string }) {
     const Response = await instance.put(
-      `update-calendar/?date=${data.time}/notes/?note=${data.noteId}`,
+      `calendar/update-note/${data.date}/notes/${data.noteId} `,
       {
         ...data,
       }
@@ -157,7 +156,9 @@ export const calendarAPI = {
 
 export const researchAPI = {
   async getResearch(data: ResearchDataType) {
-    const Response = await instance.get(`researches/get?page=${data.page}&limit=${data.limit}`);
+    const Response = await instance.get(
+      `calendar/researches/get?page=${data.page}&limit=${data.limit}`
+    );
     return Response.data;
   },
 };
