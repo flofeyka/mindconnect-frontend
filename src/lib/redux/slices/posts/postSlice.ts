@@ -1,20 +1,9 @@
+import { commentType, PostType } from '@lib/types'
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-// Types
-interface Post {
-	_id: string
-	owner: string
-	title: string
-	description?: string
-	image?: string
-	likes: string[]
-	comments: string[]
-	createdAt: string
-}
-
 interface PostsState {
-	posts: Post[]
+	posts: PostType[]
 	loading: 'idle' | 'pending' | 'succeeded' | 'failed'
 	error: string | null
 }
@@ -41,7 +30,7 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
 
 export const addPost = createAsyncThunk(
 	'posts/addPost',
-	async (postData: Partial<Post>) => {
+	async (postData: Partial<PostType>) => {
 		const response = await axios.post(
 			'https://mindconnect-vebk.onrender.com/api/post/add-post',
 			postData,
@@ -57,7 +46,7 @@ export const addPost = createAsyncThunk(
 
 export const updatePost = createAsyncThunk(
 	'posts/updatePost',
-	async ({ postId, postData }: { postId: string; postData: Partial<Post> }) => {
+	async ({ postId, postData }: { postId: string; postData: Partial<PostType> }) => {
 		const response = await axios.patch(
 			`https://mindconnect-vebk.onrender.com/api/post/update-post/${postId}`,
 			postData,
@@ -115,6 +104,7 @@ export const fetchComments = createAsyncThunk(
 				},
 			}
 		)
+
 		return response.data
 	}
 )
@@ -162,7 +152,7 @@ const postsSlice = createSlice({
 			.addCase(fetchPosts.pending, state => {
 				state.loading = 'pending'
 			})
-			.addCase(fetchPosts.fulfilled, (state, action: PayloadAction<Post[]>) => {
+			.addCase(fetchPosts.fulfilled, (state, action: PayloadAction<PostType[]>) => {
 				state.loading = 'succeeded'
 				state.posts = action.payload
 			})
@@ -170,10 +160,10 @@ const postsSlice = createSlice({
 				state.loading = 'failed'
 				state.error = action.error.message || 'Failed to fetch posts'
 			})
-			.addCase(addPost.fulfilled, (state, action: PayloadAction<Post>) => {
+			.addCase(addPost.fulfilled, (state, action: PayloadAction<PostType>) => {
 				state.posts.push(action.payload)
 			})
-			.addCase(updatePost.fulfilled, (state, action: PayloadAction<Post>) => {
+			.addCase(updatePost.fulfilled, (state, action: PayloadAction<PostType>) => {
 				const index = state.posts.findIndex(
 					post => post._id === action.payload._id
 				)
@@ -193,9 +183,19 @@ const postsSlice = createSlice({
 				}
 			})
 			.addCase(fetchComments.fulfilled, (state, action) => {
+				state.posts.forEach(post => {
+					post.comments = action.payload.map((comment: commentType) => {
+						if(comment.postId === post._id) {
+							return comment;
+						}
+					})
+				})
+
+
 				const post = state.posts.find(
-					post => post._id === action.payload.postId
+					post => post._id == action.payload.postId
 				)
+				console.log(post);
 				if (post) {
 					post.comments = action.payload
 				}

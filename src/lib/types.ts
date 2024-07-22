@@ -1,3 +1,21 @@
+export interface PostType {
+	_id: string
+	owner: string
+	title: string
+	description?: string
+	image?: string
+	likes: string[]
+	comments: string[]
+	createdAt: string
+}
+
+export type commentType = {
+	_id: string;
+	owner: string;
+	content: string;
+	postId: string;
+}
+
 export type usersDataType = {
 	id: string
 	email: string

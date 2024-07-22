@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { calendarAPI } from "@lib/API/api";
+import { calendarAPI } from "@lib/API/calendarAPI";
 import { calendarType } from "@lib/types";
 
 const initialState = {
