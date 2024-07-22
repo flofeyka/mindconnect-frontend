@@ -13,6 +13,7 @@ import {
 	addComment,
 	fetchComments,
 } from '../../lib/redux/slices/posts/postSlice'
+import Comments from '@components/Posts/Comments'
 
 interface Comment {
 	_id: string
@@ -34,6 +35,7 @@ const PostsPage: React.FC = () => {
 	const { posts, loading, error } = useSelector(
 		(state: RootState) => state.posts
 	)
+
 	const [newPost, setNewPost] = useState({
 		title: '',
 		description: '',
@@ -48,7 +50,7 @@ const PostsPage: React.FC = () => {
 	const [activeComments, setActiveComments] = useState<string | null>(null)
 
 	useEffect(() => {
-		dispatch(fetchPosts())
+		dispatch(fetchPosts());
 	}, [dispatch])
 
 	const handleAddPost = async (e: React.FormEvent) => {
@@ -249,17 +251,7 @@ const PostsPage: React.FC = () => {
 								{activeComments === post._id && (
 									<div className='mt-4'>
 										<h3 className='font-bold'>Comments:</h3>
-										{post.comments?.map((comment: Comment) => {
-											console.log(post)
-											return (
-												<li
-													key={comment._id}
-													className='bg-gray-100 p-2 mt-2 rounded'
-												>
-													<p>{comment.content}</p>
-												</li>
-											)
-										})}
+										<Comments postData={post}/>
 										<div className='mt-2'>
 											<input
 												type='text'
