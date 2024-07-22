@@ -119,6 +119,39 @@ export const fetchComments = createAsyncThunk(
 	}
 )
 
+// New async thunks for liking and unliking posts
+export const likePost = createAsyncThunk(
+	'posts/likePost',
+	async (postId: string) => {
+		const response = await axios.post(
+			`https://mindconnect-vebk.onrender.com/api/post/${postId}/like`,
+			{},
+			{
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+			}
+		)
+		return { postId, message: response.data }
+	}
+)
+
+export const unlikePost = createAsyncThunk(
+	'posts/unlikePost',
+	async (postId: string) => {
+		const response = await axios.post(
+			`https://mindconnect-vebk.onrender.com/api/post/${postId}/unlike`,
+			{},
+			{
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+			}
+		)
+		return { postId, message: response.data }
+	}
+)
+
 // Slice
 const postsSlice = createSlice({
 	name: 'posts',
@@ -164,7 +197,31 @@ const postsSlice = createSlice({
 					post => post._id === action.payload.postId
 				)
 				if (post) {
-					post.comments = action.payload.comments
+					post.comments = action.payload
+				}
+			})
+			.addCase(likePost.fulfilled, (state, action) => {
+				const post = state.posts.find(
+					post => post._id === action.payload.postId
+				)
+				if (post) {
+					// Assuming the current user's ID is stored in localStorage
+					const userId = localStorage.getItem('userId')
+					if (userId && !post.likes.includes(userId)) {
+						post.likes.push(userId)
+					}
+				}
+			})
+			.addCase(unlikePost.fulfilled, (state, action) => {
+				const post = state.posts.find(
+					post => post._id === action.payload.postId
+				)
+				if (post) {
+					// Assuming the current user's ID is stored in localStorage
+					const userId = localStorage.getItem('userId')
+					if (userId) {
+						post.likes = post.likes.filter(id => id !== userId)
+					}
 				}
 			})
 	},
