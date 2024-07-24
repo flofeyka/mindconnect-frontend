@@ -1,14 +1,16 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Provider, LikeButton } from '@lyket/react'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { redirect, useParams } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
 import { fetchPostById } from '@lib/redux/slices/post/onePostslice'
 import { fetchDoctorProfileById } from '@lib/redux/slices/doctorprofile/doctorProfileSlice'
 import { getAuthUserData } from '@lib/redux/slices/auth/authSlice'
 import { Heart, MessageCircle, Send } from 'lucide-react'
+import { Button } from '@nextui-org/react'
+import { Input } from '@nextui-org/input'
 import {
 	addComment,
 	deletePost,
@@ -19,6 +21,8 @@ import {
 } from '@lib/redux/slices/posts/postSlice'
 import Comments from '@components/Posts/Comments'
 import { RootState } from '@lib/redux/store'
+import { formatDate } from '@app/hooks/useFormattedDate'
+import { Modal, ModalContent, useDisclosure } from '@nextui-org/react'
 
 export default function Post() {
 	const dispatch = useAppDispatch()
@@ -26,20 +30,16 @@ export default function Post() {
 	const currentUserId = useAppSelector(state => state.Auth.usersData.id)
 	const params = useParams()
 	const { postId } = params as { postId: string }
+	const modal1 = useDisclosure()
 
 	const post = useAppSelector((state: RootState) =>
 		state.posts.posts.find(p => p._id === postId)
 	)
 
 	const [liked, setLiked] = useState(false)
+	console.log(liked)
 	const [likes, setLikes] = useState(0)
-	const [activeComments, setActiveComments] = useState<string | null>(null)
-	const [comment, setComment] = useState('')
-	const [editingPost, setEditingPost] = useState<{
-		id: string
-		title: string
-		description: string
-	} | null>(null)
+	const [activeComments, setActiveComments] = useState(false)
 
 	useEffect(() => {
 		if (postId && (!post || post._id !== postId)) {
@@ -52,157 +52,136 @@ export default function Post() {
 	}, [dispatch])
 
 	useEffect(() => {
-		const doctorId = params.id as string
-		if (doctorId) {
-			dispatch(fetchDoctorProfileById(doctorId))
-		}
-	}, [dispatch, params.id])
+		dispatch(fetchDoctorProfileById(params.id as string))
+	}, [dispatch])
 
-	useEffect(() => {
+	const syncLikeState = useCallback(() => {
 		if (post && currentUserId) {
 			setLikes(post.likes?.length || 0)
 			setLiked(post.likes?.includes(currentUserId) || false)
 		}
 	}, [post, currentUserId])
 
+	useEffect(() => {
+		syncLikeState()
+	}, [syncLikeState, post])
+
 	if (!post) {
 		return <div>Loading...</div>
 	}
 
-	const handleUpdatePost = (e: React.FormEvent) => {
-		e.preventDefault()
-		if (editingPost) {
-			dispatch(
-				updatePost({
-					postId: editingPost.id,
-					postData: {
-						title: editingPost.title,
-						description: editingPost.description,
-					},
-				})
-			)
-			setEditingPost(null)
-		}
-	}
+	const handleLikeUnlike = async () => {
+		if (!currentUserId) return
 
-	const handleDeletePost = (postId: string) => {
-		dispatch(deletePost(postId))
-	}
-
-	const handleAddComment = async (postId: string) => {
-		if (comment.trim()) {
-			try {
-				await dispatch(addComment({ postId, content: comment })).unwrap()
-				setComment('')
-				dispatch(fetchComments(postId))
-			} catch (error) {
-				console.error('Failed to add comment:', error)
-			}
-		}
-	}
-
-	const handleLikeUnlike = async (postId: string, isLiked: boolean) => {
 		try {
-			if (isLiked) {
+			if (liked) {
 				await dispatch(unlikePost(postId)).unwrap()
-				setLikes(prevLikes => prevLikes - 1)
 			} else {
 				await dispatch(likePost(postId)).unwrap()
-				setLikes(prevLikes => prevLikes + 1)
 			}
-			setLiked(!isLiked)
+			dispatch(fetchPostById(postId))
 		} catch (error) {
 			console.error('Failed to like/unlike post:', error)
 		}
 	}
 
-	const handleToggleComments = (postId: string) => {
-		if (activeComments === postId) {
-			setActiveComments(null)
-		} else {
-			setActiveComments(postId)
+	const handleToggleComments = () => {
+		setActiveComments(!activeComments)
+		if (!activeComments) {
 			dispatch(fetchComments(postId))
 		}
 	}
 
-	const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-		setComment(e.target.value)
+	const handleCommentDeleted = () => {
+		dispatch(fetchComments(postId))
+	}
+
+	const handleDeletePost = () => {
+		dispatch(deletePost(params.postId as string))
+		const timer = setTimeout(() => {
+			redirect(`/profile/${profile?._id}`)
+		}, 2000)
+		return () => clearTimeout(timer)
+	}
 
 	return (
-		<div className='max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4'>
+		<div className='max-w-md mx-auto bg-secondary rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4'>
 			<div className='p-8'>
-				<Link href={`/profile/${params.id}`}>
-					<div className='flex items-center mb-4'>
-						<img
-							className='h-10 w-10 rounded-full mr-2'
-							src={profile?.image}
-							alt={profile?.firstName}
-						/>
-						<div className='text-sm'>
-							<p className='text-gray-900 font-semibold'>
-								{profile?.firstName}
-							</p>
-							<p className='text-gray-600'>{post.createdAt}</p>
+				<div className='flex justify-between'>
+					<Link href={`/profile/${params.id}`}>
+						<div className='flex items-center mb-4'>
+							<img
+								className='h-10 w-10 rounded-full mr-2'
+								src={profile?.image}
+								alt={profile?.firstName}
+							/>
+							<div className='text-sm'>
+								<p className='text-gray-100 font-semibold'>
+									{profile?.firstName}
+								</p>
+								<p className='text-gray-400'>{formatDate(post.createdAt)}</p>
+							</div>
 						</div>
-					</div>
-				</Link>
+					</Link>
+					{post.owner == currentUserId && (
+						<>
+							<Button
+								onPress={modal1.onOpen}
+								className='text-white bg-red-500 px-2 py-1 '
+							>
+								Delete Post
+							</Button>
+							<Modal
+								isOpen={modal1.isOpen}
+								onClose={modal1.onClose}
+								onOpenChange={modal1.onOpenChange}
+							>
+								<ModalContent>
+									<Button
+										onClick={handleDeletePost}
+										className='text-white bg-red-500 px-2 py-1 '
+									>
+										Delete Post
+									</Button>
+								</ModalContent>
+							</Modal>
+						</>
+					)}
+				</div>
 				<img
 					className='w-full object-cover mb-4'
 					src={post.image}
 					alt={post.title}
 				/>
-				<h2 className='block mt-1 text-lg leading-tight font-medium text-black'>
+				<h1 className='block mt-1 text-lg leading-tight font-medium text-white'>
 					{post.title}
-				</h2>
-				<p className='mt-2 text-gray-500'>{post.description}</p>
+				</h1>
+				<p className='mt-2 text-gray-200'>{post.description}</p>
+
 				<div className='mt-4 flex items-center'>
 					<button
-						onClick={() => handleLikeUnlike(post._id, liked)}
+						onClick={handleLikeUnlike}
 						className={`flex items-center mr-4 ${
-							liked ? 'text-red-500' : 'text-gray-500'
+							liked ? 'text-red-500' : 'text-gray-300'
 						}`}
 					>
-						<span>{likes}</span>
+						<span className='text-gray-300 mr-1'>{likes}</span>
 						<Heart className='mr-1' size={20} />
-						{liked ? 'Like' : 'Like'}
+						{liked ? 'Unlike' : 'Like'}
 					</button>
-
 					<button
-						onClick={() => handleToggleComments(post._id)}
-						className='flex items-center text-gray-500'
+						onClick={handleToggleComments}
+						className={`flex items-center text-gray-100 ${
+							activeComments ? 'text-primary' : 'text-gray-300'
+						}`}
 					>
 						<MessageCircle className='mr-1' size={20} />
-						Комментарии
+						Comments
 					</button>
 				</div>
-				{activeComments === post._id && (
+				{activeComments && (
 					<div className='mt-4'>
-						<h3 className='font-semibold mb-2 text-black'>Комментарии:</h3>
-
-						<form
-							onSubmit={e => {
-								e.preventDefault()
-								handleAddComment(post._id)
-							}}
-							className='mt-4'
-						>
-							<input
-								type='text'
-								value={comment}
-								onChange={handleCommentChange}
-								placeholder='Напишите комментарий...'
-								className='w-full p-2 border rounded'
-							/>
-							<button
-								type='submit'
-								className='mt-2 bg-blue-500 text-white p-2 rounded flex items-center'
-							>
-								<Send size={16} className='mr-2' />
-								Отправить
-							</button>
-						</form>
-
-						<Comments postData={post} />
+						<Comments postData={post} onCommentDeleted={handleCommentDeleted} />
 					</div>
 				)}
 			</div>

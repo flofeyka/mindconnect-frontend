@@ -7,8 +7,8 @@ export default function PostLayout({
 	children: React.ReactNode
 }) {
 	return (
-		<div className='flex h-screen'>
-			<div className='bg-[#111] w-full'>{children}</div>
+		<div className='flex'>
+			<div className='bg-[#111] w-full h-full'>{children}</div>
 		</div>
 	)
 }
