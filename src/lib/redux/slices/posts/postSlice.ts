@@ -163,6 +163,21 @@ export const fetchPostById = createAsyncThunk(
 	}
 )
 
+export const deleteComment = createAsyncThunk(
+	'posts/deleteComment',
+	async ({ postId, commentId }: { postId: string; commentId: string }) => {
+		await axios.delete(
+			`https://mindconnect-vebk.onrender.com/api/post/delete-comment/${commentId}`,
+			{
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('token')}`,
+				},
+			}
+		)
+		return { postId, commentId }
+	}
+)
+
 // Slice
 const postsSlice = createSlice({
 	name: 'posts',
@@ -257,6 +272,21 @@ const postsSlice = createSlice({
 						Object.assign(existingPost, action.payload)
 					} else {
 						state.posts.push(action.payload)
+					}
+				}
+			)
+			.addCase(
+				deleteComment.fulfilled,
+				(
+					state,
+					action: PayloadAction<{ postId: string; commentId: string }>
+				) => {
+					const { postId, commentId } = action.payload
+					const post = state.posts.find(post => post._id === postId)
+					if (post) {
+						post.comments = post.comments.filter(
+							comment => comment !== commentId
+						)
 					}
 				}
 			)

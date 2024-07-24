@@ -39,9 +39,9 @@ const getToken = () => localStorage.getItem('token')
 // Async Thunks
 export const fetchDoctorProfileById = createAsyncThunk(
 	'doctorProfile/fetchById',
-	async (doctorId: string) => {
+	async (id: string) => {
 		const response = await axios.get(
-			`https://mindconnect-vebk.onrender.com/api/post/profile/${doctorId}`,
+			`https://mindconnect-vebk.onrender.com/api/post/profile/${id}`,
 			{
 				headers: {
 					Authorization: `Bearer ${getToken()}`,
