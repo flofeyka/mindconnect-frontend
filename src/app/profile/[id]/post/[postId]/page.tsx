@@ -23,6 +23,7 @@ import Comments from '@components/Posts/Comments'
 import { RootState } from '@lib/redux/store'
 import { formatDate } from '@app/hooks/useFormattedDate'
 import { Modal, ModalContent, useDisclosure } from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
 
 export default function Post() {
 	const dispatch = useAppDispatch()
@@ -31,6 +32,7 @@ export default function Post() {
 	const params = useParams()
 	const { postId } = params as { postId: string }
 	const modal1 = useDisclosure()
+	const router = useRouter()
 
 	const post = useAppSelector((state: RootState) =>
 		state.posts.posts.find(p => p._id === postId)
@@ -98,10 +100,7 @@ export default function Post() {
 
 	const handleDeletePost = () => {
 		dispatch(deletePost(params.postId as string))
-		const timer = setTimeout(() => {
-			redirect(`/profile/${profile?._id}`)
-		}, 2000)
-		return () => clearTimeout(timer)
+		router.push(`/profile/${params.id}`)
 	}
 
 	return (

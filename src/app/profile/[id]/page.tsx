@@ -21,6 +21,7 @@ import { useParams } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { getAuthUserData } from '@lib/redux/slices/auth/authSlice'
+import { disableInstantTransitions } from 'framer-motion'
 
 export default function Profile() {
 	const dispatch = useAppDispatch()
@@ -125,33 +126,42 @@ export default function Profile() {
 							{subscriberCount}
 						</p>
 						<p className='text-default-400 text-small'>Followers</p>
+						{(params.id as string) === currentUserId && (
+							<Link href={`/add`}>Add Post</Link>
+						)}
 					</div>
 				</CardFooter>
 			</Card>
 			<div className='max-w-[900px] gap-2 grid grid-cols-12 grid-rows-2 px-8 mx-auto'>
-				{posts.map(post => (
-					<Card
-						key={post._id}
-						className='col-span-12 sm:col-span-4 h-[300px] data-hover:true'
-					>
-						<Link href={`/profile/${params.id}/post/${post._id}`}>
-							<CardHeader className='absolute z-10 top-1 flex-col !items-start'>
-								<p className='text-tiny text-white/60 uppercase font-bold'>
-									{post.title}
-								</p>
-								<h4 className='text-white font-medium text-large'>
-									{post.description}
-								</h4>
-							</CardHeader>
-							<Image
-								removeWrapper
-								alt='Card background'
-								className='z-0 w-full h-full object-cover'
-								src={post.image}
-							/>
-						</Link>
-					</Card>
-				))}
+				{posts
+					.slice()
+					.reverse()
+					.map(post => (
+						<Card
+							key={post._id}
+							className='col-span-12 sm:col-span-4 h-[250px] overflow-hidden'
+						>
+							<Link
+								href={`/profile/${params.id}/post/${post._id}`}
+								className='w-full h-full relative block'
+							>
+								<CardHeader className='absolute z-10 top-0 left-0 right-0 flex-col !items-start bg-gradient-to-b from-black/60 to-transparent'>
+									<p className='text-tiny text-white/60 uppercase font-bold'>
+										{post.title}
+									</p>
+									<h4 className='text-white font-medium text-large'>
+										{post.description}
+									</h4>
+								</CardHeader>
+								<Image
+									removeWrapper
+									alt='Card background'
+									className='z-0 w-full h-full object-cover'
+									src={post.image}
+								/>
+							</Link>
+						</Card>
+					))}
 			</div>
 		</>
 	)
