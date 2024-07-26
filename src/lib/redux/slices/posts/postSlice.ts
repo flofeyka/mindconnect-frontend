@@ -27,16 +27,21 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
 	)
 	return response.data
 })
-
 export const addPost = createAsyncThunk(
 	'posts/addPost',
-	async (postData: Partial<PostType>) => {
+	async (postData: { title: string; description: string; image: File }) => {
+		const formData = new FormData()
+		formData.append('title', postData.title)
+		formData.append('description', postData.description)
+		formData.append('image', postData.image)
+
 		const response = await axios.post(
 			'https://mindconnect-vebk.onrender.com/api/post/add-post',
-			postData,
+			formData,
 			{
 				headers: {
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
+					'Content-Type': 'multipart/form-data',
 				},
 			}
 		)
