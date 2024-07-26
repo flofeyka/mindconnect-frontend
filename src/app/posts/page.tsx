@@ -50,7 +50,7 @@ const PostsPage: React.FC = () => {
 	const [activeComments, setActiveComments] = useState<string | null>(null)
 
 	useEffect(() => {
-		dispatch(fetchPosts());
+		dispatch(fetchPosts())
 	}, [dispatch])
 
 	const handleAddPost = async (e: React.FormEvent) => {
@@ -251,7 +251,7 @@ const PostsPage: React.FC = () => {
 								{activeComments === post._id && (
 									<div className='mt-4'>
 										<h3 className='font-bold'>Comments:</h3>
-										<Comments postData={post}/>
+										<Comments postData={post} />
 										<div className='mt-2'>
 											<input
 												type='text'

@@ -21,7 +21,7 @@ import { useParams } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { getAuthUserData } from '@lib/redux/slices/auth/authSlice'
-import { disableInstantTransitions } from 'framer-motion'
+import { Link as LinkUi } from '@nextui-org/react'
 
 export default function Profile() {
 	const dispatch = useAppDispatch()
@@ -114,7 +114,7 @@ export default function Profile() {
 				<CardBody className='px-3 py-0 text-small text-default-400'>
 					<p>{profile.description}</p>
 				</CardBody>
-				<CardFooter className='gap-3'>
+				<CardFooter className='gap-3 items-center flex'>
 					<div className='flex gap-1'>
 						<p className='font-semibold text-default-400 text-small'>
 							{profile.subscribedTo.length}
@@ -126,10 +126,19 @@ export default function Profile() {
 							{subscriberCount}
 						</p>
 						<p className='text-default-400 text-small'>Followers</p>
-						{(params.id as string) === currentUserId && (
-							<Link href={`/add`}>Add Post</Link>
-						)}
 					</div>
+					{(params.id as string) === currentUserId && (
+						<Button
+							href='/add'
+							as={LinkUi}
+							color='primary'
+							showAnchorIcon
+							variant='solid'
+							className='mr-0 ml-auto'
+						>
+							Add Post
+						</Button>
+					)}
 				</CardFooter>
 			</Card>
 			<div className='max-w-[900px] gap-2 grid grid-cols-12 grid-rows-2 px-8 mx-auto'>
