@@ -351,7 +351,7 @@ export default function Post() {
 				</div>
 				<img
 					className='w-full object-cover mb-4'
-					src={post.image}
+					src={post.image as any}
 					alt={post.title}
 				/>
 				<h1 className='block mt-1 text-lg leading-tight font-medium text-white'>
