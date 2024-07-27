@@ -56,14 +56,21 @@ export const updatePost = createAsyncThunk(
 		postData,
 	}: {
 		postId: string
-		postData: Partial<PostType>
+		postData: { title?: string; description?: string; image?: File }
 	}) => {
+		const formData = new FormData()
+		if (postData.title) formData.append('title', postData.title)
+		if (postData.description)
+			formData.append('description', postData.description)
+		if (postData.image) formData.append('image', postData.image)
+
 		const response = await axios.patch(
 			`https://mindconnect-vebk.onrender.com/api/post/update-post/${postId}`,
-			postData,
+			formData,
 			{
 				headers: {
 					Authorization: `Bearer ${localStorage.getItem('token')}`,
+					'Content-Type': 'multipart/form-data',
 				},
 			}
 		)
