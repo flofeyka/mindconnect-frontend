@@ -2,8 +2,7 @@ import { ResearchDataType, usersDataType } from '@lib/types'
 import axios from 'axios'
 
 const instance = axios.create({
-	withCredentials: true,
-	baseURL: 'https://mindconnect-vebk.onrender.com/api/',
+	baseURL: `${process.env.NEXT_PUBLIC_API_URL}/auth/`,
 })
 
 instance.interceptors.request.use(
@@ -21,14 +20,14 @@ instance.interceptors.request.use(
 
 export const authAPI = {
 	async googleSignIn() {
-		const Response = await instance.get('auth/googlesignin')
+		const Response = await instance.get('googlesignin')
 		return {
 			status: Response.status,
 			data: Response.data,
 		}
 	},
 	async getGoogleUsersData(code: string) {
-		const Response = await instance.get(`auth/getgoogleuserdata?code=${code}`)
+		const Response = await instance.get(`getgoogleuserdata?code=${code}`)
 		localStorage.setItem('token', Response.data.accessToken)
 		return {
 			data: Response.data.user,
@@ -39,8 +38,9 @@ export const authAPI = {
 		email: string
 		password: string
 	}): Promise<usersDataType> {
-		const Response = await instance.post('auth/signin', data)
-		localStorage.setItem('token', Response.data.token)
+		const Response = await instance.post('signin', data)
+		localStorage.setItem('token', Response.data.token);
+		localStorage.setItem('refreshToken', Response.data.refreshToken)
 		return Response.data.user
 	},
 	async register(data: {
@@ -48,18 +48,19 @@ export const authAPI = {
 		email: string
 		password: string
 	}): Promise<usersDataType> {
-		const Response = await instance.post('auth/signup', {
+		const Response = await instance.post('signup', {
 			...data,
 		})
 		localStorage.setItem('token', Response.data.token)
+		localStorage.setItem('refreshToken', Response.data.refreshToken)
 		return Response.data.user
 	},
 	async logout() {
-		const Response = await instance.post('auth/logout')
+		const Response = await instance.post('logout')
 		return Response.data
 	},
 	async getUsersData(): Promise<{ user: usersDataType; status: number }> {
-		const Response = await instance.get('auth/current', {
+		const Response = await instance.get('current', {
 			headers: {
 				Authorization: `Bearer ${localStorage.getItem('token')}`,
 			},
@@ -70,18 +71,14 @@ export const authAPI = {
 		}
 	},
 	async refresh(): Promise<{ status: number }> {
-		const Response = await instance.get('auth/refreshToken', {
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem('token')}`,
-			},
-			withCredentials: true,
-		})
-		localStorage.setItem('token', Response.data.token)
+		const Response = await instance.post('refreshToken', {refreshToken: localStorage.getItem('refreshToken')})
+		localStorage.setItem('token', Response.data.token);
+		localStorage.setItem('refreshToken', Response.data.refreshToken)
 		return { status: Response.status }
 	},
 
 	async requestResetPassword(email: string) {
-		const Response = await instance.post('auth/request-password-reset', {
+		const Response = await instance.post('request-password-reset', {
 			email,
 		})
 		return {
@@ -91,7 +88,7 @@ export const authAPI = {
 	},
 
 	async resetPassword(token: string, newPassword: string) {
-		const Response = await instance.post(`auth/reset-password/${token}`, {
+		const Response = await instance.post(`reset-password/${token}`, {
 			newPassword,
 		})
 		return {
@@ -101,7 +98,7 @@ export const authAPI = {
 	},
 
 	async verifyToken(token: string) {
-		const Response = await instance.get(`auth/verify-token/${token}`)
+		const Response = await instance.get(`verify-token/${token}`)
 		return {
 			data: Response.data,
 			status: Response.status,
@@ -109,7 +106,7 @@ export const authAPI = {
 	},
 
 	async findUsersByEmails(emails: string[]) {
-		const Response = await instance.post('auth/users-by-emails', {
+		const Response = await instance.post('users-by-emails', {
 			emails: emails,
 		})
 		return Response.data.userIds

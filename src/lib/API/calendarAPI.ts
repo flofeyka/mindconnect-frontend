@@ -2,7 +2,7 @@ import axios from "axios"
 
 const instance = axios.create({
 	withCredentials: true,
-	baseURL: 'https://mindconnect-vebk.onrender.com/api/calendar/',
+    baseURL: `${process.env.NEXT_PUBLIC_API_URL}/calendar/`,
 })
 
 instance.interceptors.request.use(

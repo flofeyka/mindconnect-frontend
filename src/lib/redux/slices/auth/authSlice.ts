@@ -1,4 +1,4 @@
-import { authAPI } from "@lib/API/api";
+import { authAPI } from "@lib/API/authAPI";
 import { authType, usersDataType } from "@lib/types";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
