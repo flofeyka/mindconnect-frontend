@@ -1,8 +1,19 @@
-import { Card, CardHeader } from '@components/ai/card'
+'use client'
+
+import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
+import { getAuthUserData } from '@lib/redux/slices/auth/authSlice'
+import { Card, CardHeader, Avatar } from '@nextui-org/react'
 import { Message as MessageType } from 'ai'
-import { Bot, User } from 'lucide-react'
+import { Bot } from 'lucide-react'
+import { useEffect } from 'react'
 
 export default function Message({ message }: { message: MessageType }) {
+	const dispatch = useAppDispatch()
+	const user = useAppSelector(state => state.Auth.usersData)
+
+	useEffect(() => {
+		dispatch(getAuthUserData())
+	}, [dispatch])
 	const { role, content } = message
 	if (role === 'assistant') {
 		return (
@@ -19,7 +30,7 @@ export default function Message({ message }: { message: MessageType }) {
 		<Card className='whitespace-pre-wrap'>
 			<CardHeader>
 				<div className='flex items-center gap-2'>
-					<User size={36} />
+					<Avatar size='sm' src={user.image} />
 					{content}
 				</div>
 			</CardHeader>
