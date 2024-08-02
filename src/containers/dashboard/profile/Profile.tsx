@@ -1,8 +1,9 @@
 import Icon from "@components/Icon";
+import ModalWrapper from "@components/Modal";
 import { useAppDispatch } from "@lib/redux/hooks";
 import { logout } from "@lib/redux/slices/auth/authSlice";
 import { usersDataType } from "@lib/types";
-import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Modal, ModalContent, useDisclosure } from "@nextui-org/react";
+import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, ModalContent, useDisclosure } from "@nextui-org/react";
 import { useForm } from "react-hook-form";
 
 export default function Profile({ user }: { user: usersDataType }) {
@@ -11,11 +12,11 @@ export default function Profile({ user }: { user: usersDataType }) {
     const dispatch = useAppDispatch();
 
     return <div>
-        <Modal onOpenChange={onOpenChange} isOpen={isOpen} >
+        <ModalWrapper onOpenChange={onOpenChange} isOpen={isOpen} >
             <ModalContent className="p-3">
                 {(onClose) => <EditProfileForm onClose={onClose} firstName={user.firstName} lastName={user.lastName} />}
             </ModalContent>
-        </Modal>
+        </ModalWrapper>
         <Dropdown>
             <DropdownTrigger>
                 <div className="flex items-center cursor-pointer">

@@ -8,8 +8,14 @@ import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
 import { fetchPostById } from '@lib/redux/slices/post/onePostslice'
 import { fetchDoctorProfileById } from '@lib/redux/slices/doctorprofile/doctorProfileSlice'
 import { getAuthUserData } from '@lib/redux/slices/auth/authSlice'
-import { Heart, MessageCircle, Send } from 'lucide-react'
-import { Button } from '@nextui-org/react'
+import { Heart, MessageCircle, RefreshCw, Send, Upload } from 'lucide-react'
+import {
+	Button,
+	ModalBody,
+	ModalFooter,
+	ModalHeader,
+	Textarea,
+} from '@nextui-org/react'
 import { Input } from '@nextui-org/input'
 import {
 	addComment,
@@ -23,6 +29,7 @@ import Comments from '@components/Posts/Comments'
 import { RootState } from '@lib/redux/store'
 import { formatDate } from '@app/hooks/useFormattedDate'
 import { Modal, ModalContent, useDisclosure } from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
 
 export default function Post() {
 	const dispatch = useAppDispatch()
@@ -31,6 +38,82 @@ export default function Post() {
 	const params = useParams()
 	const { postId } = params as { postId: string }
 	const modal1 = useDisclosure()
+	const modalEdit = useDisclosure()
+
+	// from add post
+	const [title, setTitle] = useState('')
+	const [description, setDescription] = useState('')
+	const [image, setImage] = useState<File | null>(null)
+	const [photoPreview, setPhotoPreview] = useState<string | null>(null)
+	const [isDragging, setIsDragging] = useState(false)
+
+	useEffect(() => {
+		dispatch(getAuthUserData())
+	}, [dispatch])
+
+	const handlePhotoUpload = (file: File) => {
+		setImage(file)
+		const reader = new FileReader()
+		reader.onload = e => {
+			setPhotoPreview(e.target?.result as string)
+		}
+		reader.readAsDataURL(file)
+	}
+
+	const handleDragEnter = useCallback(
+		(e: React.DragEvent<HTMLLabelElement>) => {
+			e.preventDefault()
+			e.stopPropagation()
+			setIsDragging(true)
+		},
+		[]
+	)
+
+	const handleDragLeave = useCallback(
+		(e: React.DragEvent<HTMLLabelElement>) => {
+			e.preventDefault()
+			e.stopPropagation()
+			setIsDragging(false)
+		},
+		[]
+	)
+
+	const handleDragOver = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
+		e.preventDefault()
+		e.stopPropagation()
+	}, [])
+
+	const handleDrop = useCallback((e: React.DragEvent<HTMLLabelElement>) => {
+		e.preventDefault()
+		e.stopPropagation()
+		setIsDragging(false)
+
+		if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+			handlePhotoUpload(e.dataTransfer.files[0])
+		}
+	}, [])
+
+	const resetPhoto = () => {
+		setImage(null)
+		setPhotoPreview(null)
+	}
+
+	const router = useRouter()
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault()
+		if (title && description && image) {
+			const postData = { title, description, image }
+
+			dispatch(updatePost({ postId: params.postId as string, postData }))
+			setTimeout(() => {
+				window.location.reload()
+			}, 1000)
+		} else {
+			alert('All fields are required')
+		}
+	}
+	// from add post
 
 	const post = useAppSelector((state: RootState) =>
 		state.posts.posts.find(p => p._id === postId)
@@ -98,10 +181,7 @@ export default function Post() {
 
 	const handleDeletePost = () => {
 		dispatch(deletePost(params.postId as string))
-		const timer = setTimeout(() => {
-			redirect(`/profile/${profile?._id}`)
-		}, 2000)
-		return () => clearTimeout(timer)
+		router.push(`/profile/${params.id}`)
 	}
 
 	return (
@@ -125,6 +205,127 @@ export default function Post() {
 					</Link>
 					{post.owner == currentUserId && (
 						<>
+							<Button onPress={modalEdit.onOpen}>Edit</Button>
+							<Modal
+								isOpen={modalEdit.isOpen}
+								onOpenChange={modalEdit.onOpenChange}
+							>
+								<ModalContent>
+									{onClose => (
+										<>
+											<ModalHeader className='flex flex-col gap-1'>
+												Edit post {post.title}
+											</ModalHeader>
+											<ModalBody>
+												<form onSubmit={handleSubmit} className='space-y-4'>
+													<div className='space-y-2'>
+														<label
+															htmlFor='photo'
+															className='block text-sm font-medium'
+														>
+															Select New Photo
+														</label>
+														<div className='flex items-center justify-center w-full relative'>
+															{photoPreview ? (
+																<>
+																	<img
+																		src={photoPreview}
+																		alt='Upload preview'
+																		className='max-w-full h-64 object-cover rounded-lg'
+																	/>
+																	<Button
+																		type='button'
+																		size='sm'
+																		className='absolute top-[-40px] right-2'
+																		onClick={resetPhoto}
+																	>
+																		<RefreshCw className='w-4 h-4 mr-2' />
+																		Reset Photo
+																	</Button>
+																</>
+															) : (
+																<label
+																	htmlFor='photo-upload'
+																	className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 ${
+																		isDragging
+																			? 'border-blue-500 bg-blue-50'
+																			: ''
+																	}`}
+																	onDragEnter={handleDragEnter}
+																	onDragLeave={handleDragLeave}
+																	onDragOver={handleDragOver}
+																	onDrop={handleDrop}
+																>
+																	<div className='flex flex-col items-center justify-center pt-5 pb-6'>
+																		<Upload className='w-8 h-8 mb-4 text-gray-500' />
+																		<p className='mb-2 text-sm text-gray-500'>
+																			<span className='font-semibold'>
+																				Click to upload
+																			</span>{' '}
+																			or drag and drop
+																		</p>
+																	</div>
+																	<input
+																		id='photo-upload'
+																		type='file'
+																		className='hidden'
+																		onChange={e => {
+																			if (e.target.files && e.target.files[0]) {
+																				handlePhotoUpload(e.target.files[0])
+																			}
+																		}}
+																		accept='image/*'
+																	/>
+																</label>
+															)}
+														</div>
+													</div>
+													<div className='space-y-2'>
+														<label
+															htmlFor='title'
+															className='block text-sm font-medium'
+														>
+															New Title
+														</label>
+														<Input
+															id='title'
+															value={title}
+															onChange={e => setTitle(e.target.value)}
+															placeholder='Enter post title'
+															required
+														/>
+													</div>
+													<div className='space-y-2'>
+														<label
+															htmlFor='description'
+															className='block text-sm font-medium'
+														>
+															New Description
+														</label>
+														<Textarea
+															id='description'
+															value={description}
+															onChange={e => setDescription(e.target.value)}
+															placeholder='Enter post description'
+															rows={4}
+															required
+														/>
+													</div>
+													<div className='flex justify-end space-x-2'>
+														<Button type='button' onClick={modalEdit.onClose}>
+															Cancel
+														</Button>
+														<Button type='submit'>
+															<Send className='w-4 h-4 mr-2' />
+															Edit
+														</Button>
+													</div>
+												</form>
+											</ModalBody>
+										</>
+									)}
+								</ModalContent>
+							</Modal>
 							<Button
 								onPress={modal1.onOpen}
 								className='text-white bg-red-500 px-2 py-1 '
@@ -150,7 +351,7 @@ export default function Post() {
 				</div>
 				<img
 					className='w-full object-cover mb-4'
-					src={post.image}
+					src={post.image as any}
 					alt={post.title}
 				/>
 				<h1 className='block mt-1 text-lg leading-tight font-medium text-white'>

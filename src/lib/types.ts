@@ -3,17 +3,17 @@ export interface PostType {
 	owner: string
 	title: string
 	description?: string
-	image?: string
+	image?: File
 	likes: string[]
 	comments: string[]
 	createdAt: string
 }
 
 export type commentType = {
-	_id: string;
-	owner: string;
-	content: string;
-	postId: string;
+	_id: string
+	owner: string
+	content: string
+	postId: string
 }
 
 export type usersDataType = {
