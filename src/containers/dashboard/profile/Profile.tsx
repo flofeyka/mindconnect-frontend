@@ -11,10 +11,12 @@ export default function Profile({ user }: { user: usersDataType }) {
 
     const dispatch = useAppDispatch();
 
+    console.log(user);
+
     return <div>
         <ModalWrapper onOpenChange={onOpenChange} isOpen={isOpen} >
             <ModalContent className="p-3">
-                {(onClose) => <EditProfileForm onClose={onClose} firstName={user.firstName} lastName={user.lastName} />}
+                {(onClose) => <EditProfileForm onClose={onClose} image={user.image} firstName={user.firstName} lastName={user.lastName} />}
             </ModalContent>
         </ModalWrapper>
         <Dropdown>
@@ -58,7 +60,7 @@ export default function Profile({ user }: { user: usersDataType }) {
 
 // }
 
-function EditProfileForm({ firstName, lastName, onClose }: { firstName: string, lastName: string, onClose: () => void }) {
+function EditProfileForm({ firstName, lastName, onClose, image }: { firstName: string, lastName: string, onClose: () => void, image: string }) {
     const { register, handleSubmit } = useForm({
         defaultValues: {
             firstName: firstName,
@@ -76,7 +78,7 @@ function EditProfileForm({ firstName, lastName, onClose }: { firstName: string, 
     return <form onSubmit={handleSubmit(onSubmit)}>
         {/* <div className="text-center font-semibold text-2xl">Edit profile</div> */}
         <div className="flex flex-col items-center w-full mt-2">
-            <Avatar size="lg" className="w-20 h-20 cursor-pointer" />
+            <Avatar src={image} size="lg" className="w-20 h-20 cursor-pointer" />
         </div>
         <div className="flex my-3">
             <Input {...register("firstName")} size="lg" className="mr-2" placeholder="First name" />
