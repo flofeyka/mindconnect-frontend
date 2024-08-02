@@ -121,7 +121,7 @@ export default function Register() {
 							Create an account
 						</Button>
 					</div>
-					<div className='text-center mt-10'>
+					<div className='text-center mt-2'>
 						Already have an account?{' '}
 						<Link href='/auth/login' className={'font-simebold'}>
 							{' '}

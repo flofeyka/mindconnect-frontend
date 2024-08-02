@@ -18,7 +18,7 @@ interface CalendarActionsProps {
 const CalendarActions = forwardRef<HTMLDivElement, CalendarActionsProps>(
   ({ isActive, calendar }: CalendarActionsProps, ref) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    if (!isActive) return;
+    // if (!isActive) return;
 
     return (
       <>
@@ -38,17 +38,7 @@ const CalendarActions = forwardRef<HTMLDivElement, CalendarActionsProps>(
             <span>Add a note</span>
           </div>
         </div>
-        <Modal onOpenChange={onOpenChange} isOpen={isOpen}>
-          <ModalContent className="">
-            <ModalHeader>Add Note</ModalHeader>
-            <ModalBody>
-              <div className="flex items-center gap-x-3">
-                <Input label="Note" size="sm" />
-                <Icon path="icons/check.svg" color="#1ca66f" />
-              </div>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
+
       </>
     );
   }

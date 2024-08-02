@@ -2,18 +2,9 @@
 
 import Icon from '@components/Icon'
 import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
-import { getAuthUserData } from '@lib/redux/slices/auth/authSlice'
 import { fetchAllDoctors } from '@lib/redux/slices/doctorprofile/doctorProfileSlice'
 import { CheckboxGroup, Checkbox } from '@nextui-org/react'
-import {
-	Avatar,
-	Button,
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
-	Input,
-} from '@nextui-org/react'
+import {Avatar, Card, CardBody, CardFooter, CardHeader, Input} from '@nextui-org/react'
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react'
 import Link from 'next/link'
 import { useEffect } from 'react'
@@ -25,7 +16,7 @@ export default function Doctors() {
 
 	useEffect(() => {
 		dispatch(fetchAllDoctors())
-	}, [dispatch])
+	}, [dispatch]);
 
 	return (
 		<>

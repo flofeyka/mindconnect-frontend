@@ -97,7 +97,7 @@ export default function Login() {
 						Log in account
 					</Button>
 				</div>
-				<div className='text-center mt-10'>
+				<div className='text-center mt-2'>
 					Don't have an account?{' '}
 					<Link href='/auth/register' className={'font-simebold'}>
 						{' '}
