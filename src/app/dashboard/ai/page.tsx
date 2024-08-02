@@ -1,8 +1,6 @@
 'use client'
-// import { Textarea } from '@components/ai/textarea'
 import { Textarea, Button } from '@nextui-org/react'
 import { useChat } from 'ai/react'
-// import { Button } from '@components/ai/button'
 import { Send } from 'lucide-react'
 import Message from './components/Messges'
 import { useRef } from 'react'

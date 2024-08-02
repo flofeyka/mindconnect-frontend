@@ -23,7 +23,7 @@ import Link from 'next/link'
 import { getAuthUserData } from '@lib/redux/slices/auth/authSlice'
 import { Link as LinkUi } from '@nextui-org/react'
 
-export default function Profile() {
+export default function Doctor() {
 	const dispatch = useAppDispatch()
 	const { profile, posts, loading, error } = useAppSelector(
 		state => state.doctorProfile

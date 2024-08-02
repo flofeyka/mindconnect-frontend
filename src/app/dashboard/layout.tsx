@@ -1,6 +1,7 @@
 "use client";
 import Icon from "@components/Icon";
 import Logo from "@components/Logo";
+import Link from "next/link";
 import React, { useState } from "react";
 
 export default function DashBoardLayout({
@@ -30,10 +31,12 @@ export default function DashBoardLayout({
             )}`}
             onClick={() => handleClick(1)}
           >
-            <Icon
-              path="icons/main-dashboard.svg"
-              color={`${activeIcon === 1 ? "#1ca66f" : "#ffffff"}`}
-            />
+            <Link href="/dashboard/">
+              <Icon
+                path="icons/main-dashboard.svg"
+                color={`${activeIcon === 1 ? "#1ca66f" : "#ffffff"}`}
+              />
+            </Link>
           </div>
           <div
             className={`w-full flex justify-center relative cursor-pointer ${setBorderIcon(
@@ -41,11 +44,13 @@ export default function DashBoardLayout({
             )}`}
             onClick={() => handleClick(2)}
           >
-            <Icon
-              path="icons/play.svg"
-              className="cursor-pointer"
-              color={`${activeIcon === 2 ? "#1ca66f" : "#ffffff"}`}
-            />
+            <Link href="/dashboard/ai">
+              <Icon
+                path="icons/play.svg"
+                className="cursor-pointer"
+                color={`${activeIcon === 2 ? "#1ca66f" : "#ffffff"}`}
+              />
+            </Link>
           </div>
           <div
             className={`w-full flex justify-center relative cursor-pointer ${setBorderIcon(
