@@ -4,7 +4,14 @@ import Icon from '@components/Icon'
 import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
 import { fetchAllDoctors } from '@lib/redux/slices/doctorprofile/doctorProfileSlice'
 import { CheckboxGroup, Checkbox } from '@nextui-org/react'
-import {Avatar, Card, CardBody, CardFooter, CardHeader, Input} from '@nextui-org/react'
+import {
+	Avatar,
+	Card,
+	CardBody,
+	CardFooter,
+	CardHeader,
+	Input,
+} from '@nextui-org/react'
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react'
 import Link from 'next/link'
 import { useEffect } from 'react'
@@ -16,7 +23,7 @@ export default function Doctors() {
 
 	useEffect(() => {
 		dispatch(fetchAllDoctors())
-	}, [dispatch]);
+	}, [dispatch])
 
 	return (
 		<>
@@ -45,7 +52,7 @@ export default function Doctors() {
 			<ul>
 				{doctors.map(doctor => (
 					<li key={doctor._id} className='flex justify-center p-5'>
-						<Link href={`profile/${doctor._id}`} className='w-[836px] block'>
+						<Link href={`doctor/${doctor._id}`} className='w-[836px] block'>
 							<Card className='max-w-[836px] mx-auto h-48'>
 								<CardHeader className='justify-between'>
 									<div className='flex gap-5'>
