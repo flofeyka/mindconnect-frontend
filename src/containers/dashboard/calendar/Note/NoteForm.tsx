@@ -1,0 +1,49 @@
+import { useAppDispatch } from "@lib/redux/hooks";
+import { updateNote } from "@lib/redux/slices/calendar/calendarSlice";
+import { Button, ModalFooter, Textarea } from "@nextui-org/react";
+import { useForm } from "react-hook-form";
+
+export default function NoteForm({
+  currentCalendar,
+  note,
+  onClose,
+}: {
+  currentCalendar: any;
+  note: any;
+  onClose: () => void;
+}) {
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      note: note.note,
+    },
+  });
+
+  const dispatch = useAppDispatch();
+
+  const onSubmit = (data: any) => {
+    dispatch(
+      updateNote({
+        noteId: note._id,
+        date: currentCalendar.date,
+        note: data.note,
+        calendarId: currentCalendar._id
+      })
+    );
+    onClose();
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Textarea {...register("note")} />
+
+      <ModalFooter>
+        <Button color="danger" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button color="primary" type="submit">
+          Save
+        </Button>
+      </ModalFooter>
+    </form>
+  );
+}

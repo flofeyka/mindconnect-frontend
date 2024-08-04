@@ -27,10 +27,60 @@ const authSlice = createSlice({
       state.captchaUrl = action.payload;
     },
   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   extraReducers: (builder) => {
     builder.addCase(
       signIn.fulfilled,
-      (state: authType, action: PayloadAction<usersDataType>) => {
+      (state: authType, action: PayloadAction<usersDataType | undefined>) => {
         if (action.payload) {
           state.isAuth = true;
           state.usersData = action.payload;
@@ -40,7 +90,7 @@ const authSlice = createSlice({
     );
     builder.addCase(
       signUp.fulfilled,
-      (state: authType, action: PayloadAction<usersDataType>) => {
+      (state: authType, action: PayloadAction<usersDataType | undefined>) => {
         if (action.payload) {
           state.isAuth = true;
           state.usersData = action.payload;
@@ -50,10 +100,12 @@ const authSlice = createSlice({
     );
     builder.addCase(
       getAuthUserData.fulfilled,
-      (state: authType, action: PayloadAction<usersDataType>) => {
-        state.usersData = action.payload;
-        state.isAuth = true;
-        state.isPending = false;
+      (state: authType, action: PayloadAction<usersDataType | undefined>) => {
+        if (action.payload) {
+          state.usersData = action.payload;
+          state.isAuth = true;
+          state.isPending = false;
+        }
       }
     );
     builder.addCase(
@@ -86,9 +138,9 @@ export const getAuthUserData = createAsyncThunk(
   "auth/getAuthUserData",
   async () => {
     const tokenUpdated = await authAPI.refresh();
-    if (tokenUpdated.status === 200) {
-      const data = await authAPI.getUsersData();
-      return data.user;
+    if (tokenUpdated.success) {
+      const {success, user} = await authAPI.getUsersData();
+      if(success) return user
     }
   }
 );

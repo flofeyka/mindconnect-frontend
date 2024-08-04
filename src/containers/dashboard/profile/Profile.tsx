@@ -11,8 +11,6 @@ export default function Profile({ user }: { user: usersDataType }) {
 
     const dispatch = useAppDispatch();
 
-    console.log(user);
-
     return <div>
         <ModalWrapper onOpenChange={onOpenChange} isOpen={isOpen} >
             <ModalContent className="p-3">

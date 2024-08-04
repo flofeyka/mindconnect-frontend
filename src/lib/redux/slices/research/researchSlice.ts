@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { researchAPI } from "@lib/API/api";
 import { ResearchDataType, ResearchType } from "@lib/types";
+import { researchAPI } from "@lib/API/authAPI";
 
 interface ResearchState {
   research: ResearchType | null;

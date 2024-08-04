@@ -1,27 +1,10 @@
 import axios from "axios"
-
-const instance = axios.create({
-	withCredentials: true,
-    baseURL: `${process.env.NEXT_PUBLIC_API_URL}/calendar/`,
-})
-
-instance.interceptors.request.use(
-	config => {
-		const token = localStorage.getItem('token')
-		if (token) {
-			config.headers.Authorization = `Bearer ${token}`
-		}
-		return config
-	},
-	error => {
-		return Promise.reject(error)
-	}
-)
+import baseAPI from "./api";
 
 export const calendarAPI = {
     async addCalendar(data: { time: string; note: string }) {
-      const Response = await instance.post(
-        `add-calendar/?date=${data.time}`,
+      const Response = await baseAPI.post(
+        `calendar/add-calendar/?date=${data.time}`,
         {
           ...data,
         }
@@ -29,29 +12,32 @@ export const calendarAPI = {
       return Response.data;
     },
     async getCalendarByDates(data: { startDate: string; endDate: string }) {
-      const Response = await instance.get(
-        `dates-calendar?startDate=${data.startDate}&endDate=${data.endDate}`
+      const Response = await baseAPI.get(
+        `calendar/dates-calendar?startDate=${data.startDate}&endDate=${data.endDate}`
       );
       return Response.data;
     },
     async deleteNote(data: { time: string; noteId: string }) {
-      const Response = await instance.delete(
-        `delete-calendar/?date=${data.time}/notes/?note=${data.noteId}`
+      const Response = await baseAPI.delete(
+        `calendar/delete-calendar/?date=${data.time}/notes/?note=${data.noteId}`
       );
       return Response.data;
     },
     async getOneCalendar(date: string) {
-      const Response = await instance.get(`calendar/one-calendar/${date}`);
+      const Response = await baseAPI.get(`calendar/one-calendar/${date}`);
   
       return Response.data;
     },
-    async updateNote(data: { date: string; noteId: string; note: string }) {
-      const Response = await instance.put(
-        `update-note/${data.date}/notes/${data.noteId} `,
+    async updateNote({ date, noteId, note }: { date: string; noteId: string; note: string }) {
+      const {data, status} = await baseAPI.put(
+        `calendar/update-note/${date}/notes/${noteId} `,
         {
-          ...data,
+          date, noteId, note
         }
       );
-      return Response.data;
+      return {
+        success: status === 200,
+        note: data.note
+      };
     },
   };

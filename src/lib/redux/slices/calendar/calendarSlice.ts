@@ -44,17 +44,29 @@ const calendarSlice = createSlice({
       deleteNote.fulfilled,
       (state, action: PayloadAction<string>) => {
         state.calendar = state.calendar.filter(
-          (element) => element._id.$oid !== action.payload
+          (element) => element._id !== action.payload
         );
         state.isPending = false;
       }
     );
     builder.addCase(updateNote.fulfilled, (state, action) => {
-      state.calendar = state.calendar.map((element) => {
-        if (element._id === action.payload._id) {
-          return action.payload;
+      state.calendar = state.calendar.map((calendar) => {
+        if (calendar._id === action.payload?._id) {
+          return {
+            ...calendar,
+            notes: calendar.notes.map((note) => {
+              if (note._id === action.payload?.note._id) {
+                return {
+                  ...note,
+                  note: action.payload.note.note,
+                };
+              } else {
+                return note;
+              }
+            }),
+          };
         }
-        return element;
+        return calendar;
       });
       state.isPending = false;
     });
@@ -96,9 +108,19 @@ export const getOneCalendar = createAsyncThunk(
 
 export const updateNote = createAsyncThunk(
   "calendar/updateNote",
-  async (data: { date: string; noteId: string; note: string }) => {
-    const response = await calendarAPI.updateNote(data);
-    return response;
+  async (noteData: {
+    date: string;
+    noteId: string;
+    note: string;
+    calendarId: string;
+  }) => {
+    const data = await calendarAPI.updateNote(noteData);
+    if (data.success) {
+      return {
+        _id: noteData.calendarId,
+        note: data.note,
+      };
+    }
   }
 );
 
