@@ -1,3 +1,4 @@
+import { postAPI } from '@lib/API/postAPI'
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 
@@ -28,15 +29,10 @@ const getToken = () => localStorage.getItem('token')
 export const fetchPostById = createAsyncThunk(
 	'posts/fetchById',
 	async (postId: string) => {
-		const response = await axios.get(
-			`https://mindconnect-vebk.onrender.com/api/post/${postId}`,
-			{
-				headers: {
-					Authorization: `Bearer ${getToken()}`,
-				},
-			}
-		)
-		return response.data
+		const data = await postAPI.getPostById(postId);
+		if(data.status === 200) {
+			return data.item;
+		}
 	}
 )
 

@@ -27,33 +27,10 @@ import { useEffect, useState } from "react";
 export default function Dashboard() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.Auth.usersData);
-  const { calendar } = useAppSelector((state) => state.Calendar);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-
-  const [modalsState, setModalsState] = useState([{ id: "", isActive: false }]);
-  const [currentCalendar, setCurrectCalendar] = useState({
-    id: "",
-    note: "",
-    newNote: "",
-    time: "",
-    date: "",
-  });
 
   useEffect(() => {
     dispatch(getAuthUserData());
-    dispatch(
-      getCalendarByDates({ startDate: "2024-01-01", endDate: "2024-07-18" })
-    );
-  }, [dispatch]);
-
-  useEffect(() => {
-    const modalsID = calendar.map((calendarNote) => ({
-      id: String(calendarNote._id),
-      isActive: false,
-    }));
-    setModalsState(modalsID);
-  }, [calendar]);
+  }, [dispatch])
 
   return (
     <div className="px-[30px] py-5">
@@ -92,48 +69,7 @@ export default function Dashboard() {
           </Card>
         </div>
       </div>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          <ModalHeader>{currentCalendar.time}</ModalHeader>
-          <ModalBody>
-            <Textarea
-              value={currentCalendar.newNote}
-              onChange={(e) =>
-                setCurrectCalendar({
-                  ...currentCalendar,
-                  newNote: e.target.value,
-                })
-              }
-            ></Textarea>
-
-            <Button
-              color="primary"
-              onClick={() => {
-                dispatch(
-                  updateNote({
-                    noteId: currentCalendar.id,
-                    date: currentCalendar.date,
-                    note: currentCalendar.newNote,
-                  })
-                );
-              }}
-            >
-              Save
-            </Button>
-            <Button
-              color="danger"
-              onClick={() =>
-                setCurrectCalendar({
-                  ...currentCalendar,
-                  newNote: currentCalendar.note,
-                })
-              }
-            >
-              Reset
-            </Button>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+     
     </div>
   );
 }

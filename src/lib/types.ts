@@ -37,9 +37,7 @@ export type authType = {
 }
 
 export type calendarType = {
-	_id: {
-		$oid: string
-	}
+	_id: string
 	date: {
 		$date: string
 	}

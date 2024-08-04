@@ -118,7 +118,6 @@ export default function Post() {
 	)
 
 	const [liked, setLiked] = useState(false)
-	console.log(liked)
 	const [likes, setLikes] = useState(0)
 	const [activeComments, setActiveComments] = useState(false)
 

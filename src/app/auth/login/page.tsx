@@ -17,7 +17,6 @@ export default function Login() {
 	useEffect(() => {
 		dispatch(getAuthUserData())
 	}, [dispatch])
-	console.log(user)
 
 	useEffect(() => {
 		if (Object.keys(user).length !== 0 && user !== undefined) {
