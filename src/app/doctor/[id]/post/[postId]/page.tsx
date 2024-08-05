@@ -100,22 +100,34 @@ export default function Post() {
 
 	const router = useRouter()
 
+	const post = useAppSelector((state: RootState) =>
+		state.posts.posts.find(p => p._id === postId)
+	)
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		if (title || description || image) {
-			const postData = { title, description, image }
 
+		// Only include fields in postData if they have been changed
+		const postData: Partial<{
+			title: string
+			description: string
+			image: string
+		}> = {}
+
+		if (title !== undefined) postData.title = title
+		if (description !== undefined) postData.description = description
+		if (image !== undefined) postData.image = image as any
+
+		// Only dispatch the update if there are changes
+		if (Object.keys(postData).length > 0) {
 			dispatch(updatePost({ postId: params.postId as string, postData }))
 			setTimeout(() => {
 				window.location.reload()
 			}, 1000)
 		}
 	}
-	// from add post
 
-	const post = useAppSelector((state: RootState) =>
-		state.posts.posts.find(p => p._id === postId)
-	)
+	// from add post
 
 	const [liked, setLiked] = useState(false)
 	const [likes, setLikes] = useState(0)
@@ -289,7 +301,6 @@ export default function Post() {
 															value={title}
 															onChange={e => setTitle(e.target.value)}
 															placeholder='Enter post title'
-															required
 														/>
 													</div>
 													<div className='space-y-2'>
@@ -305,7 +316,6 @@ export default function Post() {
 															onChange={e => setDescription(e.target.value)}
 															placeholder='Enter post description'
 															rows={4}
-															required
 														/>
 													</div>
 													<div className='flex justify-end space-x-2'>

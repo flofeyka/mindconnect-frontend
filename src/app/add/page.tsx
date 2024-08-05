@@ -77,7 +77,7 @@ export default function AddPage() {
 
 			dispatch(addPost(postData))
 			setTimeout(() => {
-				router.push(`/profile/${user}`)
+				router.push(`/doctor/${user}`)
 			}, 1000)
 		} else {
 			alert('All fields are required')
