@@ -45,6 +45,7 @@ export type calendarType = {
 		$oid: string
 	}
 	__v: number
+	index: number
 	notes: calendarNoteType[]
 }
 

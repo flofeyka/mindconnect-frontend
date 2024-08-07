@@ -3,6 +3,7 @@ import { authSlice, calendarSlice } from './slices'
 import postSlice from './slices/posts/postSlice'
 import doctorProfileSlice from './slices/doctorprofile/doctorProfileSlice'
 import onePostslice from './slices/post/onePostslice'
+import doctorDetailsSlice from './slices/doctordetails/doctorDetailsSlice'
 
 export const makeStore = () => {
 	return configureStore({
@@ -12,6 +13,7 @@ export const makeStore = () => {
 			posts: postSlice,
 			post: onePostslice,
 			doctorProfile: doctorProfileSlice,
+			doctorDetails: doctorDetailsSlice,
 		},
 	})
 }
