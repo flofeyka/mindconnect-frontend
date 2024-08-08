@@ -16,6 +16,10 @@ import { Autocomplete, AutocompleteItem } from '@nextui-org/react'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import specialities from './specialities.js'
+import {
+	getOneCalendar,
+	getPrevCalendar,
+} from '@lib/redux/slices/calendar/calendarSlice'
 
 export default function Doctors() {
 	const dispatch = useAppDispatch()
@@ -24,6 +28,7 @@ export default function Doctors() {
 	useEffect(() => {
 		dispatch(fetchAllDoctors())
 	}, [dispatch])
+	const currentId = useAppSelector(state => state.Calendar.oneCalendar?._id)
 
 	return (
 		<>
