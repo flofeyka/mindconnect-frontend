@@ -59,10 +59,11 @@ export const calendarAPI = {
 			message: data.message,
 		}
 	},
-	async getPrevCalendar({ calendarId }: { calendarId: string }) {
-		const Response = await baseAPI.get(
-			`calendar/previous-calendar/${calendarId}`
-		)
+	async getPrevCalendar({ calendarId }: { calendarId: string | null }) {
+		const endpoint = calendarId
+			? `calendar/previous-calendar/${calendarId}`
+			: `calendar/previous-calendar/null`
+		const Response = await baseAPI.get(endpoint)
 		return {
 			success: Response.status === 200,
 			response: Response.data,
