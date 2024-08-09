@@ -57,7 +57,7 @@ export const postAPI = {
         const { status, data } = await baseAPI.post(`post/${postId}/add-comment`)
         return {
             isAdded: status === 200,
-            items: data.comments
+            item: data.comment
         }
     },
 

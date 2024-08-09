@@ -58,7 +58,7 @@ export const addComment = createAsyncThunk(
 	async ({ postId, content }: { postId: string; content: string }) => {
 		const data = await postAPI.addComment({ postId, content });
 		if (data.isAdded) {
-			return data.items;
+			return data.item;
 		}
 	}
 )
