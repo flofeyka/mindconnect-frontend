@@ -151,7 +151,7 @@ export default function Doctor() {
 							className='col-span-12 sm:col-span-4 h-[250px] overflow-hidden'
 						>
 							<Link
-								href={`/profile/${params.id}/post/${post._id}`}
+								href={`/doctor/${params.id}/post/${post._id}`}
 								className='w-full h-full relative block'
 							>
 								<CardHeader className='absolute z-10 top-0 left-0 right-0 flex-col !items-start bg-gradient-to-b from-black/60 to-transparent'>

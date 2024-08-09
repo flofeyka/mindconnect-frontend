@@ -115,7 +115,7 @@ export default function Post() {
 	}
 	// from add post
 
-	const post = useAppSelector((state: RootState) =>
+	const post = useAppSelector(state =>
 		state.posts.posts.find(p => p._id === postId)
 	)
 
