@@ -100,24 +100,37 @@ export default function Post() {
 
 	const router = useRouter()
 
+	const post = useAppSelector((state: RootState) =>
+		state.posts.posts.find(p => p._id === postId)
+	)
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		if (title && description && image) {
-			const postData = { title, description, image }
 
+		// Only include fields in postData if they have been changed
+		const postData: Partial<{
+			title: string
+			description: string
+			image: string
+		}> = {}
+
+		if (title !== undefined) postData.title = title
+		if (description !== undefined) postData.description = description
+		if (image !== undefined) postData.image = image as any
+
+		// Only dispatch the update if there are changes
+		if (Object.keys(postData).length > 0) {
 			dispatch(updatePost({ postId: params.postId as string, postData }))
 			setTimeout(() => {
 				window.location.reload()
 			}, 1000)
-		} else {
-			alert('All fields are required')
 		}
 	}
-	// from add post
 
 	const post = useAppSelector(state =>
 		state.posts.posts.find(p => p._id === postId)
 	)
+
 
 	const [liked, setLiked] = useState(false)
 	const [likes, setLikes] = useState(0)
@@ -180,14 +193,14 @@ export default function Post() {
 
 	const handleDeletePost = () => {
 		dispatch(deletePost(params.postId as string))
-		router.push(`/profile/${params.id}`)
+		router.push(`/doctor/${params.id}`)
 	}
 
 	return (
 		<div className='max-w-md mx-auto bg-secondary rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4'>
 			<div className='p-8'>
 				<div className='flex justify-between'>
-					<Link href={`/profile/${params.id}`}>
+					<Link href={`/doctor/${params.id}`}>
 						<div className='flex items-center mb-4'>
 							<img
 								className='h-10 w-10 rounded-full mr-2'
@@ -291,7 +304,6 @@ export default function Post() {
 															value={title}
 															onChange={e => setTitle(e.target.value)}
 															placeholder='Enter post title'
-															required
 														/>
 													</div>
 													<div className='space-y-2'>
@@ -307,7 +319,6 @@ export default function Post() {
 															onChange={e => setDescription(e.target.value)}
 															placeholder='Enter post description'
 															rows={4}
-															required
 														/>
 													</div>
 													<div className='flex justify-end space-x-2'>
