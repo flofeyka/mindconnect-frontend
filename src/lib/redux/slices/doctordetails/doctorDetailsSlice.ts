@@ -19,7 +19,7 @@ baseAPI.interceptors.request.use(
 )
 
 // Define types
-interface PriceOneHour {
+export interface PriceOneHour {
 	price: string
 	currency: string
 }
@@ -68,8 +68,14 @@ export const updateDoctorProfile = createAsyncThunk<
 			if (profileData[key] != null) {
 				if (key === 'image' && profileData[key] instanceof File) {
 					formData.append('image', profileData[key])
+				} else if (Array.isArray(profileData[key])) {
+					profileData[key].forEach(item => {
+						formData.append(`${key}[]`, item) // Notice the [] to indicate an array
+					})
 				} else if (typeof profileData[key] === 'object') {
-					formData.append(key, JSON.stringify(profileData[key]))
+					Object.keys(profileData[key]).forEach(subKey => {
+						formData.append(`${key}[${subKey}]`, profileData[key][subKey])
+					})
 				} else {
 					formData.append(key, profileData[key])
 				}

@@ -127,8 +127,6 @@ export default function Post() {
 		}
 	}
 
-	// from add post
-
 	const [liked, setLiked] = useState(false)
 	const [likes, setLikes] = useState(0)
 	const [activeComments, setActiveComments] = useState(false)
