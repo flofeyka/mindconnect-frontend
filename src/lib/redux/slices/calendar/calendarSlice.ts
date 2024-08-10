@@ -235,12 +235,13 @@ export const getAllDates = createAsyncThunk(
 	}
 )
 
-  "calendar/getNextCalendar",
-  async (calendarId: string) => {
-    const response = await calendarAPI.getNextCalendar({ calendarId });
-    return response.response;
-  }
-);
+export const getNextCalendar = createAsyncThunk(
+	'calendar/getNextCalendar',
+	async (calendarId: string) => {
+		const response = await calendarAPI.getNextCalendar({ calendarId })
+		return response.response
+	}
+)
 
 export const { setCalendar } = calendarSlice.actions;
 export default calendarSlice.reducer;
