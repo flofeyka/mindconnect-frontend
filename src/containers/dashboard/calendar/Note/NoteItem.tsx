@@ -7,6 +7,10 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import NoteForm from "./NoteForm";
+import Icon from "@components/Icon";
+import { useAppDispatch } from "@lib/redux/hooks";
+import { deleteNote } from "@lib/redux/slices/calendar/calendarSlice";
+import formatDateToSubmit from "@helpers/formatDateToSubmit";
 
 export default function NoteItem({
   note,
@@ -16,6 +20,8 @@ export default function NoteItem({
   currentCalendar: any;
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const dispatch = useAppDispatch();
 
   return (
     <div>
@@ -36,14 +42,28 @@ export default function NoteItem({
         </ModalContent>
       </ModalWrapper>
       <div
-        key={String(note._id)}
-        className="bg-[#1CA66F] bg-opacity-[0.1] p-2 flex  items-center gap-x-2 rounded-md mb-2"
+        className="bg-[#1CA66F] bg-opacity-[0.1] p-2 flex items-center justify-between rounded-md mb-2 cursor-pointer"
         onClick={onOpen}
       >
-        <span className="text-gray-500">
-          {formatDateToTime(String(note.createdAt))}
-        </span>
-        <span>{note.note}</span>
+        <div className="flex gap-x-2">
+          <span className="text-gray-500">
+            {formatDateToTime(String(note.createdAt))}
+          </span>
+          <span>{note.note}</span>
+        </div>
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            dispatch(
+              deleteNote({
+                date: formatDateToSubmit(currentCalendar.date),
+                noteId: note._id,
+              })
+            );
+          }}
+        >
+          <Icon path="/icons/trash.svg" width="30" color="#FF0000" />
+        </div>
       </div>
     </div>
   );
