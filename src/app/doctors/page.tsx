@@ -15,7 +15,7 @@ import {
 import { Autocomplete, AutocompleteItem } from '@nextui-org/react'
 import Link from 'next/link'
 import { useEffect } from 'react'
-import specialities from './specialities.js'
+import specialities from '../../data/specialities.js'
 import {
 	getOneCalendar,
 	getPrevCalendar,

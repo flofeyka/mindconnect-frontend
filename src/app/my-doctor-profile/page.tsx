@@ -8,7 +8,12 @@ import {
 import { Button, Input, Select, SelectItem, Textarea } from '@nextui-org/react'
 import { RefreshCw, Upload } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import { consultTypes, currencies, fieldsOfproblems, languages } from './types'
+import {
+	consultTypes,
+	currencies,
+	fieldsOfproblems,
+	languages,
+} from '../../data/types'
 export default function MyDoctorProfile() {
 	const dispatch = useAppDispatch()
 	const doctor = useAppSelector(state => state.doctorDetails.profile)
@@ -37,6 +42,20 @@ export default function MyDoctorProfile() {
 	) => {
 		const { name, value } = e.target
 		setFormData(prev => ({ ...prev, [name]: value }))
+	}
+
+	const handlePriceInputChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		const { name, value } = e.target
+		setFormData(prev => ({
+			...prev,
+			priceOneHour: {
+				...prev.priceOneHour,
+				price: value,
+				currency: prev.priceOneHour?.currency || '', // Ensure currency is always a string
+			},
+		}))
 	}
 
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -193,7 +212,6 @@ export default function MyDoctorProfile() {
 							label='Profile Short description'
 							className='max-w-72 mb-4'
 						/>
-
 						{/* Add more form fields for other profile properties */}
 					</div>
 					<Input
@@ -211,7 +229,7 @@ export default function MyDoctorProfile() {
 							id='Price'
 							name='Price'
 							value={formData.priceOneHour?.price || ''}
-							onChange={handleInputChange}
+							onChange={handlePriceInputChange}
 							label='Price'
 							className='max-w-72 mb-4'
 						/>
