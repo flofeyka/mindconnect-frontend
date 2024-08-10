@@ -1,4 +1,4 @@
-export default function formatDateToTime(dateToFormat: string) {
+export default function formatDateToTime(dateToFormat: string | number) {
   const date = new Date(dateToFormat);
 
   const hours = date.getHours();

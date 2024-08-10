@@ -30,7 +30,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     dispatch(getAuthUserData());
-  }, [dispatch])
+  }, [dispatch]);
 
   return (
     <div className="px-[30px] py-5">
@@ -47,7 +47,6 @@ export default function Dashboard() {
         <div className="flex items-center gap-x-[30px]">
           <Icon path="icons/notifications.svg" className="cursor-pointer" />
           <Profile user={user} />
-
         </div>
       </header>
       <div className="flex gap-x-[20px]">
@@ -58,7 +57,10 @@ export default function Dashboard() {
           <Card className="p-3 flex-grow relative h-full">
             <CardHeader className="flex justify-between items-center font-semibold text-xl">
               Your psychologist
-              <Icon path="arrow-left.svg" className="rotate-180 cursor-pointer" />
+              <Icon
+                path="arrow-left.svg"
+                className="rotate-180 cursor-pointer"
+              />
             </CardHeader>
             <CardBody>
               <div className="mx-auto flex flex-col items-center gap-y-4 mt-8">
@@ -69,7 +71,6 @@ export default function Dashboard() {
           </Card>
         </div>
       </div>
-     
     </div>
   );
 }
