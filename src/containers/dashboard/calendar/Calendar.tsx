@@ -36,7 +36,7 @@ export default function Calendar() {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
 	useEffect(() => {
-		dispatch(getOneCalendar('2024-08-07'))
+		dispatch(getOneCalendar('2024-08-09'))
 	}, [dispatch])
 	console.log(calendar)
 

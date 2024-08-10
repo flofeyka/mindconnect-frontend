@@ -127,11 +127,6 @@ export default function Post() {
 		}
 	}
 
-	const post = useAppSelector(state =>
-		state.posts.posts.find(p => p._id === postId)
-	)
-
-
 	const [liked, setLiked] = useState(false)
 	const [likes, setLikes] = useState(0)
 	const [activeComments, setActiveComments] = useState(false)
