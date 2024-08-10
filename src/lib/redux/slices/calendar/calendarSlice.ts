@@ -7,6 +7,7 @@ type CalendarState = {
 	isPending: boolean
 	oneCalendar: calendarType | null
 	error: string | null
+	availableDates: string[]
 }
 
 const initialState: CalendarState = {
@@ -14,6 +15,7 @@ const initialState: CalendarState = {
 	isPending: true,
 	oneCalendar: null,
 	error: null,
+	availableDates: [],
 }
 
 const handlePending = (state: CalendarState) => {
@@ -129,6 +131,21 @@ const calendarSlice = createSlice({
 				}
 			)
 			.addCase(getNextCalendar.rejected, handleRejected)
+			.addCase(getAllDates.fulfilled, (state, action) => {
+				if (action.payload.success && Array.isArray(action.payload.response)) {
+					state.availableDates = action.payload.response
+						.filter(date => date !== null)
+						.map(dateStr => {
+							const d = new Date(dateStr)
+							return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+								2,
+								'0'
+							)}-${String(d.getDate()).padStart(2, '0')}`
+						})
+				} else {
+					state.error = 'Invalid response format'
+				}
+			})
 	},
 })
 
@@ -212,6 +229,14 @@ export const getNextCalendar = createAsyncThunk(
 	'calendar/getNextCalendar',
 	async (calendarId: string) => {
 		const response = await calendarAPI.getNextCalendar({ calendarId })
+		return response
+	}
+)
+
+export const getAllDates = createAsyncThunk(
+	'calendar/getAllDates',
+	async () => {
+		const response = await calendarAPI.getAllDates()
 		return response
 	}
 )

@@ -76,4 +76,11 @@ export const calendarAPI = {
 			response: Response.data,
 		}
 	},
+	async getAllDates() {
+		const Response = await baseAPI.get(`calendar/all-dates`)
+		return {
+			success: Response.status === 200,
+			response: Response.data,
+		}
+	},
 }
