@@ -3,18 +3,21 @@ import { calendarAPI } from "@lib/API/calendarAPI";
 import { calendarType } from "@lib/types";
 
 type CalendarState = {
-  calendar: calendarType[];
-  isPending: boolean;
-  oneCalendar: calendarType | null;
-  error: string | null;
-};
+	calendar: calendarType[]
+	isPending: boolean
+	oneCalendar: calendarType | null
+	error: string | null
+	availableDates: string[]
+}
 
 const initialState: CalendarState = {
-  calendar: [],
-  isPending: true,
-  oneCalendar: null,
-  error: null,
-};
+	calendar: [],
+	isPending: true,
+	oneCalendar: null,
+	error: null,
+	availableDates: [],
+}
+
 
 const handlePending = (state: CalendarState) => {
   state.isPending = true;
@@ -128,9 +131,25 @@ const calendarSlice = createSlice({
           state.isPending = false;
         }
       )
-      .addCase(getNextCalendar.rejected, handleRejected);
+      .addCase(getNextCalendar.rejected, handleRejected)
+    .addCase(getAllDates.fulfilled, (state, action) => {
+				if (action.payload.success && Array.isArray(action.payload.response)) {
+					state.availableDates = action.payload.response
+						.filter(date => date !== null)
+						.map(dateStr => {
+							const d = new Date(dateStr)
+							return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+								2,
+								'0'
+							)}-${String(d.getDate()).padStart(2, '0')}`
+						})
+				} else {
+					state.error = 'Invalid response format'
+				}
+			});
   },
 });
+
 
 export const addCalendar = createAsyncThunk(
   "calendar/addCalendar",
@@ -208,7 +227,14 @@ export const getPrevCalendar = createAsyncThunk(
   }
 );
 
-export const getNextCalendar = createAsyncThunk(
+export const getAllDates = createAsyncThunk(
+	'calendar/getAllDates',
+	async () => {
+		const response = await calendarAPI.getAllDates()
+		return response
+	}
+)
+
   "calendar/getNextCalendar",
   async (calendarId: string) => {
     const response = await calendarAPI.getNextCalendar({ calendarId });

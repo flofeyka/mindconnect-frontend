@@ -8,7 +8,6 @@ export const calendarAPI = {
     });
     return Response.data;
   },
-
   async getCalendarByDates(data: { startDate: string; endDate: string }) {
     const Response = await baseAPI.get(
       `calendar/dates-calendar?startDate=${data.startDate}&endDate=${data.endDate}`
@@ -74,4 +73,12 @@ export const calendarAPI = {
       response: Response.data,
     };
   },
+  async getAllDates() {
+		const Response = await baseAPI.get(`calendar/all-dates`)
+		return {
+			success: Response.status === 200,
+			response: Response.data,
+		}
+	},
 };
+
