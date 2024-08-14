@@ -129,7 +129,7 @@ export const getPublicDoctorDetails = createAsyncThunk<
 	async (doctorId, { rejectWithValue }: any) => {
 		try {
 			const response = await baseAPI.get<DoctorProfile>(
-				`/public-doctor-details/${doctorId}`
+				`/user/public-doctor-details/${doctorId}`
 			)
 			return response.data
 		} catch (error) {
