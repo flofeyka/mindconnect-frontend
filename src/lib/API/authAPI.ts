@@ -1,5 +1,4 @@
 import { ResearchDataType, usersDataType } from '@lib/types'
-import axios from 'axios'
 import baseAPI from './api'
 
 

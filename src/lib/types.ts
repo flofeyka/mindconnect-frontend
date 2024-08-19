@@ -68,3 +68,13 @@ export type ResearchDataType = {
 export type ResearchType = {
 	'@GROUP_ID': string
 }
+
+export type DoctorCalendarType = {
+	_id: string
+	date: string
+	timeSlots: TimeSlot[]
+}
+export type TimeSlot = {
+	_id: string
+	time: string
+}

@@ -20,6 +20,7 @@ import {
 } from '../../data/types'
 import { Button, Input } from '@nextui-org/react'
 import DoctorSingleSelect from '@components/EditProfile/DoctorSingleSelect'
+import DoctorCalendar from '@components/DoctorDetails/DoctorCalendar'
 
 export default function EditProfile() {
 	const dispatch = useAppDispatch()
@@ -85,8 +86,10 @@ export default function EditProfile() {
 		console.log(formData)
 		dispatch(updateDoctorProfile(formData))
 	}
+	console.log(doctor?.id)
 
 	return (
+		<>
 		<form onSubmit={handleSubmit}>
 			<PhotoUpload image={image} onImageChange={handleImageChange} />
 			<DoctorInput
@@ -203,5 +206,7 @@ export default function EditProfile() {
 				Save Changes
 			</Button>
 		</form>
+		<DoctorCalendar doctorId={doctor?.id as string} />
+		</>
 	)
 }
