@@ -4,6 +4,7 @@ import postSlice from './slices/posts/postSlice'
 import doctorProfileSlice from './slices/doctorprofile/doctorProfileSlice'
 import onePostslice from './slices/post/onePostslice'
 import doctorDetailsSlice from './slices/doctordetails/doctorDetailsSlice'
+import doctorCalendarSlice from './slices/doctorcalendar/doctorCalendarSlice'
 
 export const makeStore = () => {
 	return configureStore({
@@ -14,6 +15,7 @@ export const makeStore = () => {
 			post: onePostslice,
 			doctorProfile: doctorProfileSlice,
 			doctorDetails: doctorDetailsSlice,
+			doctorCalendar: doctorCalendarSlice,
 		},
 	})
 }
