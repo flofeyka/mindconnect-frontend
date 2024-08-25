@@ -39,11 +39,9 @@ export default function Calendar() {
   const [addNoteValue, setAddNoteValue] = useState("");
   const [date, setDate] = useState(parseDate(formatDateFromDateNow()));
 
-
   const calendar = useAppSelector((state) => state.Calendar.oneCalendar);
   const dispatch = useAppDispatch();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
 
   useEffect(() => {
     dispatch(getOneCalendar(date as any));
