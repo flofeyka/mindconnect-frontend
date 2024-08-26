@@ -35,14 +35,14 @@ export default function Profile() {
   useEffect(() => {
     dispatch(getAuthUserData());
   }, [dispatch]);
+  const doctorId = params.id as string;
 
   useEffect(() => {
-    const doctorId = params.id as string;
     if (doctorId) {
       dispatch(fetchDoctorProfileById(doctorId));
       dispatch(fetchPostsFromDoctor(doctorId));
     }
-  }, [dispatch, params.id]);
+  }, [dispatch, doctorId]);
 
   useEffect(() => {
     if (profile && currentUserId) {
@@ -127,6 +127,16 @@ export default function Profile() {
             </p>
             <p className="text-default-400 text-small">Followers</p>
           </div>
+          <Button
+            href={`/doctor-details/${doctorId}`}
+            as={LinkUi}
+            color="primary"
+            showAnchorIcon
+            variant="solid"
+            className="mr-0 ml-auto"
+          >
+            Book an appointment
+          </Button>
           {(params.id as string) === currentUserId && (
             <Button
               href="/add"

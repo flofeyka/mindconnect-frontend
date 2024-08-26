@@ -20,4 +20,20 @@ export const doctorcalendarAPI = {
     );
     return Response.data;
   },
+  async sendConsultationEmail(
+    params: {
+      doctorId: string;
+      calendarId: string;
+      timeSlotId: string;
+    },
+    data: { date: string; time: string; text: string }
+  ) {
+    const Response = await baseAPI.post(
+      `/user/appointment/${params.doctorId}/${params.calendarId}/${params.timeSlotId}`,
+      {
+        ...data,
+      }
+    );
+    return Response.data;
+  },
 };
