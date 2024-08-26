@@ -30,6 +30,23 @@ export const addAvailableDate = createAsyncThunk(
   }
 );
 
+export const sendConsultationEmail = createAsyncThunk(
+  "doctorCalendar/sendConsultationEmail",
+  async ({
+    params,
+    data,
+  }: {
+    params: { doctorId: string; calendarId: string; timeSlotId: string };
+    data: { date: string; time: string; text: string };
+  }) => {
+    const response = await doctorcalendarAPI.sendConsultationEmail(
+      params,
+      data
+    );
+    return response;
+  }
+);
+
 export const deleteAvailableDate = createAsyncThunk(
   "doctorCalendar/deleteAvailableDate",
   async (data: { calendarId: string; timeSlotId: string }) => {
@@ -77,6 +94,17 @@ const doctorCalendarSlice = createSlice({
       .addCase(addAvailableDate.rejected, (state, action) => {
         state.isPending = false;
         state.error = action.error.message || "Failed to add available date";
+      })
+      .addCase(sendConsultationEmail.pending, (state) => {
+        state.isPending = true;
+        state.error = null;
+      })
+      .addCase(sendConsultationEmail.fulfilled, (state, action) => {
+        state.isPending = false;
+      })
+      .addCase(sendConsultationEmail.rejected, (state, action) => {
+        state.isPending = false;
+        state.error = action.error.message || "Failed to send email";
       })
       .addCase(deleteAvailableDate.pending, (state) => {
         state.isPending = true;
