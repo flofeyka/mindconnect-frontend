@@ -15,9 +15,9 @@ import {
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import Link from "next/link";
 import { useEffect } from "react";
-import specialities from "../../data/specialities.js";
+import specialities from "../../../data/specialities.js";
 import { Link as LinkUi } from "@nextui-org/react";
-import { languages } from "../../data/types.js";
+import { languages } from "../../../data/types.js";
 
 export default function Doctors() {
   const dispatch = useAppDispatch();
@@ -34,7 +34,7 @@ export default function Doctors() {
         <Input
           isClearable
           placeholder="Search by name or problem"
-          startContent={<Icon path="icons/search.svg" />}
+          startContent={<Icon path="/icons/search.svg" />}
           className="max-w-[400px] origin-center mr-2"
         />
         <Autocomplete

@@ -40,12 +40,12 @@ export default function Dashboard() {
           <Input
             isClearable
             placeholder="Search"
-            startContent={<Icon path="icons/search.svg" />}
+            startContent={<Icon path="/icons/search.svg" />}
             className="min-w-[324px]"
           />
         </div>
         <div className="flex items-center gap-x-[30px]">
-          <Icon path="icons/notifications.svg" className="cursor-pointer" />
+          <Icon path="/icons/notifications.svg" className="cursor-pointer" />
           <Profile user={user} />
         </div>
       </header>
@@ -58,7 +58,7 @@ export default function Dashboard() {
             <CardHeader className="flex justify-between items-center font-semibold text-xl">
               Your psychologist
               <Icon
-                path="arrow-left.svg"
+                path="/arrow-left.svg"
                 className="rotate-180 cursor-pointer"
               />
             </CardHeader>
