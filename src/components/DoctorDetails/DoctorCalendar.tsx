@@ -10,7 +10,7 @@ import {
   deleteAvailableDate,
   getAvailableDates,
 } from "@lib/redux/slices/doctorcalendar/doctorCalendarSlice";
-import { DoctorCalendarType } from "@lib/types";
+import { DoctorCalendarType, TimeSlot } from "@lib/types";
 import {
   Button,
   Card,
@@ -46,8 +46,12 @@ export default function DoctorCalendar({
   const modalDelete = useDisclosure();
 
   // States for tracking the selected day and time slot for deletion
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [selectedDay, setSelectedDay] = useState<DoctorCalendarType | null>(
+    null
+  );
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(
+    null
+  );
 
   const [newDate, setNewDate] = useState(parseDate(formatDateFromDateNow()));
   const [newTime, setNewTime] = useState("");
@@ -80,7 +84,7 @@ export default function DoctorCalendar({
     if (weekOffset > 0) setWeekOffset((prevOffset) => prevOffset - 1);
   };
 
-  const handleDeleteClick = (day, timeSlot) => {
+  const handleDeleteClick = (day: DoctorCalendarType, timeSlot: TimeSlot) => {
     setSelectedDay(day);
     setSelectedTimeSlot(timeSlot);
     modalDelete.onOpen();
@@ -90,8 +94,8 @@ export default function DoctorCalendar({
     try {
       await dispatch(
         deleteAvailableDate({
-          calendarId: selectedDay?._id,
-          timeSlotId: selectedTimeSlot?._id,
+          calendarId: selectedDay?._id as string,
+          timeSlotId: selectedTimeSlot?._id as string,
         })
       ).unwrap();
       dispatch(
