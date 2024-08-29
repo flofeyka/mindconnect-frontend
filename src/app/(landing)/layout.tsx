@@ -42,7 +42,7 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
                   <Icon
                     width="16px"
                     height="17px"
-                    path="icons/quick-support.svg"
+                    path="/icons/quick-support.svg"
                   />
                 }
               >
