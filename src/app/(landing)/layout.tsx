@@ -21,7 +21,7 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     dispatch(getAuthUserData());
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   console.log(user);
 
@@ -60,7 +60,6 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
             )}
           </div>
         </header>
-        <LogoutButton />
         <main>
           <LandingPage />
         </main>

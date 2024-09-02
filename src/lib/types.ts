@@ -21,9 +21,13 @@ export type usersDataType = {
   email: string;
   firstName: string;
   lastName: string;
-  number: number;
+  phoneNumber: string;
   image: string;
+  age: number;
+  city: string;
+  country: string;
   isDoctor: boolean;
+  username: string;
 };
 export type authType = {
   user: any;

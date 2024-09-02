@@ -117,131 +117,119 @@ export default function DoctorPublicCalendar({
 
   return (
     <>
-      {loading ? (
-        <Spinner
-          color="primary"
-          size="lg"
-          className="absolute top-0 bottom-0 left-0 right-0"
-        />
-      ) : (
-        <Card className="p-3 max-w-[1520px]">
-          <CardHeader className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">
-              Select date and time for a consultation:
-            </h3>
-            <div className="flex gap-3">
-              {weekOffset > 0 && (
-                <button onClick={handlePreviousWeek}>
-                  <ArrowLeft />
-                </button>
-              )}
-              <button onClick={handleNextWeek}>
-                <ArrowRight />
+      <Card className="p-3 max-w-[1520px]">
+        <CardHeader className="flex justify-between items-center">
+          <h3 className="text-lg font-semibold">
+            Select date and time for a consultation:
+          </h3>
+          <div className="flex gap-3">
+            {weekOffset > 0 && (
+              <button onClick={handlePreviousWeek}>
+                <ArrowLeft />
               </button>
-            </div>
-          </CardHeader>
-          <CardBody className="flex flex-row gap-x-4">
-            {calendar.slice(0, 7).map((day) => (
-              <div
-                key={
-                  day._id
-                    ? String(day._id)
-                    : `day-${Math.random().toString(36).substr(2, 9)}`
-                }
-                className="bg-[#1CA66F] bg-opacity-[0.1] p-3 rounded-[10px] flex flex-col justify-between w-[200px]"
-              >
-                <ScrollShadow hideScrollBar className="max-h-[300px]">
-                  {day.timeSlots.map((timeSlot) => (
-                    <div
-                      key={String(timeSlot._id)}
-                      onClick={() =>
-                        handleTimeSlotSelect(
-                          String(day.date),
-                          timeSlot.time,
-                          day._id,
-                          timeSlot._id
-                        )
-                      }
-                      className={`cursor-pointer border bg-[#1CA66F] bg-opacity-[0.1] p-2 flex items-center rounded mb-2 ${
-                        selectedTimeSlot &&
-                        selectedTimeSlot.date === String(day.date) &&
-                        selectedTimeSlot.time === timeSlot.time
-                          ? "border border-green-500"
-                          : ""
-                      }`}
-                    >
-                      <span>{timeSlot.time}</span>
-                    </div>
-                  ))}
-                </ScrollShadow>
-
-                <div>
-                  <Divider />
-                  <div className="text-[#1CA66F] pt-2 flex justify-center items-center">
-                    {formatDateToDayMonth(String(day.date))}
+            )}
+            <button onClick={handleNextWeek}>
+              <ArrowRight />
+            </button>
+          </div>
+        </CardHeader>
+        <CardBody className="flex flex-row gap-x-4">
+          {calendar.slice(0, 7).map((day) => (
+            <div
+              key={
+                day._id
+                  ? String(day._id)
+                  : `day-${Math.random().toString(36).substr(2, 9)}`
+              }
+              className="bg-[#1CA66F] bg-opacity-[0.1] p-3 rounded-[10px] flex flex-col justify-between w-[200px]"
+            >
+              <ScrollShadow hideScrollBar className="max-h-[300px]">
+                {day.timeSlots.map((timeSlot) => (
+                  <div
+                    key={String(timeSlot._id)}
+                    onClick={() =>
+                      handleTimeSlotSelect(
+                        String(day.date),
+                        timeSlot.time,
+                        day._id,
+                        timeSlot._id
+                      )
+                    }
+                    className={`cursor-pointer border bg-[#1CA66F] bg-opacity-[0.1] p-2 flex items-center rounded mb-2 ${
+                      selectedTimeSlot &&
+                      selectedTimeSlot.date === String(day.date) &&
+                      selectedTimeSlot.time === timeSlot.time
+                        ? "border border-green-500"
+                        : ""
+                    }`}
+                  >
+                    <span>{timeSlot.time}</span>
                   </div>
+                ))}
+              </ScrollShadow>
+
+              <div>
+                <Divider />
+                <div className="text-[#1CA66F] pt-2 flex justify-center items-center">
+                  {formatDateToDayMonth(String(day.date))}
                 </div>
               </div>
-            ))}
-          </CardBody>
-          {selectedTimeSlot && (
-            <div className="mt-4 text-left p-3">
-              <div className="flex gap-4 items-center mb-4">
-                <h3 className="text-lg font-semibold">Selected Time:</h3>
-                <p className="text-[#1CA66F] ">
-                  {formatDateToDayMonth(selectedTimeSlot.date)} at{" "}
-                  {selectedTimeSlot.time}
-                </p>
-              </div>
-              <Textarea
-                label="Add any related comments"
-                placeholder="Enter your message..."
-                value={message}
-                onValueChange={setMessage}
-                size="lg"
-              />
-              <Button
-                onPress={modalSend.onOpen}
-                color="primary"
-                className="mt-4"
-              >
-                Send Email
-              </Button>
-              <Modal
-                isOpen={modalSend.isOpen}
-                onOpenChange={modalSend.onOpenChange}
-              >
-                <ModalContent>
-                  {(onClose) => (
-                    <>
-                      <ModalHeader className="flex flex-col gap-1">
-                        Are you sure that you want to apply for consultation on{" "}
-                        {formatDateToDayMonth(selectedTimeSlot.date)} at{" "}
-                        {selectedTimeSlot.time}
-                      </ModalHeader>
-                      <ModalBody className="mb-4">
-                        <Button color="danger" onPress={onClose}>
-                          Cancel
-                        </Button>
-                        <Button
-                          type="button"
-                          color="primary"
-                          onPress={() => {
-                            handleSendEmail();
-                            onClose();
-                          }}
-                        >
-                          Yes, save
-                        </Button>
-                      </ModalBody>
-                    </>
-                  )}
-                </ModalContent>
-              </Modal>
             </div>
-          )}
-        </Card>
-      )}
+          ))}
+        </CardBody>
+        {selectedTimeSlot && (
+          <div className="mt-4 text-left p-3">
+            <div className="flex gap-4 items-center mb-4">
+              <h3 className="text-lg font-semibold">Selected Time:</h3>
+              <p className="text-[#1CA66F] ">
+                {formatDateToDayMonth(selectedTimeSlot.date)} at{" "}
+                {selectedTimeSlot.time}
+              </p>
+            </div>
+            <Textarea
+              label="Add any related comments"
+              placeholder="Enter your message..."
+              value={message}
+              onValueChange={setMessage}
+              size="lg"
+            />
+            <Button onPress={modalSend.onOpen} color="primary" className="mt-4">
+              Send Email
+            </Button>
+            <Modal
+              isOpen={modalSend.isOpen}
+              onOpenChange={modalSend.onOpenChange}
+            >
+              <ModalContent>
+                {(onClose) => (
+                  <>
+                    <ModalHeader className="flex flex-col gap-1">
+                      Are you sure that you want to apply for consultation on{" "}
+                      {formatDateToDayMonth(selectedTimeSlot.date)} at{" "}
+                      {selectedTimeSlot.time}
+                    </ModalHeader>
+                    <ModalBody className="mb-4">
+                      <Button color="danger" onPress={onClose}>
+                        Cancel
+                      </Button>
+                      <Button
+                        type="button"
+                        color="primary"
+                        onPress={() => {
+                          handleSendEmail();
+                          onClose();
+                        }}
+                      >
+                        Yes, save
+                      </Button>
+                    </ModalBody>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
+          </div>
+        )}
+      </Card>
       {isModalOpen && (
         <Modal
           isOpen={modalSuccess.isOpen}

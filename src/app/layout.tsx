@@ -19,6 +19,7 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode
 }>) {
+	
 	return (
 		<html className='dark' lang='en'>
 			<body className={font.className}>
