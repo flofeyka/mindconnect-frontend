@@ -1,7 +1,6 @@
 "use client";
 
 import CustomButton from "@components/CustomButton";
-import { authAPI } from "@lib/API/api";
 import {
   findUsersByEmails,
   getAuthUserData,
