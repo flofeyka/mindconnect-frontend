@@ -64,7 +64,10 @@ export default function Doctors() {
       <ul>
         {doctors.map((doctor) => (
           <li key={doctor._id} className="flex justify-center p-5">
-            <Link href={`doctor/${doctor._id}`} className="w-[836px] block">
+            <Link
+              href={`/dashboard/doctor/${doctor._id}`}
+              className="w-[836px] block"
+            >
               <Card className="max-w-[836px] mx-auto h-48">
                 <CardHeader className="justify-between">
                   <div className="flex gap-5">
@@ -86,7 +89,7 @@ export default function Doctors() {
                       </h5>
                     </div>
                     <Button
-                      href={`/doctor/${doctor._id}`}
+                      href={`/dashboard/doctor/${doctor._id}`}
                       as={LinkUi}
                       color="primary"
                       showAnchorIcon
@@ -116,7 +119,7 @@ export default function Doctors() {
                   </div>
 
                   <Button
-                    href={`/doctor-details/${doctor._id}`}
+                    href={`/dashboard/doctor-details/${doctor._id}`}
                     as={LinkUi}
                     color="primary"
                     showAnchorIcon

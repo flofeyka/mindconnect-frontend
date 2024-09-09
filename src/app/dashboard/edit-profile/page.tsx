@@ -17,7 +17,7 @@ import {
   currencies,
   fieldsOfproblems,
   languages,
-} from "../../data/types";
+} from "../../../data/types";
 import {
   Button,
   Input,

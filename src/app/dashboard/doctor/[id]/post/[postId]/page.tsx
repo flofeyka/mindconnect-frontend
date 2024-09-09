@@ -181,7 +181,7 @@ export default function Post() {
 
   const handleDeletePost = () => {
     dispatch(deletePost(params.postId as string));
-    router.push(`/doctor/${params.id}`);
+    router.push(`/dashboard/doctor/${params.id}`);
   };
 
   return (

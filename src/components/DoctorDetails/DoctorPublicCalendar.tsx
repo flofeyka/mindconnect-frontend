@@ -117,7 +117,7 @@ export default function DoctorPublicCalendar({
 
   return (
     <>
-      <Card className="p-3 max-w-[1520px]">
+      <Card className="p-3 max-w-[1510px]">
         <CardHeader className="flex justify-between items-center">
           <h3 className="text-lg font-semibold">
             Select date and time for a consultation:

@@ -10,7 +10,7 @@ import ChatSideBar from "./ChatSideBar";
 import useInitializeChatClient from "./useInitializeChatClient";
 import { Menu, X } from "lucide-react";
 import useWindowSize from "@app/hooks/useWindowSize";
-import { mdBreakpoint } from "../../utils/tailwind";
+import { mdBreakpoint } from "../../../utils/tailwind";
 
 export default function ChatPage() {
   const dispatch = useAppDispatch();
