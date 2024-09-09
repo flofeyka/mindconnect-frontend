@@ -18,6 +18,7 @@
 		"@reduxjs/toolkit": "^2.2.4",
 		"@stream-io/node-sdk": "^0.2.5",
 		"@stream-io/video-react-sdk": "^1.2.2",
+		"@t3-oss/env-nextjs": "^0.11.1",
 		"@types/react-redux": "^7.1.33",
 		"ai": "^3.2.45",
 		"axios": "^1.6.8",
@@ -36,8 +37,11 @@
 		"react-redux": "^9.1.2",
 		"simple-peer": "^9.11.1",
 		"socket.io-client": "^4.7.5",
+		"stream-chat": "^8.39.0",
+		"stream-chat-react": "^11.23.8",
 		"tailwindcss-animate": "^1.0.7",
-		"yup": "^1.4.0"
+		"yup": "^1.4.0",
+		"zod": "^3.23.8"
 	},
 	"devDependencies": {
 		"@types/node": "^20",
