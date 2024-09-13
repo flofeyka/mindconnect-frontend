@@ -37,7 +37,7 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
             <HeaderHav />
             <div className="flex gap-4 items-center ml-auto">
               <TotalVolunteers />
-              <Link href={"/fast-connect"}>
+              <Link href={"/fast-connect"} target="_blank">
                 <CustomButton
                   color="default"
                   startContent={

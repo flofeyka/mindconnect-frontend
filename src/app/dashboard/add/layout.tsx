@@ -1,11 +1,11 @@
 export default function DoctorsLayout({
-	children,
+  children,
 }: {
-	children: React.ReactNode
+  children: React.ReactNode;
 }) {
-	return (
-		<div className='flex'>
-			<div className='bg-[#111] w-full h-full'>{children}</div>
-		</div>
-	)
+  return (
+    <div className="flex bg-[#111] min-h-screen">
+      <div className=" w-full h-full">{children}</div>
+    </div>
+  );
 }

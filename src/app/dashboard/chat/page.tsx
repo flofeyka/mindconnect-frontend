@@ -11,6 +11,7 @@ import useInitializeChatClient from "./useInitializeChatClient";
 import { Menu, X } from "lucide-react";
 import useWindowSize from "@app/hooks/useWindowSize";
 import { mdBreakpoint } from "../../../utils/tailwind";
+import { Spinner } from "@nextui-org/react";
 
 export default function ChatPage() {
   const dispatch = useAppDispatch();
@@ -36,8 +37,8 @@ export default function ChatPage() {
 
   if (!chatClient || !user.id) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <LoadingIndicator size={40} color="primary" />
+      <div className="absolute top-1/2 left-1/2">
+        {/* <Spinner size="lg" /> */}
       </div>
     );
   }

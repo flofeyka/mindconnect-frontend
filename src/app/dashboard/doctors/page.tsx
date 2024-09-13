@@ -13,20 +13,26 @@ import {
   Input,
 } from "@nextui-org/react";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
-import Link from "next/link";
 import { useEffect } from "react";
 import specialities from "../../../data/specialities.js";
-import { Link as LinkUi } from "@nextui-org/react";
 import { languages } from "../../../data/types.js";
+import { useRouter } from "next/navigation.js";
 
 export default function Doctors() {
   const dispatch = useAppDispatch();
   const doctors = useAppSelector((state) => state.doctorProfile.doctors);
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(fetchAllDoctors());
   }, [dispatch]);
   const currentId = useAppSelector((state) => state.Calendar.oneCalendar?._id);
+
+  useEffect(() => {
+    router.prefetch(`/dashboard/doctor/[id]`);
+    router.prefetch(`/dashboard/doctor-details/[doctorId]`);
+    router.prefetch("/dashboard/chat");
+  }, [router]);
 
   return (
     <>
@@ -64,9 +70,9 @@ export default function Doctors() {
       <ul>
         {doctors.map((doctor) => (
           <li key={doctor._id} className="flex justify-center p-5">
-            <Link
-              href={`/dashboard/doctor/${doctor._id}`}
-              className="w-[836px] block"
+            <div
+              onClick={() => router.push(`/dashboard/doctor/${doctor._id}`)}
+              className="w-[836px] block cursor-pointer"
             >
               <Card className="max-w-[836px] mx-auto h-48">
                 <CardHeader className="justify-between">
@@ -89,12 +95,12 @@ export default function Doctors() {
                       </h5>
                     </div>
                     <Button
-                      href={`/dashboard/doctor/${doctor._id}`}
-                      as={LinkUi}
                       color="primary"
-                      showAnchorIcon
                       variant="solid"
                       className="mr-0 ml-auto"
+                      onClick={() =>
+                        router.push(`/dashboard/doctor/${doctor._id}`)
+                      }
                     >
                       Go to Profile
                     </Button>
@@ -119,18 +125,18 @@ export default function Doctors() {
                   </div>
 
                   <Button
-                    href={`/dashboard/doctor-details/${doctor._id}`}
-                    as={LinkUi}
                     color="primary"
-                    showAnchorIcon
                     variant="solid"
                     className="mr-0 ml-auto"
+                    onClick={() =>
+                      router.push(`/dashboard/doctor-details/${doctor._id}`)
+                    }
                   >
                     Book an appointment
                   </Button>
                 </CardFooter>
               </Card>
-            </Link>
+            </div>
           </li>
         ))}
       </ul>

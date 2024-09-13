@@ -9,6 +9,7 @@ import {
   Avatar,
   Button,
   Image,
+  Spinner,
 } from "@nextui-org/react";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 import {
@@ -22,6 +23,7 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
 import { Link as LinkUi } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
   const dispatch = useAppDispatch();
@@ -31,6 +33,11 @@ export default function Profile() {
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [subscriberCount, setSubscriberCount] = useState(0);
   const params = useParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch("/dashboard/add");
+  }, [router]);
   const currentUserId = useAppSelector((state) => state.Auth.usersData.id);
   useEffect(() => {
     dispatch(getAuthUserData());
@@ -64,7 +71,11 @@ export default function Profile() {
   };
 
   if (loading === "pending") {
-    return <Loader2 />;
+    return (
+      <div className="absolute top-1/2 left-1/2 ">
+        <Spinner size="lg" />
+      </div>
+    );
   }
 
   if (loading === "failed") {
@@ -128,30 +139,26 @@ export default function Profile() {
             <p className="text-default-400 text-small">Followers</p>
           </div>
           <Button
-            href={`/doctor-details/${doctorId}`}
-            as={LinkUi}
             color="primary"
-            showAnchorIcon
             variant="solid"
             className="mr-0 ml-auto"
+            onClick={() => router.push(`/dashboard/doctor-details/${doctorId}`)}
           >
             Book an appointment
           </Button>
           {(params.id as string) === currentUserId && (
             <Button
-              href="/add"
-              as={LinkUi}
               color="primary"
-              showAnchorIcon
               variant="solid"
               className="mr-0 ml-auto"
+              onClick={() => router.push(`/dashboard/add`)}
             >
               Add Post
             </Button>
           )}
         </CardFooter>
       </Card>
-      <div className="max-w-[900px] gap-2 grid grid-cols-12 grid-rows-2 px-8 mx-auto">
+      <div className="max-w-[900px] gap-2 grid grid-cols-12 grid-rows-2 px-8 mb-14 mx-auto">
         {posts
           .slice()
           .reverse()
@@ -160,9 +167,11 @@ export default function Profile() {
               key={post._id}
               className="col-span-12 sm:col-span-4 h-[250px] overflow-hidden"
             >
-              <Link
-                href={`/doctor/${params.id}/post/${post._id}`}
-                className="w-full h-full relative block"
+              <div
+                onClick={() =>
+                  router.push(`/dashboard/doctor/${params.id}/post/${post._id}`)
+                }
+                className="w-full h-full relative block cursor-pointer"
               >
                 <CardHeader className="absolute z-10 top-0 left-0 right-0 flex-col !items-start bg-gradient-to-b from-black/60 to-transparent">
                   <p className="text-tiny text-white/60 uppercase font-bold">
@@ -178,7 +187,7 @@ export default function Profile() {
                   className="z-0 w-full h-full object-cover"
                   src={post.image}
                 />
-              </Link>
+              </div>
             </Card>
           ))}
       </div>

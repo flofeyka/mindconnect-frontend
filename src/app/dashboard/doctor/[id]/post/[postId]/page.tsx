@@ -14,6 +14,7 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
+  Spinner,
   Textarea,
 } from "@nextui-org/react";
 import { Input } from "@nextui-org/input";
@@ -150,7 +151,11 @@ export default function Post() {
   }, [syncLikeState, post]);
 
   if (!post) {
-    return <div>Loading...</div>;
+    return (
+      <div className="absolute top-1/2 left-1/2 ">
+        <Spinner size="lg" />
+      </div>
+    );
   }
 
   const handleLikeUnlike = async () => {
@@ -188,21 +193,22 @@ export default function Post() {
     <div className="max-w-md mx-auto bg-secondary rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4">
       <div className="p-8">
         <div className="flex justify-between">
-          <Link href={`/doctor/${params.id}`}>
-            <div className="flex items-center mb-4">
-              <img
-                className="h-10 w-10 rounded-full mr-2"
-                src={profile?.image}
-                alt={profile?.firstName}
-              />
-              <div className="text-sm">
-                <p className="text-gray-100 font-semibold">
-                  {profile?.firstName}
-                </p>
-                <p className="text-gray-400">{formatDate(post.createdAt)}</p>
-              </div>
+          <div
+            className="flex items-center mb-4 cursor-pointer"
+            onClick={() => router.push(`/dashboard/doctor/${params.id}`)}
+          >
+            <img
+              className="h-10 w-10 rounded-full mr-2"
+              src={profile?.image}
+              alt={profile?.firstName}
+            />
+            <div className="text-sm">
+              <p className="text-gray-100 font-semibold">
+                {profile?.firstName}
+              </p>
+              <p className="text-gray-400">{formatDate(post.createdAt)}</p>
             </div>
-          </Link>
+          </div>
           {post.owner == currentUserId && (
             <>
               <Button onPress={modalEdit.onOpen}>Edit</Button>

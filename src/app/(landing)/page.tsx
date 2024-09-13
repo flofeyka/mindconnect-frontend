@@ -14,7 +14,7 @@ const LandingPage: FC = () => {
       <TitleHero />
       <div className="flex justify-center gap-4 mt-[45px]">
         <CustomButton color="primary">Get a service</CustomButton>
-        <Link href={"/fast-connect"}>
+        <Link href={"/fast-connect"} target="_blank">
           <CustomButton
             color="default"
             startContent={
