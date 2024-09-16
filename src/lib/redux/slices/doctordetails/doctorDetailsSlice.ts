@@ -65,7 +65,7 @@ export const updateDoctorProfile = createAsyncThunk<
 >("doctorDetails/update", async (profileData, { rejectWithValue }) => {
   try {
     const formData = new FormData();
-    Object.keys(profileData).forEach((key) => {
+    Object.keys(profileData).forEach((key: any) => {
       if (profileData[key] != null) {
         if (key === "image" && profileData[key] instanceof File) {
           if (profileData[key]) {
@@ -73,11 +73,11 @@ export const updateDoctorProfile = createAsyncThunk<
             formData.append("image", profileData[key] as File);
           }
         } else if (Array.isArray(profileData[key])) {
-          profileData[key].forEach((item) => {
+          profileData[key].forEach((item: any) => {
             formData.append(`${key}[]`, item); // Notice the [] to indicate an array
           });
         } else if (typeof profileData[key] === "object") {
-          Object.keys(profileData[key]).forEach((subKey) => {
+          Object.keys(profileData[key]).forEach((subKey: any) => {
             formData.append(`${key}[${subKey}]`, profileData[key][subKey]);
           });
         } else {
