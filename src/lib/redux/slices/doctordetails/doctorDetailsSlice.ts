@@ -68,7 +68,10 @@ export const updateDoctorProfile = createAsyncThunk<
     Object.keys(profileData).forEach((key) => {
       if (profileData[key] != null) {
         if (key === "image" && profileData[key] instanceof File) {
-          formData.append("image", profileData[key]);
+          if (profileData[key]) {
+            // Ensure profileData[key] is not undefined
+            formData.append("image", profileData[key] as File);
+          }
         } else if (Array.isArray(profileData[key])) {
           profileData[key].forEach((item) => {
             formData.append(`${key}[]`, item); // Notice the [] to indicate an array
