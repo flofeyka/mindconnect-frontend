@@ -2,18 +2,23 @@
 import Icon from "@components/Icon";
 import Logo from "@components/Logo";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner, Tooltip } from "@nextui-org/react";
+import { usePathname } from "next/navigation";
+import Loading from "./loading";
+import { MessageSquare } from "lucide-react";
 
 export default function DashBoardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [activeIcon, setActiveIcon] = useState(1);
+  const [activeIcon, setActiveIcon] = useState(Number);
   const [isLoading, setIsLoading] = useState(false);
+  const [path, setPath] = useState("dashboard");
   const router = useRouter();
+  const pathname = usePathname();
   function handleClick(iconId: number) {
     setActiveIcon(iconId);
   }
@@ -35,10 +40,27 @@ export default function DashBoardLayout({
       setIsLoading(false); // Hide the spinner after navigation
     }
   };
+  useEffect(() => {
+    router.prefetch("/dashboard/doctors");
+    router.prefetch("/dashboard/ai");
+    router.prefetch("/dashboard/chat");
+  }, [router]);
+
+  useEffect(() => {
+    if (pathname === "/dashboard") {
+      setActiveIcon(1);
+    } else if (pathname === "/dashboard/doctors") {
+      setActiveIcon(3);
+    } else if (pathname === "/dashboard/ai") {
+      setActiveIcon(2);
+    } else if (pathname === "/dashboard/chat") {
+      setActiveIcon(4);
+    }
+  }, [pathname]);
 
   return (
-    <div className="flex h-screen ">
-      <div className="bg-[#111111] h-full w-[75px] flex flex-col justify-between items-center py-8 border-[#FFFFFF08] border-r-2 ">
+    <div className="flex min-h-screen relative ">
+      <div className="bg-[#111111] h-screen w-[75px] fixed flex flex-col justify-between items-center py-8 border-[#FFFFFF08] border-r-2 ">
         <button onClick={() => routerPush("/")}>
           <Logo title={false} />
         </button>
@@ -52,9 +74,6 @@ export default function DashBoardLayout({
                 handleDivClick("/dashboard", 1);
               }}
             >
-              {isLoading && (
-                <Spinner color="primary" size="lg" className="absolute" />
-              )}
               <Icon
                 path="/icons/main-dashboard.svg"
                 color={`${activeIcon === 1 ? "#1ca66f" : "#ffffff"}`}
@@ -70,9 +89,6 @@ export default function DashBoardLayout({
                 handleDivClick("/dashboard/ai", 2);
               }}
             >
-              {isLoading && (
-                <Spinner color="primary" size="lg" className="absolute" />
-              )}
               <Icon
                 path="/bot.svg"
                 className="cursor-pointer"
@@ -98,37 +114,37 @@ export default function DashBoardLayout({
               />
             </div>
           </Tooltip>
-          <div
-            className={`w-full flex justify-center relative cursor-pointer ${setBorderIcon(
-              4
-            )}`}
-            onClick={() => handleClick(4)}
-          >
-            <Icon
-              path="/icons/stack.svg"
-              className="cursor-pointer"
-              color={`${activeIcon === 4 ? "#1ca66f" : "#ffffff"}`}
-            />
-          </div>
+          <Tooltip content="Chat" placement="right">
+            <div
+              className={`w-full flex justify-center relative cursor-pointer ${setBorderIcon(
+                4
+              )}`}
+              onClick={() => {
+                handleClick(4);
+                routerPush("/dashboard/chat");
+              }}
+            >
+              <MessageSquare
+                className="cursor-pointer"
+                color={`${activeIcon === 4 ? "#1ca66f" : "#ffffff"}`}
+                size={22}
+              />
+            </div>
+          </Tooltip>
         </div>
         <div className="flex flex-col items-center gap-y-[45px] w-full">
           <Tooltip content="Go to fast connect" placement="right">
-            <div
-              className={`w-full flex justify-center relative cursor-pointer ${setBorderIcon(
-                5
-              )}`}
-              onClick={() => {
-                handleClick(5);
-                routerPush("/fast-connect");
-                return <Spinner />;
-              }}
-            >
-              <Icon
-                path="/icons/energy.svg"
-                className="cursor-pointer"
-                color={`${activeIcon === 5 ? "#1ca66f" : "#ffffff"}`}
-              />
-            </div>
+            <Link href={"/fast-connect"} target="_blank">
+              <div
+                className={`w-full flex justify-center relative cursor-pointer`}
+              >
+                <Icon
+                  path="/icons/energy.svg"
+                  className="cursor-pointer"
+                  color="#ffffff"
+                />
+              </div>
+            </Link>
           </Tooltip>
           <div
             className={`w-full flex justify-center relative cursor-pointer ${setBorderIcon(
@@ -157,7 +173,9 @@ export default function DashBoardLayout({
         </div>
       </div>
 
-      <div className="bg-[#111] w-full">{children}</div>
+      <div className="ml-[75px] w-full overflow-auto">
+        <Suspense fallback={<Loading />}>{children}</Suspense>
+      </div>
     </div>
   );
 }

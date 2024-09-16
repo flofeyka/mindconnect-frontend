@@ -37,12 +37,6 @@ export default function Dashboard() {
       <header className="flex justify-between items-center mb-8">
         <div className="flex items-center gap-x-[35px]">
           <h3 className="font-semibold text-[22px]">Dashboard</h3>
-          <Input
-            isClearable
-            placeholder="Search"
-            startContent={<Icon path="/icons/search.svg" />}
-            className="min-w-[324px]"
-          />
         </div>
         <div className="flex items-center gap-x-[30px]">
           <Icon path="/icons/notifications.svg" className="cursor-pointer" />

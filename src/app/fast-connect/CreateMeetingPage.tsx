@@ -16,10 +16,22 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import router from "next/router";
 import { useEffect, useState } from "react";
+import {
+  Card,
+  Checkbox,
+  DatePicker,
+  Radio,
+  RadioGroup,
+  Textarea,
+} from "@nextui-org/react";
+import { parseAbsoluteToLocal, ZonedDateTime } from "@internationalized/date";
 
 export default function CreateMeetingPage() {
   const [descriptionInput, setDescriptionInput] = useState("");
-  const [startTimeInput, setStartTimeInput] = useState("");
+  const [startTimeInput, setStartTimeInput] = useState<string>("");
+  const [startTimeValue, setStartTimeValue] = useState<ZonedDateTime | null>(
+    null
+  );
   const [participantsInput, setParticipantsInput] = useState("");
 
   const [call, setCall] = useState<Call>();
@@ -46,7 +58,6 @@ export default function CreateMeetingPage() {
       const memberEmails: string[] = participantsInput
         .split(",")
         .map((email) => email.trim());
-      console.log(memberEmails);
 
       const resultAction = await dispatch(findUsersByEmails(memberEmails));
       const memberIds: string[] = resultAction.payload as string[];
@@ -83,15 +94,19 @@ export default function CreateMeetingPage() {
   return (
     <div className="flex flex-col items-center space-y-6">
       <h1 className="text-2xl font-bold text-center">
-        Welcome {user.firstName}
+        Welcome {user.isDoctor === true && <span>Dr.</span>} {user.firstName}
       </h1>
-      <div className="w-80 mx-auto space-y-6 rounded-md bg-black p-5">
+      <Card className="w-80 mx-auto space-y-6 p-5">
         <h2 className="text-xl font-bold">Create a new meeting</h2>
         <DescriptionInput
           value={descriptionInput}
           onChange={setDescriptionInput}
         />
-        <StartTimeInput value={startTimeInput} onChange={setStartTimeInput} />
+        <StartTimeInput
+          value={startTimeValue}
+          setValue={setStartTimeValue}
+          onChange={setStartTimeInput}
+        />
         <ParticipantsInput
           value={participantsInput}
           onChange={setParticipantsInput}
@@ -105,7 +120,7 @@ export default function CreateMeetingPage() {
             Enter meeting with doctor
           </CustomButton>
         )}
-      </div>
+      </Card>
       {call && <MeetingLink call={call} />}
     </div>
   );
@@ -127,26 +142,19 @@ function DescriptionInput({ value, onChange }: DescriptionInputProps) {
   return user.isDoctor ? (
     <div className="space-y-2">
       <div className="font-medium">Meeting info</div>
-      <label className="flex items-center gap-1.5">
-        <input
-          type="checkbox"
-          checked={active}
-          onChange={(e) => {
-            setActive(e.target.checked);
-            onChange("");
-          }}
-        />
+      <Checkbox isSelected={active} onValueChange={setActive}>
         Add description
-      </label>
+      </Checkbox>
       {active && (
         <label className="block space-y-1">
           <span className="font-medium">Description</span>
-          <textarea
+
+          <Textarea
+            labelPlacement="outside"
+            placeholder="Enter your description"
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            maxLength={500}
-            className="w-full rounded-md border border-gray-300 p-2"
-          ></textarea>
+          />
         </label>
       )}
     </div>
@@ -154,17 +162,23 @@ function DescriptionInput({ value, onChange }: DescriptionInputProps) {
 }
 
 interface StartTimeInputProps {
-  value: string;
+  value: ZonedDateTime | null;
+  setValue: (value: ZonedDateTime) => void;
   onChange: (value: string) => void;
 }
 
-function StartTimeInput({ value, onChange }: StartTimeInputProps) {
+function StartTimeInput({ value, onChange, setValue }: StartTimeInputProps) {
   const [active, setActive] = useState(false);
+
   const user = useAppSelector((state) => state.Auth.usersData);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getAuthUserData());
   }, [dispatch]);
+
+  const [selected, setSelected] = useState(
+    user.isDoctor ? "scheduled" : "immediate"
+  );
 
   const dateTimeLocalNow = new Date(
     new Date().getTime() - new Date().getTimezoneOffset() * 60_000
@@ -172,47 +186,39 @@ function StartTimeInput({ value, onChange }: StartTimeInputProps) {
     .toISOString()
     .slice(0, 16);
 
+  const handleSelection = (val: string) => {
+    setSelected(val);
+    if (val === "immediate") {
+      setActive(false);
+      onChange("");
+    } else {
+      setActive(true);
+      onChange(dateTimeLocalNow);
+    }
+  };
+
   return (
     <div className="space-y-2">
       <div className="font-medium">Meeting start:</div>
-      <label className="flex items-center gap-1.5">
-        <input
-          type="radio"
-          checked={!active}
-          onChange={() => {
-            setActive(false);
-            onChange("");
-          }}
-        />
-        Start meeting immediately
-      </label>
-      {user.isDoctor ? (
-        <>
-          <label className="flex items-center gap-1.5">
-            <input
-              type="radio"
-              checked={active}
-              onChange={() => {
-                setActive(true);
-                onChange(dateTimeLocalNow);
-              }}
-            />
-            Start meeting at date/time
-          </label>
-          {active && (
-            <label className="block space-y-1">
-              <span className="font-medium">Start time</span>
-              <input
-                className="w-full rounded-md border border-gray-300 p-2"
-                type="datetime-local"
-                value={value}
-                min={dateTimeLocalNow}
-                onChange={(e) => onChange(e.target.value)}
-              />
-            </label>
-          )}
-        </>
-      ) : null}
+
+      <RadioGroup value={selected} onValueChange={handleSelection}>
+        <Radio value="immediate">Start meeting immediately</Radio>
+        {user.isDoctor && (
+          <Radio value="scheduled">Start meeting at date/time</Radio>
+        )}
+      </RadioGroup>
+      {user.isDoctor && active && (
+        <label className="block space-y-1">
+          <span className="font-medium">Start time</span>
+          <DatePicker
+            className="max-w-md"
+            granularity="second"
+            label="Date and time"
+            value={value} // Pass the correct ZonedDateTime value here
+            onChange={setValue} // Update the ZonedDateTime value in state
+          />
+        </label>
+      )}
     </div>
   );
 }
@@ -258,11 +264,10 @@ function ParticipantsInput({ value, onChange }: ParticipantsInputProps) {
           {active && (
             <label className="block space-y-1">
               <span className="font-medium">Participants emails</span>
-              <textarea
-                className="w-full rounded-md border border-gray-300 p-2"
+              <Textarea
+                placeholder="Enter participant email addresses separated by comas"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                placeholder="Enter participant email addresses separated by comas"
               />
             </label>
           )}

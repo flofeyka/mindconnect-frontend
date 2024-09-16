@@ -1,3 +1,5 @@
+"use client";
+
 import AnimatedIcon from "@components/AnimatedIcon";
 import Icon from "@components/Icon";
 import ModalWrapper from "@components/Modal";
@@ -18,7 +20,7 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
@@ -27,6 +29,12 @@ export default function Profile({ user }: { user: usersDataType }) {
   const [icon, setIcon] = useState(false);
   const modalLogout = useDisclosure();
   const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch(`/dashboard/doctor/${user.id}`);
+    router.prefetch("/dashboard/edit-profile");
+    router.prefetch("/");
+  }, [router]);
 
   const toggleDropdown = () => {
     setIcon(!icon);
@@ -77,7 +85,7 @@ export default function Profile({ user }: { user: usersDataType }) {
             <DropdownItem key="profile">
               <div
                 onClick={() => {
-                  router.push(`/doctor/${user.id}`);
+                  router.push(`/dashboard/doctor/${user.id}`);
                 }}
               >
                 My Profile
@@ -86,7 +94,7 @@ export default function Profile({ user }: { user: usersDataType }) {
             <DropdownItem key="extanded">
               <div
                 onClick={() => {
-                  router.push("/edit-profile");
+                  router.push("/dashboard/edit-profile");
                 }}
               >
                 Edit Detailes

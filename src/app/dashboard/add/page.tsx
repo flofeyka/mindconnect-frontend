@@ -79,7 +79,7 @@ export default function AddPage() {
 
       await dispatch(addPost(postData));
       setTimeout(() => {
-        router.push(`/doctor/${userId}`);
+        router.push(`/dashboard/doctor/${userId}`);
       }, 0);
       await dispatch(fetchPostsFromDoctor(userId));
     } else {
@@ -176,7 +176,7 @@ export default function AddPage() {
         <div className="flex justify-end space-x-2">
           <Button
             type="button"
-            onClick={() => router.push(`/profile/${userId}`)}
+            onClick={() => router.push(`/dashboard/doctor/${userId}`)}
           >
             Cancel
           </Button>

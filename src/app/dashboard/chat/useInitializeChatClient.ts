@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
 import { useEffect, useState } from "react";
 import { StreamChat } from "stream-chat";
-import { env } from "../../env";
+import { env } from "../../../env";
 
 export default function useInitializeChatClient() {
   const dispatch = useAppDispatch();

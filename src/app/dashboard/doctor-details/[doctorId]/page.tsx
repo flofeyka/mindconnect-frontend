@@ -22,8 +22,8 @@ export default function DoctorDetails() {
 
   return (
     <div className="bg-[#111] min-h-screen flex flex-col items-center pb-44">
-      <div className="container mx-auto px-4 py-8">
-        <Card className="max-w-[1520px]">
+      <div className="container max-w-[1281px] mx-auto px-4 py-8">
+        <Card className="max-w-[1281px]">
           <div className="md:flex">
             <div className="md:flex-shrink-0 p-2  ">
               <img

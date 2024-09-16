@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Providers from "./providers";
 import "../assets/styles/global.css";
-import React from "react";
+import React, { Suspense } from "react";
+import Loading from "./dashboard/loading";
 
 const font = Poppins({
   subsets: ["devanagari"],

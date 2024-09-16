@@ -117,7 +117,7 @@ export default function DoctorPublicCalendar({
 
   return (
     <>
-      <Card className="p-3 max-w-[1520px]">
+      <Card className="p-3 max-w-[1510px]">
         <CardHeader className="flex justify-between items-center">
           <h3 className="text-lg font-semibold">
             Select date and time for a consultation:
@@ -141,7 +141,7 @@ export default function DoctorPublicCalendar({
                   ? String(day._id)
                   : `day-${Math.random().toString(36).substr(2, 9)}`
               }
-              className="bg-[#1CA66F] bg-opacity-[0.1] p-3 rounded-[10px] flex flex-col justify-between w-[200px]"
+              className="bg-[#1CA66F] bg-opacity-[0.1] p-3 rounded-[10px] flex flex-col justify-between basis-[200px] flex-grow flex-shrink min-w-[158px]"
             >
               <ScrollShadow hideScrollBar className="max-h-[300px]">
                 {day.timeSlots.map((timeSlot) => (
@@ -220,7 +220,7 @@ export default function DoctorPublicCalendar({
                           onClose();
                         }}
                       >
-                        Yes, save
+                        Yes, send
                       </Button>
                     </ModalBody>
                   </>

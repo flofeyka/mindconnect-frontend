@@ -23,7 +23,7 @@ export default function DoctorMultipleSelect({
   options,
   value,
   onChange,
-  className = "max-w-[294px] block mb-4 ",
+  className = "w-[350px] block mb-4 ",
 }: DoctorSelectProps) {
   const handleSelectionChange = (keys: Selection) => {
     onChange(Array.from(keys) as string[]);

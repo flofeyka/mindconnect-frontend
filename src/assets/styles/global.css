@@ -35,6 +35,9 @@
 .str-chat__channel-search.str-chat__channel-search--width-results.str-chat__channel-search--inline {
   height: fit-content;
 }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   background-color: #101010;
