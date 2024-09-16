@@ -3,21 +3,20 @@ import { calendarAPI } from "@lib/API/calendarAPI";
 import { calendarType } from "@lib/types";
 
 type CalendarState = {
-	calendar: calendarType[]
-	isPending: boolean
-	oneCalendar: calendarType | null
-	error: string | null
-	availableDates: string[]
-}
+  calendar: calendarType[];
+  isPending: boolean;
+  oneCalendar: calendarType | null;
+  error: string | null;
+  availableDates: string[];
+};
 
 const initialState: CalendarState = {
-	calendar: [],
-	isPending: true,
-	oneCalendar: null,
-	error: null,
-	availableDates: [],
-}
-
+  calendar: [],
+  isPending: true,
+  oneCalendar: null,
+  error: null,
+  availableDates: [],
+};
 
 const handlePending = (state: CalendarState) => {
   state.isPending = true;
@@ -61,7 +60,6 @@ const calendarSlice = createSlice({
           state.isPending = false;
         }
       )
-      .addCase(getOneCalendar.rejected, handleRejected)
 
       // addCalendar
       .addCase(
@@ -109,7 +107,6 @@ const calendarSlice = createSlice({
           state.isPending = false;
         }
       )
-      .addCase(deleteCalendar.rejected, handleRejected)
 
       // getPrevCalendar
       .addCase(getPrevCalendar.pending, handlePending)
@@ -120,7 +117,6 @@ const calendarSlice = createSlice({
           state.isPending = false;
         }
       )
-      .addCase(getPrevCalendar.rejected, handleRejected)
 
       // getNextCalendar
       .addCase(getNextCalendar.pending, handlePending)
@@ -131,25 +127,23 @@ const calendarSlice = createSlice({
           state.isPending = false;
         }
       )
-      .addCase(getNextCalendar.rejected, handleRejected)
-    .addCase(getAllDates.fulfilled, (state, action) => {
-				if (action.payload.success && Array.isArray(action.payload.response)) {
-					state.availableDates = action.payload.response
-						.filter(date => date !== null)
-						.map(dateStr => {
-							const d = new Date(dateStr)
-							return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
-								2,
-								'0'
-							)}-${String(d.getDate()).padStart(2, '0')}`
-						})
-				} else {
-					state.error = 'Invalid response format'
-				}
-			});
+      .addCase(getAllDates.fulfilled, (state, action) => {
+        if (action.payload.success && Array.isArray(action.payload.response)) {
+          state.availableDates = action.payload.response
+            .filter((date) => date !== null)
+            .map((dateStr) => {
+              const d = new Date(dateStr);
+              return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+                2,
+                "0"
+              )}-${String(d.getDate()).padStart(2, "0")}`;
+            });
+        } else {
+          state.error = "Invalid response format";
+        }
+      });
   },
 });
-
 
 export const addCalendar = createAsyncThunk(
   "calendar/addCalendar",
@@ -219,7 +213,7 @@ export const getPrevCalendar = createAsyncThunk(
       } else {
         return rejectWithValue("Failed to fetch previous calendar");
       }
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch previous calendar"
       );
@@ -228,20 +222,20 @@ export const getPrevCalendar = createAsyncThunk(
 );
 
 export const getAllDates = createAsyncThunk(
-	'calendar/getAllDates',
-	async () => {
-		const response = await calendarAPI.getAllDates()
-		return response
-	}
-)
+  "calendar/getAllDates",
+  async () => {
+    const response = await calendarAPI.getAllDates();
+    return response;
+  }
+);
 
 export const getNextCalendar = createAsyncThunk(
-	'calendar/getNextCalendar',
-	async (calendarId: string) => {
-		const response = await calendarAPI.getNextCalendar({ calendarId })
-		return response.response
-	}
-)
+  "calendar/getNextCalendar",
+  async (calendarId: string) => {
+    const response = await calendarAPI.getNextCalendar({ calendarId });
+    return response.response;
+  }
+);
 
 export const { setCalendar } = calendarSlice.actions;
 export default calendarSlice.reducer;
