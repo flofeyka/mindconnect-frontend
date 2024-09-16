@@ -187,7 +187,7 @@ export default function DoctorCalendar({
       </Modal>
 
       {!loading && (
-        <Card className="p-3 mt-16 max-w-[1520px]">
+        <Card className="p-3 mt-16 max-w-[1510px]">
           <CardHeader className="flex justify-between items-center">
             <div className="text-xl">Set Your Available dates</div>
             <Button onPress={modalAdd.onOpen} color="primary">
@@ -219,7 +219,7 @@ export default function DoctorCalendar({
                     ? String(day._id)
                     : `day-${Math.random().toString(36).substr(2, 9)}`
                 }
-                className="bg-[#1CA66F] bg-opacity-[0.1] p-3 rounded-[10px] flex flex-col justify-between w-[200px]"
+                className="bg-[#1CA66F] bg-opacity-[0.1] p-3 rounded-[10px] flex flex-col justify-between basis-[200px] flex-grow flex-shrink min-w-[158px]"
               >
                 <ScrollShadow hideScrollBar className="max-h-[300px]">
                   {day.timeSlots.map((timeSlot) => (

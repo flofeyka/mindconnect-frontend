@@ -1,3 +1,4 @@
+import LoadingButton from "@components/LoadingButton";
 import { usersDataType } from "@lib/types";
 import { ArrowLeft } from "lucide-react";
 import { resolve } from "path";
@@ -24,18 +25,27 @@ export default function UsersMenu({
 
   const [users, setUsers] = useState<(UserResponse & { image?: string })[]>();
 
+  const [moreUsersLoading, setMoreUsersLoading] = useState(false);
+
+  const [endOfPaginationReached, setEndOfPaginationReached] =
+    useState<boolean>();
+
+  const pageSize = 2;
+
   useEffect(() => {
     async function loadInitialUsers() {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
 
       try {
         const response = await client.queryUsers(
           {
             id: { $ne: user.id },
           },
-          { id: 1 }
+          { id: 1 },
+          { limit: pageSize + 1 }
         );
-        setUsers(response.users);
+        setUsers(response.users.slice(0, pageSize));
+        setEndOfPaginationReached(response.users.length <= pageSize);
       } catch (error) {
         console.error(error);
         alert("Error loading users");
@@ -43,6 +53,33 @@ export default function UsersMenu({
     }
     loadInitialUsers();
   }, [client, user.id]);
+
+  async function loadMoreUsers() {
+    setMoreUsersLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    try {
+      const lastUserId = users?.[users.length - 1].id;
+
+      if (!lastUserId) return;
+
+      const response = await client.queryUsers(
+        {
+          $and: [{ id: { $ne: user.id } }, { id: { $gt: lastUserId } }],
+        },
+        { id: 1 },
+        { limit: pageSize + 1 }
+      );
+      console.log(response);
+      setUsers([...users, ...response.users.slice(0, pageSize)]);
+      setEndOfPaginationReached(response.users.length <= pageSize);
+    } catch (error) {
+      console.error(error);
+      alert("Error loading users");
+    } finally {
+      setMoreUsersLoading(false);
+    }
+  }
 
   function handleChannelSelected(channel: Channel) {
     setActiveChannel(channel);
@@ -64,17 +101,29 @@ export default function UsersMenu({
 
   return (
     <div className=" str-chat bg-white absolute z-10 h-full w-full border-e-[#DBDDE1]">
-      <div className="flex items-center gap-3 text-lg font-bold">
-        <ArrowLeft onClick={onClose} className="cursor-pointer" /> Users
+      <div className="flex items-center gap-3 text-lg font-bold text-black">
+        <ArrowLeft onClick={onClose} className="cursor-pointer" color="black" />{" "}
+        Users
       </div>
-      {!users && <LoadingUsers />}
-      {users?.map((user) => (
-        <UserResult
-          user={user}
-          onUserClicked={startChatWithUser}
-          key={user.id}
-        />
-      ))}
+      <div>
+        {!users && <LoadingUsers />}
+        {users?.map((user) => (
+          <UserResult
+            user={user}
+            onUserClicked={startChatWithUser}
+            key={user.id}
+          />
+        ))}
+        {endOfPaginationReached === false && (
+          <LoadingButton
+            loading={moreUsersLoading}
+            className="m-auto mb-3 w-[80%]"
+            onClick={loadMoreUsers}
+          >
+            Load more users
+          </LoadingButton>
+        )}
+      </div>
     </div>
   );
 }

@@ -30,7 +30,7 @@ export default function DoctorInput({
       value={value}
       onChange={handleChange}
       label={label}
-      className="max-w-[294px] mb-4"
+      className="w-[350px] mb-4"
     />
   );
 }

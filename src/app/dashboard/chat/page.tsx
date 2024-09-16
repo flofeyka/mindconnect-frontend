@@ -11,7 +11,6 @@ import useInitializeChatClient from "./useInitializeChatClient";
 import { Menu, X } from "lucide-react";
 import useWindowSize from "@app/hooks/useWindowSize";
 import { mdBreakpoint } from "../../../utils/tailwind";
-import { Spinner } from "@nextui-org/react";
 
 export default function ChatPage() {
   const dispatch = useAppDispatch();

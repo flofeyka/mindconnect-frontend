@@ -3,20 +3,22 @@
 import Icon from "@components/Icon";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 import { fetchAllDoctors } from "@lib/redux/slices/doctorprofile/doctorProfileSlice";
-import { CheckboxGroup, Checkbox, Button } from "@nextui-org/react";
-import {
-  Avatar,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Input,
-} from "@nextui-org/react";
+import { CheckboxGroup, Checkbox, Button, Spinner } from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { useEffect } from "react";
 import specialities from "../../../data/specialities.js";
 import { languages } from "../../../data/types.js";
 import { useRouter } from "next/navigation.js";
+import dynamic from "next/dynamic";
+
+const DoctorList = dynamic(() => import("./DoctorList"), {
+  loading: () => (
+    <div className="absolute top-1/2 left-1/2 ">
+      <Spinner size="lg" />
+    </div>
+  ),
+});
 
 export default function Doctors() {
   const dispatch = useAppDispatch();
@@ -26,7 +28,6 @@ export default function Doctors() {
   useEffect(() => {
     dispatch(fetchAllDoctors());
   }, [dispatch]);
-  const currentId = useAppSelector((state) => state.Calendar.oneCalendar?._id);
 
   useEffect(() => {
     router.prefetch(`/dashboard/doctor/[id]`);
@@ -67,79 +68,7 @@ export default function Doctors() {
         </CheckboxGroup>
       </div>
 
-      <ul>
-        {doctors.map((doctor) => (
-          <li key={doctor._id} className="flex justify-center p-5">
-            <div
-              onClick={() => router.push(`/dashboard/doctor/${doctor._id}`)}
-              className="w-[836px] block cursor-pointer"
-            >
-              <Card className="max-w-[836px] mx-auto h-48">
-                <CardHeader className="justify-between">
-                  <div className="flex gap-5">
-                    <Avatar
-                      isBordered
-                      radius="full"
-                      size="lg"
-                      src={
-                        doctor.image ||
-                        "https://nextui.org/avatars/avatar-1.png"
-                      }
-                    />
-                    <div className="flex flex-col gap-1 items-start justify-center">
-                      <h4 className="text-small font-semibold leading-none text-default-600">
-                        {doctor.firstName} {doctor.lastName}
-                      </h4>
-                      <h5 className="text-small tracking-tight text-default-400">
-                        {doctor.email}
-                      </h5>
-                    </div>
-                    <Button
-                      color="primary"
-                      variant="solid"
-                      className="mr-0 ml-auto"
-                      onClick={() =>
-                        router.push(`/dashboard/doctor/${doctor._id}`)
-                      }
-                    >
-                      Go to Profile
-                    </Button>
-                  </div>
-                </CardHeader>
-
-                <CardBody className="px-3 py-0 text-small text-default-400">
-                  <p>{doctor.description}</p>
-                </CardBody>
-                <CardFooter className="gap-3">
-                  <div className="flex gap-1">
-                    <p className="font-semibold text-default-400 text-small">
-                      {doctor.subscribedTo.length}
-                    </p>
-                    <p className=" text-default-400 text-small">Following</p>
-                  </div>
-                  <div className="flex gap-1">
-                    <p className="font-semibold text-default-400 text-small">
-                      {doctor.subscribers.length}
-                    </p>
-                    <p className="text-default-400 text-small">Followers</p>
-                  </div>
-
-                  <Button
-                    color="primary"
-                    variant="solid"
-                    className="mr-0 ml-auto"
-                    onClick={() =>
-                      router.push(`/dashboard/doctor-details/${doctor._id}`)
-                    }
-                  >
-                    Book an appointment
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <DoctorList doctors={doctors} />
     </>
   );
 }

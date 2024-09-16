@@ -29,7 +29,7 @@ export default function DoctorTextArea({
       value={value}
       onChange={handleChange}
       label={label}
-      className="w-[600px] mb-4"
+      className="w-[712px] mb-4"
     />
   );
 }

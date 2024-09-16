@@ -64,7 +64,7 @@ export default function PhotoUpload({
   };
 
   return (
-    <div className="flex items-center justify-center w-[250px] relative">
+    <div className="flex items-center justify-center w-[350px]  relative">
       {photoPreview ? (
         <>
           <img
@@ -85,7 +85,7 @@ export default function PhotoUpload({
       ) : (
         <label
           htmlFor="photo-upload"
-          className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 ${
+          className={`flex flex-col items-center justify-center w-full h-[400px] border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 ${
             isDragging ? "border-blue-500 bg-blue-50" : ""
           }`}
           onDragEnter={handleDragEnter}

@@ -165,7 +165,7 @@ export default function Profile() {
           .map((post) => (
             <Card
               key={post._id}
-              className="col-span-12 sm:col-span-4 h-[250px] overflow-hidden"
+              className="col-span-12 sm:col-span-4 h-[250px] overflow-hidden relative"
             >
               <div
                 onClick={() =>
@@ -173,14 +173,15 @@ export default function Profile() {
                 }
                 className="w-full h-full relative block cursor-pointer"
               >
-                <CardHeader className="absolute z-10 top-0 left-0 right-0 flex-col !items-start bg-gradient-to-b from-black/60 to-transparent">
-                  <p className="text-tiny text-white/60 uppercase font-bold">
-                    {post.title}
-                  </p>
+                {/* Black gradient that covers half of the card */}
+                <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/100 to-transparent h-full"></div>
+
+                <CardHeader className="absolute z-20 top-0 left-0 right-0 flex-col !items-start p-4">
                   <h4 className="text-white font-medium text-large">
-                    {post.description}
+                    {post.title}
                   </h4>
                 </CardHeader>
+
                 <Image
                   removeWrapper
                   alt="Card background"

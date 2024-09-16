@@ -220,7 +220,7 @@ export default function DoctorPublicCalendar({
                           onClose();
                         }}
                       >
-                        Yes, save
+                        Yes, send
                       </Button>
                     </ModalBody>
                   </>
