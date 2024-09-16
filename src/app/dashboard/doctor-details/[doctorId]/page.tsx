@@ -5,8 +5,19 @@ import { getPublicDoctorDetails } from "@lib/redux/slices/doctordetails/doctorDe
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { MapPin, Clock, Globe, Phone, DollarSign } from "lucide-react";
-import DoctorPublicCalendar from "@components/DoctorDetails/DoctorPublicCalendar";
-import { Card } from "@nextui-org/react";
+import { Card, Spinner } from "@nextui-org/react";
+import dynamic from "next/dynamic";
+
+const DoctorPublicCalendar = dynamic(
+  () => import("@components/DoctorDetails/DoctorPublicCalendar"),
+  {
+    loading: () => (
+      <div className="absolute top-1/2 left-1/2 ">
+        <Spinner size="lg" />
+      </div>
+    ),
+  }
+);
 
 export default function DoctorDetails() {
   const params = useParams();

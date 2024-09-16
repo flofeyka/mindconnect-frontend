@@ -31,7 +31,18 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import DoctorSingleSelect from "@components/EditProfile/DoctorSingleSelect";
-import DoctorCalendar from "@components/DoctorDetails/DoctorCalendar";
+import dynamic from "next/dynamic";
+
+const DoctorCalendar = dynamic(
+  () => import("@components/DoctorDetails/DoctorCalendar"),
+  {
+    loading: () => (
+      <div className="absolute top-1/2 left-1/2 ">
+        <Spinner size="lg" />
+      </div>
+    ),
+  }
+);
 
 export default function EditProfile() {
   const dispatch = useAppDispatch();
