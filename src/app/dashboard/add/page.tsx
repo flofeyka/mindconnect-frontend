@@ -8,6 +8,7 @@ import { addPost } from "@lib/redux/slices/posts/postSlice";
 import { useRouter } from "next/navigation";
 import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
 import { fetchPostsFromDoctor } from "@lib/redux/slices/doctorprofile/doctorProfileSlice";
+import Image from "next/image";
 
 export default function AddPage() {
   const dispatch = useAppDispatch();
@@ -100,8 +101,10 @@ export default function AddPage() {
           <div className="flex items-center justify-center w-full relative">
             {photoPreview ? (
               <>
-                <img
+                <Image
                   src={photoPreview}
+                  width={672}
+                  height={256}
                   alt="Upload preview"
                   className="max-w-full h-64 object-cover rounded-lg"
                 />

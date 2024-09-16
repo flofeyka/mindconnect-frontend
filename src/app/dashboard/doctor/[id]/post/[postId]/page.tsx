@@ -155,7 +155,7 @@ export default function Post() {
 
   useEffect(() => {
     dispatch(fetchDoctorProfileById(params.id as string));
-  }, [dispatch]);
+  }, [dispatch, params.id]);
 
   const syncLikeState = useCallback(() => {
     if (post && currentUserId) {

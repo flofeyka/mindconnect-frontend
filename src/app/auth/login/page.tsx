@@ -97,9 +97,8 @@ export default function Login() {
           </Button>
         </div>
         <div className="text-center mt-2">
-          Don't have an account?{" "}
+          Dont have an account?
           <Link href="/auth/register" className={"font-simebold"}>
-            {" "}
             Register
           </Link>
         </div>

@@ -313,7 +313,10 @@ export default function MyDoctorProfile() {
               <div className="p-8">
                 <div className="flex gap-2">
                   {doctor.typeOfConsultation.map((index) => (
-                    <div className="uppercase tracking-wide  text-sm text-indigo-500 font-semibold">
+                    <div
+                      key={index}
+                      className="uppercase tracking-wide  text-sm text-indigo-500 font-semibold"
+                    >
                       {index}
                     </div>
                   ))}
