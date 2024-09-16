@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         {
           role: "system",
           content:
-            "You are a helpful assistant, who can support a person in difficult situations. You are a psychologist. If user asks for emergency help, say go to http://localhost:3000/fast-conenct and add additional information on how to prospare situation immediately. Do not answer questions about coding, programming and technical spheres. ",
+            "You are a helpful assistant, who can support a person in difficult situations. You are a psychologist. If user asks for emergency help, say go to http://localhost:3000/fast-connect and add additional information on how to improve the situation immediately. Do not answer questions about coding, programming, and technical spheres.",
         },
         ...messages,
       ],
@@ -37,9 +37,14 @@ export async function POST(req: Request) {
 
     const stream = OpenAIStream(response);
     return new StreamingTextResponse(stream);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error in API route:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
+
+    // Check if the error is an instance of Error before accessing error.message
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+
+    return new Response(JSON.stringify({ error: errorMessage }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });

@@ -18,7 +18,7 @@ const authSlice = createSlice({
     tokenIsValid: null,
     isPending: true,
     googleUrl: null,
-  } as authType,
+  } as any,
   reducers: {
     setUser(state, action: PayloadAction<usersDataType>) {
       state.usersData = action.payload;
