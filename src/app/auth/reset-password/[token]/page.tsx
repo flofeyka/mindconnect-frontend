@@ -18,12 +18,12 @@ export default function ResetPassword() {
   const params = useParams<{ token: string }>();
   const dispatch = useAppDispatch();
   const [tokenIsValid, isPending] = useAppSelector((state) => [
-    state.auth.tokenIsValid,
-    state.auth.isPending,
+    state.Auth.tokenIsValid,
+    state.Auth.isPending,
   ]);
   useEffect(() => {
     dispatch(checkVerifyToken({ token: params.token }));
-  }, [tokenIsValid, dispatch]);
+  }, [tokenIsValid, dispatch, params.token]);
 
   const formik = useFormik<FormikValues>({
     initialValues: {
