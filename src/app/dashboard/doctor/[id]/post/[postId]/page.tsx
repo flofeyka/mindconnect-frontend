@@ -26,11 +26,27 @@ import {
   unlikePost,
   updatePost,
 } from "@lib/redux/slices/posts/postSlice";
-import Comments from "@components/Posts/Comments";
 import { RootState } from "@lib/redux/store";
 import { formatDate } from "@app/hooks/useFormattedDate";
 import { Modal, ModalContent, useDisclosure } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const Comments = dynamic(() => import("@components/Posts/Comments"), {
+  loading: () => (
+    <div className="absolute top-1/2 left-1/2 ">
+      <Spinner size="lg" />
+    </div>
+  ),
+});
+
+const UserCard = dynamic(() => import("./UserCard"), {
+  loading: () => (
+    <div className="absolute top-1/2 left-1/2 ">
+      <Spinner size="lg" />
+    </div>
+  ),
+});
 
 export default function Post() {
   const dispatch = useAppDispatch();
@@ -103,15 +119,17 @@ export default function Post() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (title && description && image) {
-      const postData = { title, description, image };
+    if (title || description || image) {
+      const postData = {
+        title: title || post?.title,
+        description: description || post?.description,
+        image: image || post?.image,
+      };
 
       dispatch(updatePost({ postId: params.postId as string, postData }));
       setTimeout(() => {
         window.location.reload();
       }, 1000);
-    } else {
-      alert("All fields are required");
     }
   };
   // from add post
@@ -190,208 +208,225 @@ export default function Post() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-secondary rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4">
-      <div className="p-8">
-        <div className="flex justify-between">
-          <div
-            className="flex items-center mb-4 cursor-pointer"
-            onClick={() => router.push(`/dashboard/doctor/${params.id}`)}
-          >
-            <img
-              className="h-10 w-10 rounded-full mr-2"
-              src={profile?.image}
-              alt={profile?.firstName}
-            />
-            <div className="text-sm">
-              <p className="text-gray-100 font-semibold">
-                {profile?.firstName}
-              </p>
-              <p className="text-gray-400">{formatDate(post.createdAt)}</p>
+    <div className="flex justify-center m-4 gap-4">
+      <div className="max-w-md bg-secondary rounded-xl shadow-md overflow-hidden md:max-w-2xl ">
+        <div className="p-8">
+          <div className="flex justify-between">
+            <div
+              className="flex items-center mb-4 cursor-pointer"
+              onClick={() => router.push(`/dashboard/doctor/${params.id}`)}
+            >
+              <img
+                className="h-10 w-10 rounded-full mr-2"
+                src={profile?.image}
+                alt={profile?.firstName}
+              />
+              <div className="text-sm">
+                <p className="text-gray-100 font-semibold">
+                  {profile?.firstName}
+                </p>
+                <p className="text-gray-400">{formatDate(post.createdAt)}</p>
+              </div>
             </div>
-          </div>
-          {post.owner == currentUserId && (
-            <>
-              <Button onPress={modalEdit.onOpen}>Edit</Button>
-              <Modal
-                isOpen={modalEdit.isOpen}
-                onOpenChange={modalEdit.onOpenChange}
-              >
-                <ModalContent>
-                  {(onClose) => (
-                    <>
-                      <ModalHeader className="flex flex-col gap-1">
-                        Edit post {post.title}
-                      </ModalHeader>
-                      <ModalBody>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                          <div className="space-y-2">
-                            <label
-                              htmlFor="photo"
-                              className="block text-sm font-medium"
-                            >
-                              Select New Photo
-                            </label>
-                            <div className="flex items-center justify-center w-full relative">
-                              {photoPreview ? (
-                                <>
-                                  <img
-                                    src={photoPreview}
-                                    alt="Upload preview"
-                                    className="max-w-full h-64 object-cover rounded-lg"
-                                  />
-                                  <Button
-                                    type="button"
-                                    size="sm"
-                                    className="absolute top-[-40px] right-2"
-                                    onClick={resetPhoto}
+            {post.owner == currentUserId && (
+              <>
+                <Button onPress={modalEdit.onOpen}>Edit</Button>
+                <Modal
+                  isOpen={modalEdit.isOpen}
+                  onOpenChange={modalEdit.onOpenChange}
+                >
+                  <ModalContent>
+                    {(onClose) => (
+                      <>
+                        <ModalHeader className="flex flex-col gap-1">
+                          Edit post {post.title}
+                        </ModalHeader>
+                        <ModalBody>
+                          <form onSubmit={handleSubmit} className="space-y-4">
+                            <div className="space-y-2">
+                              <label
+                                htmlFor="photo"
+                                className="block text-sm font-medium"
+                              >
+                                Select New Photo
+                              </label>
+                              <div className="flex items-center justify-center w-full relative">
+                                {photoPreview ? (
+                                  <>
+                                    <img
+                                      src={photoPreview}
+                                      alt="Upload preview"
+                                      className="max-w-full h-64 object-cover rounded-lg"
+                                    />
+                                    <Button
+                                      type="button"
+                                      size="sm"
+                                      className="absolute top-[-40px] right-2"
+                                      onClick={resetPhoto}
+                                    >
+                                      <RefreshCw className="w-4 h-4 mr-2" />
+                                      Reset Photo
+                                    </Button>
+                                  </>
+                                ) : (
+                                  <label
+                                    htmlFor="photo-upload"
+                                    className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 ${
+                                      isDragging
+                                        ? "border-blue-500 bg-blue-50"
+                                        : ""
+                                    }`}
+                                    onDragEnter={handleDragEnter}
+                                    onDragLeave={handleDragLeave}
+                                    onDragOver={handleDragOver}
+                                    onDrop={handleDrop}
                                   >
-                                    <RefreshCw className="w-4 h-4 mr-2" />
-                                    Reset Photo
-                                  </Button>
-                                </>
-                              ) : (
-                                <label
-                                  htmlFor="photo-upload"
-                                  className={`flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 ${
-                                    isDragging
-                                      ? "border-blue-500 bg-blue-50"
-                                      : ""
-                                  }`}
-                                  onDragEnter={handleDragEnter}
-                                  onDragLeave={handleDragLeave}
-                                  onDragOver={handleDragOver}
-                                  onDrop={handleDrop}
-                                >
-                                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <Upload className="w-8 h-8 mb-4 text-gray-500" />
-                                    <p className="mb-2 text-sm text-gray-500">
-                                      <span className="font-semibold">
-                                        Click to upload
-                                      </span>{" "}
-                                      or drag and drop
-                                    </p>
-                                  </div>
-                                  <input
-                                    id="photo-upload"
-                                    type="file"
-                                    className="hidden"
-                                    onChange={(e) => {
-                                      if (e.target.files && e.target.files[0]) {
-                                        handlePhotoUpload(e.target.files[0]);
-                                      }
-                                    }}
-                                    accept="image/*"
-                                  />
-                                </label>
-                              )}
+                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                      <Upload className="w-8 h-8 mb-4 text-gray-500" />
+                                      <p className="mb-2 text-sm text-gray-500">
+                                        <span className="font-semibold">
+                                          Click to upload
+                                        </span>{" "}
+                                        or drag and drop
+                                      </p>
+                                    </div>
+                                    <input
+                                      id="photo-upload"
+                                      type="file"
+                                      className="hidden"
+                                      onChange={(e) => {
+                                        if (
+                                          e.target.files &&
+                                          e.target.files[0]
+                                        ) {
+                                          handlePhotoUpload(e.target.files[0]);
+                                        }
+                                      }}
+                                      accept="image/*"
+                                    />
+                                  </label>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                          <div className="space-y-2">
-                            <label
-                              htmlFor="title"
-                              className="block text-sm font-medium"
-                            >
-                              New Title
-                            </label>
-                            <Input
-                              id="title"
-                              value={title}
-                              onChange={(e) => setTitle(e.target.value)}
-                              placeholder="Enter post title"
-                              required
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <label
-                              htmlFor="description"
-                              className="block text-sm font-medium"
-                            >
-                              New Description
-                            </label>
-                            <Textarea
-                              id="description"
-                              value={description}
-                              onChange={(e) => setDescription(e.target.value)}
-                              placeholder="Enter post description"
-                              rows={4}
-                              required
-                            />
-                          </div>
-                          <div className="flex justify-end space-x-2">
-                            <Button type="button" onClick={modalEdit.onClose}>
-                              Cancel
-                            </Button>
-                            <Button type="submit">
-                              <Send className="w-4 h-4 mr-2" />
-                              Edit
-                            </Button>
-                          </div>
-                        </form>
-                      </ModalBody>
-                    </>
-                  )}
-                </ModalContent>
-              </Modal>
-              <Button
-                onPress={modal1.onOpen}
-                className="text-white bg-red-500 px-2 py-1 "
-              >
-                Delete Post
-              </Button>
-              <Modal
-                isOpen={modal1.isOpen}
-                onClose={modal1.onClose}
-                onOpenChange={modal1.onOpenChange}
-              >
-                <ModalContent>
-                  <Button
-                    onClick={handleDeletePost}
-                    className="text-white bg-red-500 px-2 py-1 "
-                  >
-                    Delete Post
-                  </Button>
-                </ModalContent>
-              </Modal>
-            </>
+                            <div className="space-y-2">
+                              <label
+                                htmlFor="title"
+                                className="block text-sm font-medium"
+                              >
+                                New Title
+                              </label>
+                              <Input
+                                id="title"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="Enter post title"
+                                required
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label
+                                htmlFor="description"
+                                className="block text-sm font-medium"
+                              >
+                                New Description
+                              </label>
+                              <Textarea
+                                id="description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                placeholder="Enter post description"
+                                rows={4}
+                                required
+                              />
+                            </div>
+                            <div className="flex justify-end space-x-2">
+                              <Button type="button" onClick={modalEdit.onClose}>
+                                Cancel
+                              </Button>
+                              <Button type="submit">
+                                <Send className="w-4 h-4 mr-2" />
+                                Edit
+                              </Button>
+                            </div>
+                          </form>
+                        </ModalBody>
+                      </>
+                    )}
+                  </ModalContent>
+                </Modal>
+                <Button
+                  onPress={modal1.onOpen}
+                  className="text-white bg-red-500 px-2 py-1 "
+                >
+                  Delete Post
+                </Button>
+                <Modal
+                  isOpen={modal1.isOpen}
+                  onClose={modal1.onClose}
+                  onOpenChange={modal1.onOpenChange}
+                >
+                  <ModalContent>
+                    <ModalHeader>
+                      <span>Are you sure you want to delete this post?</span>
+                    </ModalHeader>
+                    <ModalBody>
+                      <Button
+                        onClick={handleDeletePost}
+                        className="text-white bg-red-500 px-2 py-1 "
+                      >
+                        Delete Post
+                      </Button>
+                      <Button onPress={modal1.onClose} color="default">
+                        Cancel
+                      </Button>
+                    </ModalBody>
+                  </ModalContent>
+                </Modal>
+              </>
+            )}
+          </div>
+          <img
+            className="w-full object-cover mb-4"
+            src={post.image as any}
+            alt={post.title}
+          />
+          <h1 className="block mt-1 text-lg leading-tight font-medium text-white">
+            {post.title}
+          </h1>
+          <p className="mt-2 text-gray-200">{post.description}</p>
+
+          <div className="mt-4 flex items-center">
+            <button
+              onClick={handleLikeUnlike}
+              className={`flex items-center mr-4 ${
+                liked ? "text-red-500" : "text-gray-300"
+              }`}
+            >
+              <span className="text-gray-300 mr-1">{likes}</span>
+              <Heart className="mr-1" size={20} />
+              {liked ? "Unlike" : "Like"}
+            </button>
+            <button
+              onClick={handleToggleComments}
+              className={`flex items-center text-gray-100 ${
+                activeComments ? "text-primary" : "text-gray-300"
+              }`}
+            >
+              <MessageCircle className="mr-1" size={20} />
+              Comments
+            </button>
+          </div>
+          {activeComments && (
+            <div className="mt-4">
+              <Comments
+                postData={post}
+                onCommentDeleted={handleCommentDeleted}
+              />
+            </div>
           )}
         </div>
-        <img
-          className="w-full object-cover mb-4"
-          src={post.image as any}
-          alt={post.title}
-        />
-        <h1 className="block mt-1 text-lg leading-tight font-medium text-white">
-          {post.title}
-        </h1>
-        <p className="mt-2 text-gray-200">{post.description}</p>
-
-        <div className="mt-4 flex items-center">
-          <button
-            onClick={handleLikeUnlike}
-            className={`flex items-center mr-4 ${
-              liked ? "text-red-500" : "text-gray-300"
-            }`}
-          >
-            <span className="text-gray-300 mr-1">{likes}</span>
-            <Heart className="mr-1" size={20} />
-            {liked ? "Unlike" : "Like"}
-          </button>
-          <button
-            onClick={handleToggleComments}
-            className={`flex items-center text-gray-100 ${
-              activeComments ? "text-primary" : "text-gray-300"
-            }`}
-          >
-            <MessageCircle className="mr-1" size={20} />
-            Comments
-          </button>
-        </div>
-        {activeComments && (
-          <div className="mt-4">
-            <Comments postData={post} onCommentDeleted={handleCommentDeleted} />
-          </div>
-        )}
       </div>
+      <UserCard />
     </div>
   );
 }

@@ -22,19 +22,15 @@ import { useParams } from "next/navigation";
 import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
 import { useRouter } from "next/navigation";
 
-export default function Profile() {
+export default function UserCard() {
   const dispatch = useAppDispatch();
-  const { profile, posts, loading, error } = useAppSelector(
+  const { profile, loading, error } = useAppSelector(
     (state) => state.doctorProfile
   );
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [subscriberCount, setSubscriberCount] = useState(0);
   const params = useParams();
-  const router = useRouter();
 
-  useEffect(() => {
-    router.prefetch("/dashboard/add");
-  }, [router]);
   const currentUserId = useAppSelector((state) => state.Auth.usersData.id);
   useEffect(() => {
     dispatch(getAuthUserData());
@@ -84,14 +80,14 @@ export default function Profile() {
   }
 
   return (
-    <>
-      <Card className="max-w-[836px] mx-auto h-48 mt-14 mb-14">
+    <div className="relative w-[340px]">
+      <Card className="max-w-[340px] h-40 fixed">
         <CardHeader className="justify-between">
           <div className="flex gap-5">
             <Avatar
               isBordered
               radius="full"
-              size="lg"
+              size="md"
               src={profile.image || "https://nextui.org/avatars/avatar-1.png"}
             />
             <div className="flex flex-col gap-1 items-start justify-center">
@@ -111,7 +107,7 @@ export default function Profile() {
             }
             color="primary"
             radius="full"
-            size="md"
+            size="sm"
             variant={isSubscribed ? "bordered" : "solid"}
             onPress={handleSubscribeToggle}
           >
@@ -135,60 +131,8 @@ export default function Profile() {
             </p>
             <p className="text-default-400 text-small">Followers</p>
           </div>
-          <Button
-            color="primary"
-            variant="solid"
-            className="mr-0 ml-auto"
-            onClick={() => router.push(`/dashboard/doctor-details/${doctorId}`)}
-          >
-            Book an appointment
-          </Button>
-          {(params.id as string) === currentUserId && (
-            <Button
-              color="primary"
-              variant="solid"
-              className="mr-0 ml-auto"
-              onClick={() => router.push(`/dashboard/add`)}
-            >
-              Add Post
-            </Button>
-          )}
         </CardFooter>
       </Card>
-      <div className="max-w-[900px] gap-2 grid grid-cols-12 grid-rows-2 px-8 mb-14 mx-auto">
-        {posts
-          .slice()
-          .reverse()
-          .map((post) => (
-            <Card
-              key={post._id}
-              className="col-span-12 sm:col-span-4 h-[250px] overflow-hidden relative"
-            >
-              <div
-                onClick={() =>
-                  router.push(`/dashboard/doctor/${params.id}/post/${post._id}`)
-                }
-                className="w-full h-full relative block cursor-pointer"
-              >
-                {/* Black gradient that covers half of the card */}
-                <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/100 to-transparent h-full"></div>
-
-                <CardHeader className="absolute z-20 top-0 left-0 right-0 flex-col !items-start p-4">
-                  <h4 className="text-white font-medium text-large">
-                    {post.title}
-                  </h4>
-                </CardHeader>
-
-                <Image
-                  removeWrapper
-                  alt="Card background"
-                  className="z-0 w-full h-full object-cover"
-                  src={post.image}
-                />
-              </div>
-            </Card>
-          ))}
-      </div>
-    </>
+    </div>
   );
 }
