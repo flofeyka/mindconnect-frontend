@@ -100,10 +100,19 @@ const calendarSlice = createSlice({
       .addCase(deleteCalendar.pending, handlePending)
       .addCase(
         deleteCalendar.fulfilled,
-        (state, action: PayloadAction<{ calendarId: string }>) => {
-          state.calendar = state.calendar.filter(
-            (cal) => cal._id !== action.payload.calendarId
-          );
+        (
+          state,
+          action: PayloadAction<{
+            success: boolean;
+            message: any;
+            calendarId: string;
+          }>
+        ) => {
+          if (action.payload.success) {
+            state.calendar = state.calendar.filter(
+              (cal) => cal._id !== action.payload.calendarId
+            );
+          }
           state.isPending = false;
         }
       )
@@ -197,9 +206,13 @@ export const updateNote = createAsyncThunk(
 
 export const deleteCalendar = createAsyncThunk(
   "calendar/deleteCalendar",
-  async (calendarId: string) => {
-    const response = await calendarAPI.deleteCalendar({ calendarId });
-    return response;
+  async (calendarId: string, { rejectWithValue }) => {
+    try {
+      const response = await calendarAPI.deleteCalendar({ calendarId });
+      return { ...response, calendarId };
+    } catch (error) {
+      return rejectWithValue("Failed to delete calendar");
+    }
   }
 );
 
