@@ -74,11 +74,19 @@ export const calendarAPI = {
     };
   },
   async getAllDates() {
-		const Response = await baseAPI.get(`calendar/all-dates`)
-		return {
-			success: Response.status === 200,
-			response: Response.data,
-		}
-	},
+    const Response = await baseAPI.get(`calendar/all-dates`);
+    return {
+      success: Response.status === 200,
+      response: Response.data,
+    };
+  },
+  async createTodayCalendar(data: { date: string }) {
+    const Response = await baseAPI.post(
+      `calendar/add-today-calendar/${data.date}`
+    );
+    return {
+      success: Response.status === 200,
+      response: Response.data,
+    };
+  },
 };
-
