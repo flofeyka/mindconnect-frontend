@@ -116,6 +116,7 @@ const calendarSlice = createSlice({
           state.isPending = false;
         }
       )
+      .addCase(addTodayCalendar.pending, handlePending)
       .addCase(
         addTodayCalendar.fulfilled,
         (state, action: PayloadAction<calendarType>) => {
@@ -123,6 +124,10 @@ const calendarSlice = createSlice({
           state.isPending = false;
         }
       )
+      .addCase(addTodayCalendar.rejected, (state, action) => {
+        state.isPending = false;
+        state.error = action.payload || "Failed to add today's calendar";
+      })
 
       // getPrevCalendar
       .addCase(getPrevCalendar.pending, handlePending)
@@ -169,11 +174,27 @@ export const addCalendar = createAsyncThunk(
   }
 );
 
-export const addTodayCalendar = createAsyncThunk(
+export const addTodayCalendar = createAsyncThunk<
+  calendarType,
+  { date: string },
+  { rejectValue: string }
+>(
   "calendar/addTodayCalendar",
-  async (data: { date: string }) => {
-    const response = await calendarAPI.createTodayCalendar({ date: data.date });
-    return response;
+  async (data: { date: string }, { rejectWithValue }) => {
+    try {
+      const response = await calendarAPI.createTodayCalendar({
+        date: data.date,
+      });
+      if (response.success) {
+        return response.response;
+      } else {
+        return rejectWithValue("Failed to create today's calendar");
+      }
+    } catch (error) {
+      return rejectWithValue(
+        "An error occurred while creating today's calendar"
+      );
+    }
   }
 );
 
