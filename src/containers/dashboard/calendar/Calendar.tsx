@@ -20,13 +20,13 @@ import {
   ScrollShadow,
   useDisclosure,
 } from "@nextui-org/react";
-import CalendarItem from "./CalendarItem";
 import { useEffect, useState } from "react";
 import {
   getOneCalendar,
   getPrevCalendar,
   getNextCalendar,
   addCalendar,
+  addTodayCalendar,
 } from "@lib/redux/slices/calendar/calendarSlice";
 import NoteItem from "./Note/NoteItem";
 import formatDateToDayMonth from "@helpers/formatDateToDayMonth";
@@ -41,11 +41,18 @@ export default function Calendar() {
 
   const calendar = useAppSelector((state) => state.Calendar.oneCalendar);
   const dispatch = useAppDispatch();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   useEffect(() => {
     dispatch(getOneCalendar(date as any));
   }, [dispatch, date]);
+
+  console.log(formatDateFromDateNow());
+  useEffect(() => {
+    const date = formatDateFromDateNow();
+    console.log("Inside useEffect:", date);
+    dispatch(addTodayCalendar({ date }));
+  }, [dispatch]);
 
   const handlePrevCalendar = () => {
     if (calendar?._id) {
@@ -55,11 +62,28 @@ export default function Calendar() {
     }
   };
 
+  const handleSaveNewNote = async () => {
+    try {
+      await dispatch(
+        addCalendar({
+          time: formatDateToTime(Date.now()),
+          note: addNoteValue,
+          date: formatDateFromDateNow(),
+        })
+      ).unwrap();
+      onClose();
+      dispatch(getOneCalendar(date as any));
+    } catch (error) {
+      console.error("Error adding available date:", error);
+    }
+  };
+
   const handleNextCalendar = () => {
     if (calendar?._id) {
       dispatch(getNextCalendar(calendar._id));
     }
   };
+  console.log(calendar);
 
   return (
     <Card className="p-3 relative h-full">
@@ -97,38 +121,40 @@ export default function Calendar() {
           <div>
             <Divider />
             <div className="text-[#1CA66F] pt-2 flex justify-center items-center gap-x-5">
-              {formatDateToDayMonth(String(calendar?.date))}
+              {formatDateToDayMonth(
+                calendar === null || !calendar.date
+                  ? String(new Date())
+                  : String(calendar.date)
+              )}
               <div className="cursor-pointer p-1 bg-[#1CA66F1A] rounded-[32px] relative">
                 <ModalWrapper onOpenChange={onOpenChange} isOpen={isOpen}>
                   <ModalContent className="py-3">
-                    <ModalHeader>Add Note</ModalHeader>
-                    <ModalBody>
-                      <div className="flex items-center gap-3">
-                        <Input
-                          label="Note"
-                          size="sm"
-                          onChange={(e) => setAddNoteValue(e.target.value)}
-                          value={addNoteValue}
-                        />
-                      </div>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button
-                        className="font-semibold text-white w-full"
-                        color="success"
-                        onClick={() => {
-                          dispatch(
-                            addCalendar({
-                              time: formatDateToTime(Date.now()),
-                              note: addNoteValue,
-                              date: formatDateFromDateNow(),
-                            })
-                          );
-                        }}
-                      >
-                        Submit
-                      </Button>
-                    </ModalFooter>
+                    {(onClose) => (
+                      <>
+                        <ModalHeader>Add Note</ModalHeader>
+                        <ModalBody>
+                          <div className="flex items-center gap-3">
+                            <Input
+                              label="Note"
+                              size="sm"
+                              onChange={(e) => setAddNoteValue(e.target.value)}
+                              value={addNoteValue}
+                            />
+                          </div>
+                        </ModalBody>
+                        <ModalFooter>
+                          <Button
+                            className="font-semibold text-white w-full"
+                            color="success"
+                            onClick={() => {
+                              handleSaveNewNote();
+                            }}
+                          >
+                            Submit
+                          </Button>
+                        </ModalFooter>
+                      </>
+                    )}
                   </ModalContent>
                 </ModalWrapper>
                 <Dropdown>

@@ -116,6 +116,13 @@ const calendarSlice = createSlice({
           state.isPending = false;
         }
       )
+      .addCase(
+        addTodayCalendar.fulfilled,
+        (state, action: PayloadAction<calendarType>) => {
+          state.calendar.push(action.payload);
+          state.isPending = false;
+        }
+      )
 
       // getPrevCalendar
       .addCase(getPrevCalendar.pending, handlePending)
@@ -158,6 +165,14 @@ export const addCalendar = createAsyncThunk(
   "calendar/addCalendar",
   async (data: { date: string; time: string; note: string }) => {
     const response = await calendarAPI.addCalendar(data);
+    return response;
+  }
+);
+
+export const addTodayCalendar = createAsyncThunk(
+  "calendar/addTodayCalendar",
+  async (data: { date: string }) => {
+    const response = await calendarAPI.createTodayCalendar({ date: data.date });
     return response;
   }
 );
