@@ -15,6 +15,8 @@ interface DoctorSingleSelectProps {
   value: string;
   onChange: (value: string) => void;
   className?: string;
+  error?: string;
+  isDisabled?: boolean;
 }
 
 export default function DoctorSingleSelect({
@@ -24,6 +26,8 @@ export default function DoctorSingleSelect({
   value,
   onChange,
   className = "w-[350px]",
+  error,
+  isDisabled = false,
 }: DoctorSingleSelectProps) {
   const handleSelectionChange = (keys: Selection) => {
     const selectedKey = Array.from(keys)[0] as string;
@@ -38,6 +42,9 @@ export default function DoctorSingleSelect({
       className={className}
       selectedKeys={value ? [value] : []}
       onSelectionChange={handleSelectionChange}
+      isDisabled={isDisabled}
+      isInvalid={!!error}
+      errorMessage={error}
     >
       {options.map((option) => (
         <SelectItem key={option.key} value={option.key}>

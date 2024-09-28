@@ -24,14 +24,13 @@ import {
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   Spinner,
-  Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
 import DoctorSingleSelect from "@components/EditProfile/DoctorSingleSelect";
 import dynamic from "next/dynamic";
+import { DoctorSelectPlace } from "@components/EditProfile";
 
 const DoctorCalendar = dynamic(
   () => import("@components/DoctorDetails/DoctorCalendar"),
@@ -59,6 +58,20 @@ export default function EditProfile() {
   const [image, setImage] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isImageUploaded, setIsImageUplaoded] = useState(false);
+  const [validationsFormData, setValidationsFormData] = useState({
+    firstName: "",
+    lastName: "",
+    age: "",
+    phoneNumber: "",
+    description: "",
+    aboutMe: "",
+    priceOneHour: "",
+    country: "",
+    city: "",
+    yearsOfExperience: "",
+    gender: "",
+  });
+  const [isValidAll, setIsValidAll] = useState(false);
 
   useEffect(() => {
     if (doctor) {
@@ -72,6 +85,15 @@ export default function EditProfile() {
     }
   }, [doctor]);
 
+  useEffect(() => {
+    if (validationsFormData) {
+      const isValidAll = Object.values(validationsFormData).every(
+        (value) => value === ""
+      );
+      setIsValidAll(isValidAll);
+    }
+  }, [validationsFormData]);
+
   const handleImageChange = (newImage: File | null) => {
     setImage(newImage);
     setFormData((prevData: Partial<DoctorProfile>) => ({
@@ -80,8 +102,98 @@ export default function EditProfile() {
     }));
   };
 
+  // Определяем правила валидации для каждого поля профиля доктора
+  const validationRules: {
+    [key in keyof DoctorProfile]?: (value: string) => string;
+  } = {
+    firstName: (value) => {
+      if (value.length < 3 || value.length > 32) {
+        return "This field must contain between 3 and 32 characters";
+      }
+      return "";
+    },
+    lastName: (value) => {
+      if (value.length < 3 || value.length > 32) {
+        return "This field must contain between 3 and 32 characters";
+      }
+      return "";
+    },
+    country: (value) => {
+      if (!value) {
+        return "Country is required";
+      }
+      return "";
+    },
+    city: (value) => {
+      if (!value) {
+        return "City is required";
+      }
+      return "";
+    },
+    age: (value) => {
+      value = value.trim();
+      const num = Number(value);
+      if (isNaN(num)) {
+        return "Age must be a number";
+      }
+      if (num < 10 || num > 100) {
+        return "Age must be between 10 and 100 years";
+      }
+      return "";
+    },
+    phoneNumber: (value) => {
+      if (value.length > 15) {
+        return "This field cannot be longer than 15 characters";
+      }
+      if (!value.startsWith("+")) {
+        return "Phone number must start with '+'";
+      }
+      return "";
+    },
+    description: (value) => {
+      if (value.length > 255) {
+        return "This field cannot be longer than 255 characters";
+      }
+      return "";
+    },
+    aboutMe: (value) => {
+      if (value.length > 2500) {
+        return "This field cannot be longer than 2500 characters";
+      }
+      return "";
+    },
+    yearsOfExperience: (value) => {
+      const num = Number(value);
+      if (isNaN(num)) {
+        return "Years of experience must be a number";
+      }
+      if (num < 0 || num > 100) {
+        return "Work experience must be between 0 and 100 years";
+      }
+      return "";
+    },
+    gender: (value) => {
+      if (value.length > 32) {
+        return "This field cannot be longer than 32 characters";
+      }
+      return "";
+    },
+  };
+
+  /**
+   * Обрабатывает изменение значения поля формы и выполняет валидацию.
+   * @param field - имя поля профиля доктора
+   * @returns Функция, принимающая новое значение поля
+   */
   const handleInputChange = (field: keyof DoctorProfile) => (value: string) => {
+    // Обновляем состояние данных формы
     setFormData((prev) => ({ ...prev, [field]: value }));
+
+    // Проверяем наличие правил валидации для данного поля
+    if (validationRules[field]) {
+      const errorMessage = validationRules[field]!(value);
+      setValidationsFormData((prev) => ({ ...prev, [field]: errorMessage }));
+    }
   };
 
   const handleSelectChange =
@@ -92,7 +204,7 @@ export default function EditProfile() {
   const handlePriceInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
     setFormData((prev) => ({
       ...prev,
       priceOneHour: {
@@ -101,6 +213,23 @@ export default function EditProfile() {
         currency: prev.priceOneHour?.currency || "",
       },
     }));
+    if (Number(value) > 10000 && formData.priceOneHour?.currency === "UAH") {
+      setValidationsFormData((prev) => ({
+        ...prev,
+        priceOneHour: "Price must be less than 10000",
+      }));
+    } else if (
+      Number(value) > 1000 &&
+      (formData.priceOneHour?.currency === "USD" ||
+        formData.priceOneHour?.currency === "EUR")
+    ) {
+      setValidationsFormData((prev) => ({
+        ...prev,
+        priceOneHour: "Price must be less than 1000",
+      }));
+    } else {
+      setValidationsFormData((prev) => ({ ...prev, priceOneHour: "" }));
+    }
   };
 
   const handleSingleSelectChange =
@@ -126,8 +255,6 @@ export default function EditProfile() {
       });
   };
 
-  console.log(doctor?.id);
-
   return (
     <div className="flex flex-col items-center">
       {loading ? (
@@ -139,7 +266,7 @@ export default function EditProfile() {
       ) : (
         <>
           <h1 className="title text-3xl mt-6 text-center">
-            Edit Your Doctors Profile
+            Edit Your Doctor's Profile
           </h1>
           <DoctorCalendar doctorId={doctor?.id as string} loading={loading} />
           <div className="w-[1250px]">
@@ -191,6 +318,7 @@ export default function EditProfile() {
                     value={formData.firstName || ""}
                     onChange={handleInputChange("firstName")}
                     label="First Name"
+                    error={validationsFormData.firstName}
                   />
                   <DoctorInput
                     id="lastName"
@@ -198,6 +326,7 @@ export default function EditProfile() {
                     value={formData.lastName || ""}
                     onChange={handleInputChange("lastName")}
                     label="Last Name"
+                    error={validationsFormData.lastName}
                   />
                 </div>
                 <div className="flex gap-3">
@@ -207,6 +336,7 @@ export default function EditProfile() {
                     value={(formData.age as any) || ""}
                     onChange={handleInputChange("age")}
                     label="Your Age"
+                    error={validationsFormData.age}
                   />
                   <DoctorInput
                     id="phoneNumber"
@@ -214,6 +344,7 @@ export default function EditProfile() {
                     value={(formData.phoneNumber as any) || ""}
                     onChange={handleInputChange("phoneNumber")}
                     label="Your Phone Number"
+                    error={validationsFormData.phoneNumber}
                   />
                 </div>
                 <DoctorTextArea
@@ -221,14 +352,16 @@ export default function EditProfile() {
                   name="description"
                   value={formData.description || ""}
                   onChange={handleInputChange("description")}
-                  label="Profile Short description"
+                  label="Profile Short Description"
+                  error={validationsFormData.description}
                 />
                 <DoctorTextArea
-                  id="aboutme"
-                  name="aboutme"
+                  id="aboutMe"
+                  name="aboutMe"
                   value={formData.aboutMe || ""}
                   onChange={handleInputChange("aboutMe")}
                   label="About Me"
+                  error={validationsFormData.aboutMe}
                 />
                 <div className="flex gap-3">
                   <DoctorMultipleSelect
@@ -263,6 +396,8 @@ export default function EditProfile() {
                     onChange={handlePriceInputChange}
                     label="Price"
                     className="w-[350px] mb-4"
+                    isInvalid={!!validationsFormData.priceOneHour}
+                    errorMessage={validationsFormData.priceOneHour}
                   />
                   <DoctorSingleSelect
                     label="Choose your currency"
@@ -273,19 +408,13 @@ export default function EditProfile() {
                   />
                 </div>
                 <div className="flex gap-3">
-                  <DoctorInput
-                    id="country"
-                    name="country"
-                    value={formData.country || ""}
-                    onChange={handleInputChange("country")}
-                    label="Country"
-                  />
-                  <DoctorInput
-                    id="city"
-                    name="city"
-                    value={formData.city || ""}
-                    onChange={handleInputChange("city")}
-                    label="City"
+                  <DoctorSelectPlace
+                    countryValue={formData.country || ""}
+                    cityValue={formData.city || ""}
+                    onCountryChange={handleInputChange("country")}
+                    onCityChange={handleInputChange("city")}
+                    countryError={validationsFormData.country}
+                    cityError={validationsFormData.city}
                   />
                 </div>
                 <div className="flex gap-3">
@@ -295,6 +424,7 @@ export default function EditProfile() {
                     value={(formData.yearsOfExperience as any) || ""}
                     onChange={handleInputChange("yearsOfExperience")}
                     label="Years Of Experience"
+                    error={validationsFormData.yearsOfExperience}
                   />
                   <DoctorInput
                     id="gender"
@@ -302,10 +432,15 @@ export default function EditProfile() {
                     value={formData.gender || ""}
                     onChange={handleInputChange("gender")}
                     label="Your Gender"
+                    error={validationsFormData.gender}
                   />
                 </div>
 
-                <Button color="primary" onPress={modal1.onOpen}>
+                <Button
+                  color="primary"
+                  isDisabled={!isValidAll}
+                  onPress={modal1.onOpen}
+                >
                   Save Changes
                 </Button>
               </div>
@@ -327,6 +462,7 @@ export default function EditProfile() {
                             handleSubmit();
                             onClose();
                           }}
+                          isDisabled={!isValidAll}
                         >
                           Yes, save
                         </Button>

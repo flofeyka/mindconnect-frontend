@@ -56,6 +56,33 @@ export default function DoctorCalendar({
   const [newDate, setNewDate] = useState(parseDate(formatDateFromDateNow()));
   const [newTime, setNewTime] = useState("");
 
+  const [errorMessageTime, setErrorMessageTime] = useState<string>("");
+
+  // валидация на 23:59
+  const checkErrorMessageTime = (value: string) => {
+    value = value.trim();
+    const timeRegex = /^(\d{2}):(\d{2})$/;
+    const match = value.match(timeRegex);
+    if (!match) {
+      setErrorMessageTime("Time must be in HH:MM format.");
+      return;
+    }
+    const hours = parseInt(match[1], 10);
+    const minutes = parseInt(match[2], 10);
+    if (hours < 0 || hours > 23) {
+      setErrorMessageTime("Hours must be between 00 and 23.");
+    } else if (minutes < 0 || minutes > 59) {
+      setErrorMessageTime("Minutes must be between 00 and 59.");
+    } else {
+      setErrorMessageTime("");
+    }
+  };
+
+  useEffect(() => {
+    checkErrorMessageTime(newTime);
+  }, [newTime])
+  
+
   useEffect(() => {
     if (doctorId) {
       const timer = setTimeout(() => {
@@ -136,6 +163,8 @@ export default function DoctorCalendar({
                   placeholder="Time (11:00)"
                   value={newTime}
                   onChange={(e) => setNewTime(e.target.value)}
+                  isInvalid={Boolean(errorMessageTime)}
+                  errorMessage={errorMessageTime}
                 />
               </ModalBody>
               <ModalFooter>
@@ -148,6 +177,7 @@ export default function DoctorCalendar({
                   }
                   color="primary"
                   onPress={onClose}
+                  isDisabled={Boolean(errorMessageTime)}
                 >
                   Save
                 </Button>
