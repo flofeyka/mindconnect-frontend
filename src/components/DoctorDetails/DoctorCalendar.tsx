@@ -117,7 +117,6 @@ export default function DoctorCalendar({
 
   return (
     <>
-      {/* Modal for Adding New Date and Time */}
       <Modal isOpen={modalAdd.isOpen} onOpenChange={modalAdd.onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -156,8 +155,6 @@ export default function DoctorCalendar({
           )}
         </ModalContent>
       </Modal>
-
-      {/* Modal for Confirming Deletion */}
       <Modal
         isOpen={modalDelete.isOpen}
         onOpenChange={modalDelete.onOpenChange}
