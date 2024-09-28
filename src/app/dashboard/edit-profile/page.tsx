@@ -183,7 +183,6 @@ export default function EditProfile() {
   /**
    * Обрабатывает изменение значения поля формы и выполняет валидацию.
    * @param field - имя поля профиля доктора
-   * @returns Функция, принимающая новое значение поля
    */
   const handleInputChange = (field: keyof DoctorProfile) => (value: string) => {
     // Обновляем состояние данных формы
