@@ -266,8 +266,9 @@ export default function EditProfile() {
       ) : (
         <>
           <h1 className="title text-3xl mt-6 text-center">
-            Edit Your Doctor's Profile
+            Edit Your Doctor&apos;s Profile
           </h1>
+
           <DoctorCalendar doctorId={doctor?.id as string} loading={loading} />
           <div className="w-[1250px]">
             <form
