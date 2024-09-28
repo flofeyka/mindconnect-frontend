@@ -125,15 +125,21 @@ export const signUp = createAsyncThunk(
     firstName,
     email,
     password,
+    username,
+    isDoctor,
   }: {
     firstName: string;
     email: string;
     password: string;
+    username: string;
+    isDoctor: boolean;
   }) => {
     const data: usersDataType = await authAPI.register({
       firstName,
       email,
       password,
+      username,
+      isDoctor,
     });
     return data;
   }
