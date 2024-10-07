@@ -9,6 +9,7 @@ interface DoctorTextAreaProps extends Omit<TextAreaProps, "onChange"> {
   value: string;
   onChange: (value: string) => void;
   label: string;
+  error: string;
 }
 
 export default function DoctorTextArea({
@@ -17,6 +18,7 @@ export default function DoctorTextArea({
   value,
   onChange,
   label,
+  error
 }: DoctorTextAreaProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
@@ -30,6 +32,7 @@ export default function DoctorTextArea({
       onChange={handleChange}
       label={label}
       className="w-[712px] mb-4"
+      errorMessage={error}
     />
   );
 }

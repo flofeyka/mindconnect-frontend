@@ -9,6 +9,7 @@ interface DoctorInputProps extends Omit<InputProps, "onChange"> {
   value: string;
   onChange: (value: string) => void;
   label: string;
+  error: string;
 }
 
 export default function DoctorInput({
@@ -17,6 +18,7 @@ export default function DoctorInput({
   value,
   onChange,
   label,
+  error
 }: DoctorInputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
@@ -31,6 +33,8 @@ export default function DoctorInput({
       onChange={handleChange}
       label={label}
       className="w-[350px] mb-4"
+      isInvalid={!!error}
+      errorMessage={error}
     />
   );
 }
