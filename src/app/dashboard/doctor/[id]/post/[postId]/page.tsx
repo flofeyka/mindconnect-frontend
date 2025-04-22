@@ -135,7 +135,7 @@ export default function Post() {
   // from add post
 
   const post = useAppSelector((state: RootState) =>
-    state.posts.posts.find((p) => p._id === postId)
+    state.posts.posts.find((p) => p.id === postId)
   );
 
   const [liked, setLiked] = useState(false);
@@ -144,7 +144,7 @@ export default function Post() {
   const [activeComments, setActiveComments] = useState(false);
 
   useEffect(() => {
-    if (postId && (!post || post._id !== postId)) {
+    if (postId && (!post || post.id !== postId)) {
       dispatch(fetchPostById(postId));
     }
   }, [dispatch, postId, post]);
@@ -181,11 +181,11 @@ export default function Post() {
 
     try {
       if (liked) {
-        await dispatch(unlikePost(postId)).unwrap();
+        await dispatch(unlikePost(post.id)).unwrap();
       } else {
-        await dispatch(likePost(postId)).unwrap();
+        await dispatch(likePost(post.id)).unwrap();
       }
-      dispatch(fetchPostById(postId));
+      dispatch(fetchPostById(post.id));
     } catch (error) {
       console.error("Failed to like/unlike post:", error);
     }
@@ -194,16 +194,16 @@ export default function Post() {
   const handleToggleComments = () => {
     setActiveComments(!activeComments);
     if (!activeComments) {
-      dispatch(fetchComments(postId));
+      dispatch(fetchComments(post.id));
     }
   };
 
   const handleCommentDeleted = () => {
-    dispatch(fetchComments(postId));
+    dispatch(fetchComments(post.id));
   };
 
   const handleDeletePost = () => {
-    dispatch(deletePost(params.postId as string));
+    dispatch(deletePost(post.id));
     router.push(`/dashboard/doctor/${params.id}`);
   };
 

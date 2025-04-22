@@ -36,9 +36,10 @@ export default function Auth() {
       className="flex flex-col justify-center items-center"
     >
       <div className="text-center max-w-[350px] mb-2">
-        <div className="text-2xl font-bold mb-2">Log in to your account</div>
+        <div className="text-2xl font-bold mb-2">Войдите в свой аккаунт</div>
         <div>
-          If you do not have an account, you can create one in a few clicks
+          Если у вас нет учетной записи, вы можете создать ее за несколько
+          кликов
         </div>
       </div>
       <div className="w-[300px] my-3">
@@ -55,11 +56,11 @@ export default function Auth() {
       </div>
       <div className="flex mb-3">
         <Button className="w-[50px]" onClick={() => dispatch(googleSignIn())}>
-          <Image src="google.svg" alt="cool" width={23} height={23} />
+          <Image src="google.svg" alt="гугл" width={23} height={23} />
         </Button>
         <Button color="success" className="text-white font-medium w-[220px]">
           <div className={"flex"}>
-            Sign in <Vector className="rotate-180" color="1a1a1a" />
+            Войти <Vector className="rotate-180" color="1a1a1a" />
           </div>
         </Button>
       </div>
@@ -68,7 +69,7 @@ export default function Auth() {
           href="/auth/register"
           className={"flex items-center font-semibold"}
         >
-          Create an account
+          Создать аккаунт
           <div className={"rotate-180 mx-2 hover:pr-2 flex"}>
             <Vector />
           </div>

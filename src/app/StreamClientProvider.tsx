@@ -1,83 +1,85 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '@lib/redux/hooks'
-import { getAuthUserData } from '@lib/redux/slices/auth/authSlice'
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
+import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
 import {
-	StreamVideo,
-	StreamVideoClient,
-	User,
-} from '@stream-io/video-react-sdk'
-import { Loader2 } from 'lucide-react'
-import { nanoid } from '@reduxjs/toolkit'
-import { getToken } from './actions'
+  StreamVideo,
+  StreamVideoClient,
+  User,
+} from "@stream-io/video-react-sdk";
+import { Loader2 } from "lucide-react";
+import { nanoid } from "@reduxjs/toolkit";
+import { getToken } from "./actions";
 
 interface StreamClientProviderProps {
-	children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function StreamClientProvider({
-	children,
+  children,
 }: StreamClientProviderProps) {
-	const videoClient = useInitializeVideoClient()
+  const videoClient = useInitializeVideoClient();
 
-	if (!videoClient) {
-		return (
-			<div className='h-screen flex items-center justify-center'>
-				<Loader2 className='mx-auto animate-spin' />
-			</div>
-		)
-	}
+  if (!videoClient) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <Loader2 className="mx-auto animate-spin" />
+      </div>
+    );
+  }
 
-	return <StreamVideo client={videoClient}>{children}</StreamVideo>
+  return <StreamVideo client={videoClient}>{children}</StreamVideo>;
 }
 
 function useInitializeVideoClient() {
-	const user = useAppSelector(state => state.Auth.usersData)
-	const dispatch = useAppDispatch()
-	const [videoClient, setVideoClient] = useState<StreamVideoClient | null>(null)
+  const user = useAppSelector((state) => state.Auth.usersData);
+  const dispatch = useAppDispatch();
+  const [videoClient, setVideoClient] = useState<StreamVideoClient | null>(
+    null
+  );
 
-	useEffect(() => {
-		dispatch(getAuthUserData())
-	}, [dispatch])
+  useEffect(() => {
+    dispatch(getAuthUserData());
+  }, [dispatch]);
 
-	useEffect(() => {
-		if (!user) return
+  useEffect(() => {
+    if (!user) return;
 
-		let streamUser: User
+    let streamUser: User;
 
-		if (user?.id) {
-			streamUser = {
-				id: user.id,
-				name: user.firstName || user.id,
-				image: user.image,
-			}
-		} else {
-			const id = nanoid()
-			streamUser = {
-				id,
-				type: 'guest',
-				name: `Guest ${id}`,
-			}
-		}
+    if (user?.id) {
+      streamUser = {
+        id: user.id,
+        name: user.firstName || user.id,
+        image: user.image,
+      };
+    } else {
+      const id = nanoid();
+      streamUser = {
+        id,
+        type: "guest",
+        name: `Гость ${id}`,
+      };
+    }
 
-		const apiKey = process.env.NEXT_PUBLIC_STREAM_VIDEO_API_KEY
-		if (!apiKey) {
-			throw new Error('stream api key not set')
-		}
+    const apiKey = process.env.NEXT_PUBLIC_STREAM_VIDEO_API_KEY;
+    if (!apiKey) {
+      throw new Error("ключ api stream не установлен");
+    }
 
-		const client = new StreamVideoClient({
-			apiKey,
-			user: streamUser,
-			tokenProvider: user?.id ? () => getToken(user.id) : undefined,
-		})
+    const client = new StreamVideoClient({
+      apiKey,
+      user: streamUser,
+      tokenProvider: user?.id ? () => getToken(user.id) : undefined,
+    });
 
-		setVideoClient(client)
-		return () => {
-			client.disconnectUser()
-			setVideoClient(null)
-		}
-	}, [user])
+    setVideoClient(client);
+    return () => {
+      client.disconnectUser();
+      setVideoClient(null);
+    };
+  }, [user]);
 
-	return videoClient
+  return videoClient;
 }

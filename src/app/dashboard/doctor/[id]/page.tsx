@@ -161,12 +161,12 @@ export default function Profile() {
           .reverse()
           .map((post) => (
             <Card
-              key={post._id}
+              key={post.id}
               className="col-span-12 sm:col-span-4 h-[250px] overflow-hidden relative"
             >
               <div
                 onClick={() =>
-                  router.push(`/dashboard/doctor/${params.id}/post/${post._id}`)
+                  router.push(`/dashboard/doctor/${params.id}/post/${post.id}`)
                 }
                 className="w-full h-full relative block cursor-pointer"
               >

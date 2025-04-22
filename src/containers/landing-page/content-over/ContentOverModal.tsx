@@ -7,7 +7,7 @@ const ContentOverModal: FC = () => {
       <div className="flex gap-4">
         <Input
           type="email"
-          label="Your name"
+          label="Ваше имя"
           classNames={{
             inputWrapper: [
               "border-solid border-1  border-[#ffff]/5 bg-[#FFFFFF]/5",
@@ -16,7 +16,7 @@ const ContentOverModal: FC = () => {
         />
         <Input
           type="email"
-          label="Subject"
+          label="Тема"
           classNames={{
             inputWrapper: [
               "border-solid border-1  border-[#ffff]/5 bg-[#FFFFFF]/5",
@@ -26,7 +26,7 @@ const ContentOverModal: FC = () => {
       </div>
       <Input
         type="email"
-        label="Subject"
+        label="Тема"
         className="py-[14px]"
         classNames={{
           inputWrapper: [
@@ -35,7 +35,7 @@ const ContentOverModal: FC = () => {
         }}
       />
       <Textarea
-        placeholder="Your message..."
+        placeholder="Ваше сообщение..."
         className="w-full "
         classNames={{
           inputWrapper: [

@@ -34,7 +34,7 @@ export default function ResetPassword() {
       newPassword: Yup.string().trim().required().min(8),
       repeatNewPassword: Yup.string().oneOf(
         [Yup.ref("newPassword")],
-        "Password should match"
+        "Пароли должны совпадать"
       ),
     }),
     onSubmit: (values: FormikValues) =>
@@ -59,10 +59,10 @@ export default function ResetPassword() {
       onSubmit={formik.handleSubmit}
       className={"flex flex-col items-center"}
     >
-      <Title>Reset password</Title>
+      <Title>Сбросить пароль</Title>
       <InputForm
         className={"mb-2"}
-        placeholder={"Password"}
+        placeholder={"Пароль"}
         width={"300px"}
         height={"50px"}
         name={"newPassword"}
@@ -73,7 +73,7 @@ export default function ResetPassword() {
       />
       <InputForm
         className={"mb-2"}
-        placeholder={"Repeat password"}
+        placeholder={"Повторите пароль"}
         width={"300px"}
         height={"50px"}
         name={"repeatNewPassword"}
@@ -82,9 +82,9 @@ export default function ResetPassword() {
         value={formik.values.repeatNewPassword}
         onChange={formik.handleChange}
       />
-      <Button type={"submit"}>Reset</Button>
+      <Button type={"submit"}>Сбросить</Button>
     </form>
   ) : (
-    <div>Token is not valid</div>
+    <div>Токен недействителен</div>
   );
 }

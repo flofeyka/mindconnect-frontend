@@ -16,7 +16,7 @@ import { Modal, ModalContent, useDisclosure } from "@nextui-org/react";
 import { Send } from "lucide-react";
 
 interface Comment {
-  _id: string;
+  id: string;
   content: string;
   createdAt: string;
   owner: string;
@@ -42,19 +42,19 @@ export default function Comments({
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchComments(postData._id)).then((action) => {
+    dispatch(fetchComments(postData.id)).then((action) => {
       if (fetchComments.fulfilled.match(action)) {
         setComments(action.payload);
       }
     });
     console.log(postData.owner);
-  }, [dispatch, postData._id]);
+  }, [dispatch, postData.id]);
 
   const handleDeleteComment = (commentId: string) => {
-    dispatch(deleteComment({ postId: postData._id, commentId }))
+    dispatch(deleteComment({ postId: postData.id, commentId }))
       .then(() => {
         setComments(
-          comments.filter((comment: any) => comment._id !== commentId)
+          comments.filter((comment: any) => comment.id !== commentId)
         );
         onCommentDeleted();
       })
@@ -68,10 +68,10 @@ export default function Comments({
     if (comment.trim()) {
       try {
         const newComment = await dispatch(
-          addComment({ postId: postData._id, content: comment })
+          addComment({ postId: postData.id, content: comment })
         ).unwrap();
         setComment("");
-        dispatch(fetchComments(postData._id));
+        dispatch(fetchComments(postData.id));
         setComments([...comments, newComment.comment]);
       } catch (error) {
         console.error("Failed to add comment:", error);
@@ -103,7 +103,7 @@ export default function Comments({
         .slice()
         .reverse()
         .map((comment: Comment) => (
-          <div key={comment._id}>
+          <div key={comment.id}>
             <Card className="mb-3">
               <CardBody className="flex gap-2">
                 <p className="text-white">{comment.content}</p>
@@ -115,20 +115,20 @@ export default function Comments({
                 comment.owner === currentUserId) && (
                 <CardFooter>
                   <Button
-                    onPress={() => setOpenModalId(comment._id)}
+                    onPress={() => setOpenModalId(comment.id)}
                     className="text-white bg-red-500 px-2 py-1"
                   >
                     Delete Comment
                   </Button>
                   <Modal
-                    isOpen={openModalId === comment._id}
+                    isOpen={openModalId === comment.id}
                     onOpenChange={(isOpen) => {
                       if (!isOpen) setOpenModalId(null);
                     }}
                   >
                     <ModalContent>
                       <Button
-                        onClick={() => handleDeleteComment(comment._id)}
+                        onClick={() => handleDeleteComment(comment.id)}
                         className="text-white bg-red-500 px-2 py-1"
                       >
                         Delete

@@ -14,6 +14,7 @@ import { useEffect } from "react";
 export default function Login() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.Auth.usersData);
+
   useEffect(() => {
     dispatch(getAuthUserData());
   }, [dispatch]);
@@ -44,15 +45,16 @@ export default function Login() {
       <form onSubmit={formik.handleSubmit}>
         <div className="max-w-[300px]">
           <div className="text-center mb-5">
-            <Title>Log in</Title>
+            <Title>Вход</Title>
             <div className="text-[14px]">
-              If you do not have an account, you can create one in a few clicks
+              Если у вас нет учетной записи, вы можете создать ее за несколько
+              кликов
             </div>
           </div>
           <div className={"mb-[10px]"}>
             <InputForm
               name="email"
-              placeholder="Email"
+              placeholder="Электронная почта"
               value={formik.values.email}
               onChange={formik.handleChange}
               type="email"
@@ -64,7 +66,7 @@ export default function Login() {
           <div className={"mb-[10px]"}>
             <InputForm
               name="password"
-              placeholder="Password"
+              placeholder="Пароль"
               value={formik.values.password}
               onChange={formik.handleChange}
               type="password"
@@ -75,11 +77,11 @@ export default function Login() {
           </div>
           <div className="flex justify-start">
             <Checkbox color="success" size="sm">
-              Remember me
+              Запомнить меня
             </Checkbox>
             <div className="ml-auto">
               <Link href="/auth/forgot-password" className="text-[13px]">
-                Forgot password?
+                Забыли пароль?
               </Link>
             </div>
           </div>
@@ -93,13 +95,13 @@ export default function Login() {
             color="success"
             type="submit"
           >
-            Log in account
+            Войти в аккаунт
           </Button>
         </div>
         <div className="text-center mt-2">
-          Dont have an account?{" "}
+          Нет аккаунта?{" "}
           <Link href="/auth/register" className={"font-simebold"}>
-            Register
+            Регистрация
           </Link>
         </div>
       </form>

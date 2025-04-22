@@ -25,10 +25,10 @@ export default function NoteForm({
   const onSubmit = (data: any) => {
     dispatch(
       updateNote({
-        noteId: note._id,
+        noteId: note.id,
         date: currentCalendar.date,
         note: data.note,
-        calendarId: currentCalendar._id,
+        calendarId: currentCalendar.id,
       })
     );
     onClose();
@@ -44,10 +44,10 @@ export default function NoteForm({
 
       <ModalFooter>
         <Button color="danger" onClick={onClose}>
-          Cancel
+          Отмена
         </Button>
         <Button color="primary" type="submit">
-          Save
+          Сохранить
         </Button>
       </ModalFooter>
     </form>

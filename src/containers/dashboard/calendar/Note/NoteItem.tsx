@@ -35,7 +35,12 @@ export default function NoteItem({
         <ModalContent>
           {(onClose) => (
             <div>
-              <ModalHeader>{formatDateToTime(note.createdAt)}</ModalHeader>
+              <ModalHeader>
+                {new Date(note.createdAt).toLocaleTimeString("default", {
+                  minute: "2-digit",
+                  hour: "2-digit",
+                })}
+              </ModalHeader>
               <ModalBody>
                 <NoteForm
                   currentCalendar={currentCalendar}
@@ -49,8 +54,11 @@ export default function NoteItem({
       </ModalWrapper>
       <div className="bg-[#1CA66F] bg-opacity-[0.1] p-2 flex items-center justify-between rounded-md mb-2 cursor-pointer">
         <div className="flex gap-x-2" onClick={onOpen}>
-          <span className="text-gray-500">
-            {formatDateToTime(String(note.createdAt))}
+          <span className="text-gray-500 break-keep w-full">
+            {new Date(note.createdAt).toLocaleTimeString("default", {
+              minute: "2-digit",
+              hour: "2-digit",
+            })}
           </span>
           <span>{note.note}</span>
         </div>
@@ -63,23 +71,28 @@ export default function NoteItem({
         >
           <ModalContent>
             <div>
-              <ModalHeader>{formatDateToTime(note.createdAt)}</ModalHeader>
-              <ModalBody>
-                <p>Are you sure you want to delete this note?</p>
+              <ModalHeader>
+                {new Date(note.createdAt).toLocaleTimeString("default", {
+                  minute: "2-digit",
+                  hour: "2-digit",
+                })}
+              </ModalHeader>
+              <ModalBody className="space-y-10">
+                <p>Вы уверены, что хотите удалить эту заметку?</p>
                 <Button
-                  color="primary"
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  color="danger"
+                  onPress={(e) => {
+                    // e.stopPropagation();
                     dispatch(
                       deleteNote({
                         date: formatDateToSubmit(currentCalendar.date),
-                        noteId: note._id,
+                        noteId: note.id,
                       })
                     ).unwrap();
-                    dispatch(getOneCalendar(currentCalendar.date as any));
+                    dispatch(getOneCalendar(currentCalendar.id as any));
                   }}
                 >
-                  Delete
+                  Удалить
                 </Button>
               </ModalBody>
             </div>

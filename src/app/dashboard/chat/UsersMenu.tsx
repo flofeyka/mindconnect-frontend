@@ -1,3 +1,4 @@
+'use client';
 import LoadingButton from "@components/LoadingButton";
 import { usersDataType } from "@lib/types";
 import { ArrowLeft } from "lucide-react";

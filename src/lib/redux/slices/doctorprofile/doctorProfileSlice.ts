@@ -1,9 +1,12 @@
+import baseAPI from "@lib/API/api";
+import { DoctorAPI } from "@lib/API/doctorAPI";
+import { Gender, Language, Problem } from "@lib/types";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Interfaces
 interface DoctorProfile {
-  _id: string;
+  id: string;
   firstName: string;
   email: string;
   description: string;
@@ -17,7 +20,7 @@ interface DoctorProfile {
 interface Post {
   description: string;
   image: string | undefined;
-  _id: string;
+  id: string;
   title: string;
   owner: string;
   createdAt: string;
@@ -86,16 +89,13 @@ export const unsubscribeFromDoctor = createAsyncThunk(
 
 export const fetchAllDoctors = createAsyncThunk(
   "doctorProfile/fetchAll",
-  async () => {
-    const response = await axios.get(
-      "https://mindconnect-vebk.onrender.com/api/user/doctors",
-      {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
-      }
-    );
-    return response.data;
+  async (dto: {
+    languages: Language[];
+    problems: Problem[];
+    gender: Gender;
+    search: string;
+  }) => {
+    return await DoctorAPI.fetchDoctors(dto);
   }
 );
 
@@ -146,11 +146,11 @@ const doctorProfileSlice = createSlice({
         state.error = action.error.message || "Failed to fetch doctor profile";
       })
       .addCase(subscribeToDoctor.fulfilled, (state, action) => {
-        if (state.profile && state.profile._id === action.payload.doctorId) {
+        if (state.profile && state.profile.id === action.payload.doctorId) {
           state.profile.subscribers.push(action.meta.arg); // Assuming the current user ID is passed as arg
         }
         state.doctors = state.doctors.map((doctor) =>
-          doctor._id === action.payload.doctorId
+          doctor.id === action.payload.doctorId
             ? {
                 ...doctor,
                 subscribers: [...doctor.subscribers, action.meta.arg],
@@ -159,13 +159,13 @@ const doctorProfileSlice = createSlice({
         );
       })
       .addCase(unsubscribeFromDoctor.fulfilled, (state, action) => {
-        if (state.profile && state.profile._id === action.payload.doctorId) {
+        if (state.profile && state.profile.id === action.payload.doctorId) {
           state.profile.subscribers = state.profile.subscribers.filter(
             (id) => id !== action.meta.arg
           );
         }
         state.doctors = state.doctors.map((doctor) =>
-          doctor._id === action.payload.doctorId
+          doctor.id === action.payload.doctorId
             ? {
                 ...doctor,
                 subscribers: doctor.subscribers.filter(

@@ -1,9 +1,14 @@
 "use client";
 
 import Icon from "@components/Icon";
-import { formatDateFromDateNow } from "@helpers/formatDateFromDateNow";
-import formatDateToDayMonth from "@helpers/formatDateToDayMonth";
-import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
+import {
+  getLocalTimeZone,
+  parseDate,
+  today,
+  CalendarDate,
+  DateValue,
+  ZonedDateTime,
+} from "@internationalized/date";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 import {
   addAvailableDate,
@@ -26,9 +31,21 @@ import {
   ScrollShadow,
   DatePicker,
   useDisclosure,
+  Tooltip,
+  NextUIProvider,
+  Checkbox,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import { Trash } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useParams } from "next/navigation";
+
+// Добавляем функцию форматирования даты
+function formatDateToDayMonth(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("default", { day: "numeric", month: "long" });
+}
 
 interface DoctorCalendarProps {
   doctorId: string;
@@ -53,7 +70,11 @@ export default function DoctorCalendar({
     null
   );
 
-  const [newDate, setNewDate] = useState(parseDate(formatDateFromDateNow()));
+  const [chosenDate, setChosenDate] = useState<string>("");
+  const [chosenTime, setChosenTime] = useState<string>("");
+  const [newDate, setNewDate] = useState<DateValue | null>(
+    today(getLocalTimeZone())
+  );
   const [newTime, setNewTime] = useState("");
 
   const [errorMessageTime, setErrorMessageTime] = useState<string>("");
@@ -80,8 +101,7 @@ export default function DoctorCalendar({
 
   useEffect(() => {
     checkErrorMessageTime(newTime);
-  }, [newTime])
-  
+  }, [newTime]);
 
   useEffect(() => {
     if (doctorId) {
@@ -121,8 +141,8 @@ export default function DoctorCalendar({
     try {
       await dispatch(
         deleteAvailableDate({
-          calendarId: selectedDay?._id as string,
-          timeSlotId: selectedTimeSlot?._id as string,
+          calendarId: selectedDay?.id as string,
+          timeSlotId: selectedTimeSlot?.id as string,
         })
       ).unwrap();
       dispatch(
@@ -135,11 +155,22 @@ export default function DoctorCalendar({
     }
   };
 
-  const formatDate = (dateObject: any) => {
-    const year = dateObject.year;
-    const month = String(dateObject.month).padStart(2, "0");
-    const day = String(dateObject.day).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+  const formatDate = (date: DateValue | null): string => {
+    if (!date) return "";
+
+    const jsDate = date.toDate(getLocalTimeZone());
+    const day = jsDate.getDate().toString().padStart(2, "0");
+    const month = (jsDate.getMonth() + 1).toString().padStart(2, "0");
+    const year = jsDate.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  };
+
+  const navigateTable = (selectedDay: DoctorCalendarType | null) => {
+    if (selectedDay) {
+      const newDate = new Date(selectedDay.date);
+      // Do something with newDate if needed
+    }
   };
 
   return (
@@ -154,8 +185,10 @@ export default function DoctorCalendar({
               <ModalBody>
                 <DatePicker
                   label="Date"
-                  value={newDate}
-                  onChange={setNewDate}
+                  value={newDate as any}
+                  onChange={(date: any) => {
+                    if (date) setNewDate(date);
+                  }}
                   minValue={today(getLocalTimeZone())}
                 />
                 <Input
@@ -172,11 +205,11 @@ export default function DoctorCalendar({
                 </Button>
                 <Button
                   onClick={() =>
-                    handleSaveNewDate(formatDate(newDate as any), newTime)
+                    newDate && handleSaveNewDate(formatDate(newDate), newTime)
                   }
                   color="primary"
                   onPress={onClose}
-                  isDisabled={Boolean(errorMessageTime)}
+                  isDisabled={Boolean(errorMessageTime) || !newDate}
                 >
                   Save
                 </Button>
@@ -194,7 +227,12 @@ export default function DoctorCalendar({
             <>
               <ModalHeader className="flex flex-col gap-1">
                 Are you sure that you want to delete {selectedTimeSlot?.time}{" "}
-                from {formatDateToDayMonth(String(selectedDay?.date))}
+                from{" "}
+                {selectedDay?.date &&
+                  new Date(selectedDay.date).toLocaleDateString("ru-RU", {
+                    month: "2-digit",
+                    day: "2-digit",
+                  })}
               </ModalHeader>
               <ModalBody className="mb-4">
                 <Button color="primary" onPress={onClose}>
@@ -242,8 +280,8 @@ export default function DoctorCalendar({
             {calendar.slice(0, 7).map((day) => (
               <div
                 key={
-                  day._id
-                    ? String(day._id)
+                  day.id
+                    ? String(day.id)
                     : `day-${Math.random().toString(36).substr(2, 9)}`
                 }
                 className="bg-[#1CA66F] bg-opacity-[0.1] p-3 rounded-[10px] flex flex-col justify-between basis-[200px] flex-grow flex-shrink min-w-[158px]"
@@ -251,7 +289,7 @@ export default function DoctorCalendar({
                 <ScrollShadow hideScrollBar className="max-h-[300px]">
                   {day.timeSlots.map((timeSlot) => (
                     <div
-                      key={String(timeSlot._id)}
+                      key={String(timeSlot.id)}
                       className="bg-[#1CA66F] bg-opacity-[0.1] p-2 flex items-center rounded mb-2"
                     >
                       <span>{timeSlot.time}</span>

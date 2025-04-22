@@ -1,30 +1,30 @@
 const ProblemData = [
 	{
-		title: '1. Unstable world situation',
-		text: 'In time of insecurities we are more liable to feel ourselves on our lowest, worrying about the future.',
-		answerTitle: '1. You are not charged',
-		answerText: `Don't worry, everyone has an opportunity to acquire fast & free help and a chance to change their lives.`,
+		title: '1. Нестабильная ситуация в мире',
+		text: 'В период нестабильности мы более склонны чувствовать себя на самом низком уровне, переживая за будущее.',
+		answerTitle: '1. Вы не один',
+		answerText: `Не беспокойтесь, у каждого есть возможность получить быструю и бесплатную помощь и возможность изменить свою жизнь.`,
 	},
 	{
-		title: '2. Stress and burnout',
-		text: 'Modern lifestyles often lead to anxiety, high levels of stress impacting mental well-being.',
-		answerTitle: '2. Let professionals do their job',
+		title: '2. Стресс и переутомление',
+		text: 'Современные образы жизни часто приводят к стрессу и высокому уровню стресса, влияющему на психическое здоровье.',
+		answerTitle: '2. Пусть профессионалы занимаются своим делом',
 		answerText:
-			'We have specialized doctors around the globe, who would be pleased to contact with you.',
+			'У нас есть специалисты по всему миру, которые будут рады с вами связаться.',
 	},
 	{
-		title: '3. Isolation and Loneliness',
-		text: 'It becomes more prevalent, particularly with the rise of remote work and social distancing measures.',
-		answerTitle: '3. You are not alone',
+		title: '3. Изоляция и одиночество',
+		text: 'Она становится более распространенной, особенно с ростом удаленной работы и мер социального дистанцирования.',
+		answerTitle: '3. Вы не одни',
 		answerText:
-			'There are 8 more billion people on Earth and 1000+ doctors on MindConnect who would be able to talk to you 24/7.',
+			'На Земле есть 8 миллиардов людей и 1000+ психологов на MindConnect, которые смогут поговорить с вами 24/7.',
 	},
 	{
-		title: '4. No analogues',
-		text: 'Unfortunately, there is no such platform on the internet like MindConnect',
-		answerTitle: '4. Everything in one place',
+		title: '4. Нет аналогов',
+		text: 'К сожалению, на интернет-площадке нет такого места, как MindConnect',
+		answerTitle: '4. Все в одном месте',
 		answerText:
-			'No need to go back and forth, spend excess time in search of help, because all you need is MindConnect.',
+			'Не нужно возвращаться туда-сюда, тратить лишнее время на поиск помощи, потому что все, что вам нужно, — это MindConnect.',
 	},
 ]
 

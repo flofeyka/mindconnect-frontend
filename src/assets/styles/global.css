@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "~stream-chat-react/dist/css/v2/index.css";
+/* @import "~stream-chat-react/dist/css/v2/index.css"; */
 
 :root {
   --primary: rgba(65, 65, 65, 0.1);

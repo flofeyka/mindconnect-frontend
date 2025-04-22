@@ -43,7 +43,11 @@ const CustomModal: FC<CustomModalProps> = ({
             </ModalHeader>
             <ModalBody>{children}</ModalBody>
             <ModalFooter>
-              <CustomButton style={{ width: "55vh" }} color="primary" onClick={onClose}>
+              <CustomButton
+                style={{ width: "55vh" }}
+                color="primary"
+                onClick={onClose}
+              >
                 Submit
               </CustomButton>
             </ModalFooter>

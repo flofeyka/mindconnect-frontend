@@ -7,7 +7,7 @@ const FooterBottom: FC = () => {
       <div className="w-full h-[2px] bg-[#ffff]/10"></div>
       <div className=" flex justify-between mt-8">
         <Link className="text-[14px] text-[#ffff]/50" href="#">
-          © 2024 mindconnect. All rights reserved.
+          © 2024 mindconnect. Все права защищены.
         </Link>
         <div className="flex gap-5">
           <Link href="#">

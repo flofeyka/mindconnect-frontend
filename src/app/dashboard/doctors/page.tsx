@@ -3,14 +3,18 @@
 import Icon from "@components/Icon";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 import { fetchAllDoctors } from "@lib/redux/slices/doctorprofile/doctorProfileSlice";
-import { CheckboxGroup, Checkbox, Button, Spinner } from "@nextui-org/react";
-import { Input } from "@nextui-org/react";
-import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
-import { useEffect } from "react";
-import specialities from "../../../data/specialities.js";
-import { languages } from "../../../data/types.js";
-import { useRouter } from "next/navigation.js";
+import { Gender, Language, Problem } from "@lib/types";
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Checkbox,
+  CheckboxGroup,
+  Input,
+  Spinner,
+} from "@nextui-org/react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const DoctorList = dynamic(() => import("./DoctorList"), {
   loading: () => (
@@ -25,9 +29,21 @@ export default function Doctors() {
   const doctors = useAppSelector((state) => state.doctorProfile.doctors);
   const router = useRouter();
 
+  const [search, setSearch] = useState<string>("");
+  const [problem, setProblem] = useState<Problem>(Problem.ALCOHOL_USE_DISORDER);
+  const [language, setLanguage] = useState<Language>(Language.RUSSIAN);
+  const [gender, setGender] = useState<Gender>(Gender.NOT_SELECTED);
+
   useEffect(() => {
-    dispatch(fetchAllDoctors());
-  }, [dispatch]);
+    dispatch(
+      fetchAllDoctors({
+        search,
+        problems: [problem],
+        languages: [language],
+        gender,
+      })
+    );
+  }, [dispatch, search, problem, language, gender]);
 
   useEffect(() => {
     router.prefetch(`/dashboard/doctor/[id]`);
@@ -37,34 +53,41 @@ export default function Doctors() {
 
   return (
     <>
-      <div className="flex justify-center mt-5 items-center">
+      <div className="flex justify-center overflow-x-hidden mt-5 items-center">
         <Input
           isClearable
-          placeholder="Search by name or problem"
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          placeholder="Поиск по имени или проблеме"
           startContent={<Icon path="/icons/search.svg" />}
           className="max-w-[400px] origin-center mr-2"
         />
         <Autocomplete
-          placeholder="Your problem"
-          defaultItems={specialities}
+          onSelectionChange={(value) => setProblem(value as Problem)}
+          value={problem}
+          placeholder="Ваша проблема"
+          defaultItems={Object.entries(Problem)}
           className="max-w-xs mr-2"
         >
           {(item) => (
-            <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>
+            <AutocompleteItem key={item[0]}>{item[1]}</AutocompleteItem>
           )}
         </Autocomplete>
         <Autocomplete
-          placeholder="Choose a language"
-          defaultItems={languages}
+          onSelectionChange={(value) => setLanguage(value as Language)}
+          value={language}
+          placeholder="Выберите язык"
+          defaultItems={Object.entries(Language)}
           className="max-w-xs mr-2"
         >
           {(item) => (
-            <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>
+            <AutocompleteItem key={item[0]}>{item[1]}</AutocompleteItem>
           )}
         </Autocomplete>
         <CheckboxGroup orientation="horizontal" color="secondary">
-          <Checkbox value="buenos-aires">Male</Checkbox>
-          <Checkbox value="sydney">Female</Checkbox>
+          <Checkbox value={Gender.MALE}>Мужчина</Checkbox>
+          <Checkbox value={Gender.FEMALE}>Женщина</Checkbox>
+          <Checkbox value={undefined}>Не важно</Checkbox>
         </CheckboxGroup>
       </div>
 

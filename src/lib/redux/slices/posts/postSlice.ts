@@ -218,7 +218,7 @@ const postsSlice = createSlice({
         updatePost.fulfilled,
         (state, action: PayloadAction<PostType>) => {
           const index = state.posts.findIndex(
-            (post) => post._id === action.payload._id
+            (post) => post.id === action.payload.id
           );
           if (index !== -1) {
             state.posts[index] = action.payload;
@@ -226,11 +226,11 @@ const postsSlice = createSlice({
         }
       )
       .addCase(deletePost.fulfilled, (state, action: PayloadAction<string>) => {
-        state.posts = state.posts.filter((post) => post._id !== action.payload);
+        state.posts = state.posts.filter((post) => post.id !== action.payload);
       })
       .addCase(addComment.fulfilled, (state, action) => {
         const post = state.posts.find(
-          (post) => post._id === action.payload.postId
+          (post) => post.id === action.payload.postId
         );
         if (post) {
           post.comments.push(action.payload);
@@ -239,14 +239,14 @@ const postsSlice = createSlice({
       .addCase(fetchComments.fulfilled, (state, action) => {
         state.posts.forEach((post) => {
           post.comments = action.payload.map((comment: commentType) => {
-            if (comment.postId === post._id) {
+            if (comment.postId === post.id) {
               return comment;
             }
           });
         });
 
         const post = state.posts.find(
-          (post) => post._id == action.payload.postId
+          (post) => post.id == action.payload.postId
         );
         console.log(post);
         if (post) {
@@ -255,7 +255,7 @@ const postsSlice = createSlice({
       })
       .addCase(likePost.fulfilled, (state, action) => {
         const post = state.posts.find(
-          (post) => post._id === action.payload.postId
+          (post) => post.id === action.payload.postId
         );
         if (post) {
           const userId = localStorage.getItem("userId");
@@ -266,7 +266,7 @@ const postsSlice = createSlice({
       })
       .addCase(unlikePost.fulfilled, (state, action) => {
         const post = state.posts.find(
-          (post) => post._id === action.payload.postId
+          (post) => post.id === action.payload.postId
         );
         if (post) {
           const userId = localStorage.getItem("userId");
@@ -280,7 +280,7 @@ const postsSlice = createSlice({
         fetchPostById.fulfilled,
         (state, action: PayloadAction<PostType>) => {
           const existingPost = state.posts.find(
-            (post) => post._id === action.payload._id
+            (post) => post.id === action.payload.id
           );
           if (existingPost) {
             Object.assign(existingPost, action.payload);
@@ -296,7 +296,7 @@ const postsSlice = createSlice({
           action: PayloadAction<{ postId: string; commentId: string }>
         ) => {
           const { postId, commentId } = action.payload;
-          const post = state.posts.find((post) => post._id === postId);
+          const post = state.posts.find((post) => post.id === postId);
           if (post) {
             post.comments = post.comments.filter(
               (comment) => comment !== commentId

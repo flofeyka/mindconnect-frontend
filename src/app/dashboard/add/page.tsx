@@ -84,19 +84,19 @@ export default function AddPage() {
       }, 0);
       await dispatch(fetchPostsFromDoctor(userId));
     } else {
-      alert("All fields are required");
+      alert("Все поля обязательны");
     }
   };
 
   return (
     <div className="max-w-2xl mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Create a New Post</h1>
+        <h1 className="text-2xl font-bold">Создать новую публикацию</h1>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <label htmlFor="photo" className="block text-sm font-medium">
-            Photo
+            Фото
           </label>
           <div className="flex items-center justify-center w-full relative">
             {photoPreview ? (
@@ -105,7 +105,7 @@ export default function AddPage() {
                   src={photoPreview}
                   width={672}
                   height={256}
-                  alt="Upload preview"
+                  alt="Предпросмотр загрузки"
                   className="max-w-full h-64 object-cover rounded-lg"
                 />
                 <Button
@@ -115,7 +115,7 @@ export default function AddPage() {
                   onClick={resetPhoto}
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  Reset Photo
+                  Сбросить фото
                 </Button>
               </>
             ) : (
@@ -132,8 +132,8 @@ export default function AddPage() {
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <Upload className="w-8 h-8 mb-4 text-gray-500" />
                   <p className="mb-2 text-sm text-gray-500">
-                    <span className="font-semibold">Click to upload</span> or
-                    drag and drop
+                    <span className="font-semibold">Нажмите для загрузки</span>{" "}
+                    или перетащите файл
                   </p>
                 </div>
                 <input
@@ -153,25 +153,25 @@ export default function AddPage() {
         </div>
         <div className="space-y-2">
           <label htmlFor="title" className="block text-sm font-medium">
-            Title
+            Заголовок
           </label>
           <Input
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Enter post title"
+            placeholder="Введите заголовок публикации"
             required
           />
         </div>
         <div className="space-y-2">
           <label htmlFor="description" className="block text-sm font-medium">
-            Description
+            Описание
           </label>
           <Textarea
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Enter post description"
+            placeholder="Введите описание публикации"
             rows={4}
             required
           />
@@ -181,11 +181,11 @@ export default function AddPage() {
             type="button"
             onClick={() => router.push(`/dashboard/doctor/${userId}`)}
           >
-            Cancel
+            Отмена
           </Button>
           <Button type="submit">
             <Send className="w-4 h-4 mr-2" />
-            Post
+            Опубликовать
           </Button>
         </div>
       </form>

@@ -1,7 +1,6 @@
 "use client";
 
 import Icon from "@components/Icon";
-import formatDateToDayMonth from "@helpers/formatDateToDayMonth";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 import {
   getAvailableDates,
@@ -137,8 +136,8 @@ export default function DoctorPublicCalendar({
           {calendar.slice(0, 7).map((day) => (
             <div
               key={
-                day._id
-                  ? String(day._id)
+                day.id
+                  ? String(day.id)
                   : `day-${Math.random().toString(36).substr(2, 9)}`
               }
               className="bg-[#1CA66F] bg-opacity-[0.1] p-3 rounded-[10px] flex flex-col justify-between basis-[200px] flex-grow flex-shrink min-w-[158px]"
@@ -146,13 +145,13 @@ export default function DoctorPublicCalendar({
               <ScrollShadow hideScrollBar className="max-h-[300px]">
                 {day.timeSlots.map((timeSlot) => (
                   <div
-                    key={String(timeSlot._id)}
+                    key={String(timeSlot.id)}
                     onClick={() =>
                       handleTimeSlotSelect(
                         String(day.date),
                         timeSlot.time,
-                        day._id,
-                        timeSlot._id
+                        day.id,
+                        timeSlot.id
                       )
                     }
                     className={`cursor-pointer border bg-[#1CA66F] bg-opacity-[0.1] p-2 flex items-center rounded mb-2 ${
@@ -171,7 +170,10 @@ export default function DoctorPublicCalendar({
               <div>
                 <Divider />
                 <div className="text-[#1CA66F] pt-2 flex justify-center items-center">
-                  {formatDateToDayMonth(String(day.date))}
+                  {new Date(day.date).toLocaleDateString("default", {
+                    day: "numeric",
+                    month: "long",
+                  })}
                 </div>
               </div>
             </div>
@@ -182,7 +184,10 @@ export default function DoctorPublicCalendar({
             <div className="flex gap-4 items-center mb-4">
               <h3 className="text-lg font-semibold">Selected Time:</h3>
               <p className="text-[#1CA66F] ">
-                {formatDateToDayMonth(selectedTimeSlot.date)} at{" "}
+                {new Date(selectedTimeSlot.date).toLocaleDateString("default", {
+                  day: "numeric",
+                  month: "long",
+                })} at{" "}
                 {selectedTimeSlot.time}
               </p>
             </div>
@@ -205,7 +210,10 @@ export default function DoctorPublicCalendar({
                   <>
                     <ModalHeader className="flex flex-col gap-1">
                       Are you sure that you want to apply for consultation on{" "}
-                      {formatDateToDayMonth(selectedTimeSlot.date)} at{" "}
+                      {new Date(selectedTimeSlot.date).toLocaleDateString("default", {
+                        day: "numeric",
+                        month: "long",
+                      })} at{" "}
                       {selectedTimeSlot.time}
                     </ModalHeader>
                     <ModalBody className="mb-4">

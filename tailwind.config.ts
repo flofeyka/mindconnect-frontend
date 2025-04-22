@@ -76,6 +76,16 @@ const config: Config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
+    screens: {
+      'sm': {max: '959px'},
+      // => @media (min-width: 576px) { ... }
+
+      'md': {min: '960px', max: '1439px'},
+      // => @media (min-width: 960px) { ... }
+
+      'lg': {min: '1440px'},
+      // => @media (min-width: 1440px) { ... }
+    },
   },
   darkMode: "class",
   plugins: [

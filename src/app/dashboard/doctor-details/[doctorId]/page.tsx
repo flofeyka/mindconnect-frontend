@@ -49,7 +49,7 @@ export default function DoctorDetails() {
                   {doctorProfile?.typeOfConsultation.join(", ")}
                 </div>
                 <h1 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight">
-                  Dr. {doctorProfile?.firstName} {doctorProfile?.lastName}
+                  Др. {doctorProfile?.firstName} {doctorProfile?.lastName}
                 </h1>
                 <p className="mt-2 text-gray-400">
                   {doctorProfile?.description}
@@ -60,7 +60,7 @@ export default function DoctorDetails() {
                 </div>
                 <div className="mt-2 flex items-center text-gray-400">
                   <Clock className="h-5 w-5 mr-2" />
-                  {doctorProfile?.yearsOfExperience} years of experience
+                  {doctorProfile?.yearsOfExperience} лет опыта
                 </div>
               </div>
               <div>
@@ -76,16 +76,16 @@ export default function DoctorDetails() {
               <div className="mt-2 flex items-center text-gray-400">
                 <DollarSign className="h-5 w-5 mr-2" />
                 {doctorProfile?.priceOneHour.price}{" "}
-                {doctorProfile?.priceOneHour.currency} / hour
+                {doctorProfile?.priceOneHour.currency} / час
               </div>
             </div>
           </div>
           <div className="px-8 py-6 bg-[#1CA66F] bg-opacity-[0.1] ">
-            <h2 className="text-xl font-semibold mb-4">About Me</h2>
+            <h2 className="text-xl font-semibold mb-4">Обо мне</h2>
             <p className="text-gray-300">{doctorProfile?.aboutMe}</p>
           </div>
           <div className="px-8 py-6">
-            <h2 className="text-xl font-semibold mb-4">Fields of Expertise</h2>
+            <h2 className="text-xl font-semibold mb-4">Области экспертизы</h2>
             <div className="flex flex-wrap gap-2">
               {doctorProfile?.fieldsOfProblems.map((field, index) => (
                 <span

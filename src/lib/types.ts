@@ -1,5 +1,5 @@
 export interface PostType {
-  _id: string;
+  id: string;
   owner: string;
   title: string;
   description?: string;
@@ -10,7 +10,7 @@ export interface PostType {
 }
 
 export type commentType = {
-  _id: string;
+  id: string;
   owner: string;
   content: string;
   postId: string;
@@ -41,10 +41,8 @@ export type authType = {
 };
 
 export type calendarType = {
-  _id: string;
-  date: {
-    $date: string;
-  };
+  id: number;
+  date: Date;
   owner: {
     $oid: string;
   };
@@ -54,14 +52,11 @@ export type calendarType = {
 };
 
 export type calendarNoteType = {
-  _id: {
-    $oid: string;
-  };
+  id: number;
   note: string;
+  calendarId: number;
   time: string;
-  createdAt: {
-    $date: string;
-  };
+  createdAt: Date;
 };
 
 export type ResearchDataType = {
@@ -74,11 +69,58 @@ export type ResearchType = {
 };
 
 export type DoctorCalendarType = {
-  _id: string;
+  id: string;
   date: string;
   timeSlots: TimeSlot[];
 };
 export type TimeSlot = {
-  _id: string;
+  id: string;
   time: string;
 };
+
+export interface ChatDialog {
+  id: string;
+  title: string;
+  name: string;
+  imgUrl: string;
+  lastMessage?: {
+    role: "user" | "assistant";
+    content: "string";
+    created_at: string;
+  };
+}
+
+export enum Gender {
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+  NOT_SELECTED = "NOT SELECTED",
+}
+
+export enum Language {
+  ENGLISH = "English",
+  RUSSIAN = "Russian",
+  SPANISH = "Spanish",
+  GERMAN = "German",
+  CHINESE = "Chinese",
+  HINDI = "Hindi",
+  UKRAINIAN = "Ukrainian",
+}
+
+export enum Problem {
+  POST_TRAUMATIC_STRESS_DISORDER_PTSD = "Post-Traumatic Stress Disorder (PTSD)",
+  GENERALIZED_ANXIETY_DISORDER_GAD = "Generalized Anxiety Disorder (GAD)",
+  STRESS = "Stress",
+  BURNOUT = "Burnout",
+  ADHD = "ADHD",
+  PANIC_DISORDER = "Panic Disorder",
+  SOCIAL_ANXIETY_DISORDER = "Social Anxiety Disorder",
+  SPECIFIC_PHOBIAS = "Specific Phobias",
+  MAJOR_DEPRESSIVE_DISORDER = "Major Depressive Disorder",
+  BIPOLAR_DISORDER = "Bipolar Disorder",
+  SCHIZOAFFECTIVE_DISORDER = "Schizoaffective Disorder",
+  ALCOHOL_USE_DISORDER = "Alcohol Use Disorder",
+  GAMBLING_DISORDER = "Gambling Disorder",
+  SUBSTANCE_USE_DISORDERS = "Substance Use Disorders",
+  GENDER_DYSPHORIA = "Gender Dysphoria",
+  DEPENDENT_PERSONALITY_DISORDER = "Dependent Personality Disorder",
+}

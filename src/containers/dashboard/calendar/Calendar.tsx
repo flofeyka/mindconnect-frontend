@@ -3,10 +3,10 @@ import Icon from "@components/Icon";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 import {
   Button,
+  calendar,
   Card,
   CardBody,
   CardHeader,
-  DatePicker,
   Divider,
   Dropdown,
   DropdownItem,
@@ -25,164 +25,104 @@ import {
   getOneCalendar,
   getPrevCalendar,
   getNextCalendar,
-  addCalendar,
+  addNote,
   addTodayCalendar,
 } from "@lib/redux/slices/calendar/calendarSlice";
 import NoteItem from "./Note/NoteItem";
-import formatDateToDayMonth from "@helpers/formatDateToDayMonth";
 import ModalWrapper from "@components/Modal";
-import { formatDateFromDateNow } from "@helpers/formatDateFromDateNow";
 import formatDateToTime from "@helpers/formatDateToTime";
-import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
+import CalendarItem from "./CalendarItem";
 
 export default function Calendar() {
   const [addNoteValue, setAddNoteValue] = useState("");
-  const [date, setDate] = useState(parseDate(formatDateFromDateNow()));
+  const [date, setDate] = useState(new Date().toISOString());
 
-  const calendar = useAppSelector((state) => state.Calendar.oneCalendar);
+  // const calendar = useAppSelector((state) => state.Calendar.oneCalendar);
+  const calendars = useAppSelector((state) => state.Calendar.calendar);
   const dispatch = useAppDispatch();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  useEffect(() => {
-    dispatch(getOneCalendar(date as any));
-  }, [dispatch, date]);
+  console.log(calendar);
+  // useEffect(() => {
+  //   dispatch(getOneCalendar(calendar?.id as any));
+  // }, [dispatch, calendar?.id]);
 
-  console.log(formatDateFromDateNow());
   useEffect(() => {
-    const date = formatDateFromDateNow();
+    const date = new Date().toISOString();
     console.log("Inside useEffect:", date);
-    dispatch(addTodayCalendar({ date }));
+    // dispatch(addTodayCalendar({ date }));
   }, [dispatch]);
 
-  const handlePrevCalendar = () => {
-    if (calendar?._id) {
-      dispatch(getPrevCalendar(calendar._id));
-    } else {
-      dispatch(getPrevCalendar(null));
-    }
-  };
+  // const handlePrevCalendar = () => {
+  //   if (calendar?.id) {
+  //     dispatch(getPrevCalendar(calendar.id));
+  //   } else {
+  //     dispatch(getPrevCalendar(null));
+  //   }
+  // };
 
-  const handleSaveNewNote = async () => {
-    try {
-      await dispatch(
-        addCalendar({
-          time: formatDateToTime(Date.now()),
-          note: addNoteValue,
-          date: formatDateFromDateNow(),
-        })
-      ).unwrap();
-      onClose();
-      dispatch(getOneCalendar(date as any));
-    } catch (error) {
-      console.error("Error adding available date:", error);
-    }
-  };
+  // const handleNextCalendar = () => {
+  //   if (calendar?.id) {
+  //     dispatch(getNextCalendar(calendar.id));
+  //   }
+  // };
 
-  const handleNextCalendar = () => {
-    if (calendar?._id) {
-      dispatch(getNextCalendar(calendar._id));
-    }
-  };
-  console.log(calendar);
+  // // Форматирование даты календаря для отображения
+  // const formatCalendarDate = () => {
+  //   if (!calendar?.date)
+  //     return new Date().toLocaleDateString("default", {
+  //       month: "2-digit",
+  //       day: "2-digit",
+  //     });
+
+  //   try {
+  //     if (typeof calendar.date === "object" && "$date" in calendar.date) {
+  //       return new Date(calendar.date).toLocaleDateString("default", {
+  //         month: "2-digit",
+  //         day: "2-digit",
+  //       });
+  //     }
+  //     return new Date(String(calendar.date)).toLocaleDateString("default", {
+  //       month: "2-digit",
+  //       day: "2-digit",
+  //     });
+  //   } catch (e) {
+  //     return new Date().toLocaleDateString("default", {
+  //       month: "2-digit",
+  //       day: "2-digit",
+  //     });
+  //   }
+  // };
 
   return (
     <Card className="p-3 relative h-full">
       <CardHeader className="flex justify-between items-center">
-        <div className="font-semibold text-xl">Calendar</div>
+        <div className="font-semibold text-xl">Календарь</div>
         <div className="flex gap-3">
-          <DatePicker
-            label="Date"
-            onChange={setDate}
-            value={date}
-            maxValue={today(getLocalTimeZone())}
+          <input
+            type="date"
+            className="p-2 rounded bg-gray-800 text-white border border-gray-700"
+            value={new Date(date).toISOString().split("T")[0]}
+            onChange={(e) => setDate(new Date(e.target.value).toISOString())}
           />
-          <button className="cursor-pointer" onClick={handlePrevCalendar}>
+          <button
+            className="cursor-pointer"
+            // onClick={handlePrevCalendar}
+          >
             <Icon path="arrow-left.svg" />
           </button>
           <button
             className="rotate-180 cursor-pointer"
-            onClick={handleNextCalendar}
+            // onClick={handleNextCalendar}
           >
             <Icon path="arrow-left.svg" />
           </button>
         </div>
       </CardHeader>
       <CardBody className="flex flex-row gap-x-4">
-        <div
-          key={String(calendar?._id)}
-          className="bg-[#1CA66F] bg-opacity-[0.1] p-3 rounded-[10px] flex flex-col justify-between w-full "
-        >
-          <ScrollShadow hideScrollBar className="max-h-[300px]">
-            {calendar?.notes.map((note: any) => (
-              <NoteItem key={note._id} currentCalendar={calendar} note={note} />
-            ))}
-          </ScrollShadow>
-
-          <div>
-            <Divider />
-            <div className="text-[#1CA66F] pt-2 flex justify-center items-center gap-x-5">
-              {formatDateToDayMonth(
-                calendar === null || !calendar.date
-                  ? String(new Date())
-                  : String(calendar.date)
-              )}
-              <div className="cursor-pointer p-1 bg-[#1CA66F1A] rounded-[32px] relative">
-                <ModalWrapper onOpenChange={onOpenChange} isOpen={isOpen}>
-                  <ModalContent className="py-3">
-                    {(onClose) => (
-                      <>
-                        <ModalHeader>Add Note</ModalHeader>
-                        <ModalBody>
-                          <div className="flex items-center gap-3">
-                            <Input
-                              label="Note"
-                              size="sm"
-                              onChange={(e) => setAddNoteValue(e.target.value)}
-                              value={addNoteValue}
-                            />
-                          </div>
-                        </ModalBody>
-                        <ModalFooter>
-                          <Button
-                            className="font-semibold text-white w-full"
-                            color="success"
-                            onClick={() => {
-                              handleSaveNewNote();
-                            }}
-                          >
-                            Submit
-                          </Button>
-                        </ModalFooter>
-                      </>
-                    )}
-                  </ModalContent>
-                </ModalWrapper>
-                <Dropdown>
-                  <DropdownTrigger>
-                    <div>
-                      <Icon path="/icons/plus.svg " />
-                    </div>
-                  </DropdownTrigger>
-
-                  <DropdownMenu>
-                    <DropdownItem key="evaluate">
-                      <div className="flex gap-1">
-                        <Icon path="icons/smile.svg" />
-                        <span>Evaluate your current condition</span>
-                      </div>
-                    </DropdownItem>
-                    <DropdownItem key="add-note" onClick={onOpen}>
-                      <div className="flex gap-1">
-                        <Icon path="icons/notes.svg" />
-                        <span>Add a note</span>
-                      </div>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </div>
-            </div>
-          </div>
-        </div>
+        {calendars.map((calendar) => (
+          <CalendarItem currentCalendar={calendar} key={calendar.id} />
+        ))}
       </CardBody>
     </Card>
   );

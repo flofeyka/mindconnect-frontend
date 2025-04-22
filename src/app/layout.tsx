@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import Providers from "./providers";
+import React from "react";
 import "../assets/styles/global.css";
-import React, { Suspense } from "react";
-import Loading from "./dashboard/loading";
+import Providers from "./providers";
 
 const font = Poppins({
-  subsets: ["devanagari"],
+  subsets: ["latin"],
   weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
   title: "Mind-Connect",
-  description: "Develop and change your mind",
+  description: "Развивайте и меняйте свой разум",
 };
 
 export default function RootLayout({
@@ -21,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="dark" lang="en">
+    <html className="dark" lang="ru">
       <body className={font.className}>
         <Providers>{children}</Providers>
       </body>

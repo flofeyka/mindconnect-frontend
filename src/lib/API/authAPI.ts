@@ -3,46 +3,48 @@ import baseAPI from "./api";
 
 export const authAPI = {
   async googleSignIn() {
-    const Response = await baseAPI.get("auth/googlesignin");
+    const { data } = await baseAPI.get("auth/googlesignin");
     return {
-      status: Response.status,
-      data: Response.data,
+      status: data.status,
+      data: data.data,
     };
   },
   async getGoogleUsersData(code: string) {
-    const Response = await baseAPI.get(`auth/getgoogleuserdata?code=${code}`);
-    localStorage.setItem("token", Response.data.accessToken);
+    const { data } = await baseAPI.get(`auth/getgoogleuserdata?code=${code}`);
+    localStorage.setItem("token", data.accessToken);
     return {
-      data: Response.data.user,
-      status: Response.status,
+      data: data.user,
+      status: data.status,
     };
   },
-  async login(data: {
+  async login(body: {
     email: string;
     password: string;
   }): Promise<usersDataType> {
-    const Response = await baseAPI.post("auth/signin", data);
-    localStorage.setItem("token", Response.data.token);
-    localStorage.setItem("refreshToken", Response.data.refreshToken);
-    return Response.data.user;
+    const { data } = await baseAPI.post("auth/sign-in", body);
+    localStorage.setItem("token", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
+    return data.user;
   },
-  async register(data: {
+  async register(body: {
     firstName: string;
     email: string;
     password: string;
-    username: string;
+    lastName: string;
     isDoctor: boolean;
   }): Promise<usersDataType> {
-    const Response = await baseAPI.post("auth/signup", {
-      ...data,
+    const { data } = await baseAPI.post("auth/sign-up", {
+      ...body,
     });
-    localStorage.setItem("token", Response.data.token);
-    localStorage.setItem("refreshToken", Response.data.refreshToken);
-    return Response.data.user;
+    localStorage.setItem("token", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
+    return data.user;
   },
   async logout() {
-    const Response = await baseAPI.post("auth/logout");
-    return Response.data;
+    const { data } = await baseAPI.post("auth/logout");
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    return data;
   },
   async getUsersData(): Promise<{ user: usersDataType; success: boolean }> {
     const { data, status } = await baseAPI.get("auth/current", {
@@ -55,22 +57,22 @@ export const authAPI = {
       success: status === 200,
     };
   },
-  async refresh(): Promise<{ success: boolean }> {
-    const { status, data } = await baseAPI.post("auth/refreshToken", {
+  async refresh(): Promise<{ success: boolean; user: usersDataType }> {
+    const { status, data } = await baseAPI.post("auth/refresh", {
       refreshToken: localStorage.getItem("refreshToken"),
     });
-    localStorage.setItem("token", data.token);
+    localStorage.setItem("token", data.accessToken);
     localStorage.setItem("refreshToken", data.refreshToken);
-    return { success: status === 200 };
+    return { success: status === 201, user: data.user };
   },
 
   async requestResetPassword(email: string) {
-    const Response = await baseAPI.post("auth/request-password-reset", {
+    const { data, status } = await baseAPI.post("auth/request-password-reset", {
       email,
     });
     return {
-      status: Response.status,
-      data: Response.data,
+      status: status,
+      data: data,
     };
   },
 

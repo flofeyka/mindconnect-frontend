@@ -2,28 +2,35 @@ import axios from "axios";
 import baseAPI from "./api";
 
 export const calendarAPI = {
-  async addCalendar(data: { date: string; time: string; note: string }) {
-    const Response = await baseAPI.post(`calendar/add-calendar/${data.date}`, {
-      ...data,
+  async addNote(body: { calendar_id: number; note: string }) {
+    const {data} = await baseAPI.post(`calendar/note`, {
+      ...body
     });
-    return Response.data;
+    return data;
   },
-  async getCalendarByDates(data: { startDate: string; endDate: string }) {
-    const Response = await baseAPI.get(
-      `calendar/dates-calendar?startDate=${data.startDate}&endDate=${data.endDate}`
+  async getCalendarByDates(body: { startDate: string; endDate: string }) {
+    // const Response = await baseAPI.get(
+    //   `calendar/dates-calendar?startDate=${data.startDate}&endDate=${data.endDate}`
+    // );
+    // return Response.data;
+    const { data } = await baseAPI.get(`calendar/all/by-dates`, {
+      params: {
+        start_date: body.startDate,
+        end_date: body.endDate,
+      },
+    });
+    return data;
+  },
+  async deleteNote(body: { date: string; noteId: number }) {
+    const {data} = await baseAPI.delete(
+      `calendar/note/${body.noteId}`
     );
-    return Response.data;
+    return data;
   },
-  async deleteNote(data: { date: string; noteId: string }) {
-    const Response = await baseAPI.delete(
-      `calendar/delete-note/${data.date}/notes/${data.noteId}`
-    );
-    return Response.data;
-  },
-  async getOneCalendar(date: string) {
-    const Response = await baseAPI.get(`calendar/one-calendar/${date}`);
+  async getOneCalendar(calendar_id: number) {
+    const { data } = await baseAPI.get(`calendar/${calendar_id}`);
 
-    return Response.data;
+    return data;
   },
   async updateNote({
     date,
@@ -31,7 +38,7 @@ export const calendarAPI = {
     note,
   }: {
     date: string;
-    noteId: string;
+    noteId: number;
     note: string;
   }) {
     const { data, status } = await baseAPI.put(
@@ -47,7 +54,7 @@ export const calendarAPI = {
       note: data.note,
     };
   },
-  async deleteCalendar({ calendarId }: { calendarId: string }) {
+  async deleteCalendar({ calendarId }: { calendarId: number }) {
     const { data, status } = await baseAPI.delete(
       `calendar/delete/${calendarId}`
     );
@@ -56,9 +63,9 @@ export const calendarAPI = {
       message: data.message,
     };
   },
-  async getPrevCalendar({ calendarId }: { calendarId: string | null }) {
+  async getPrevCalendar({ calendarId }: { calendarId: number | null }) {
     const endpoint = calendarId
-      ? `calendar/previous-calendar/${calendarId}`
+      ? `calendar/${calendarId}`
       : `calendar/previous-calendar/null`;
     const Response = await baseAPI.get(endpoint);
     return {
@@ -66,7 +73,7 @@ export const calendarAPI = {
       response: Response.data,
     };
   },
-  async getNextCalendar({ calendarId }: { calendarId: string }) {
+  async getNextCalendar({ calendarId }: { calendarId: number }) {
     const Response = await baseAPI.get(`calendar/next-calendar/${calendarId}`);
     return {
       success: Response.status === 200,
@@ -80,13 +87,11 @@ export const calendarAPI = {
       response: Response.data,
     };
   },
-  async createTodayCalendar(data: { date: string }) {
-    const Response = await baseAPI.post(
-      `calendar/add-today-calendar/${data.date}`
-    );
+  async createTodayCalendar() {
+    const { data } = await baseAPI.post(`calendar/today-calendar`);
     return {
-      success: Response.status === 200,
-      response: Response.data,
+      success: data.success,
+      calendar: data.calendar,
     };
   },
 };

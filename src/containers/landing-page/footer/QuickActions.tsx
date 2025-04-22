@@ -3,58 +3,58 @@ import React, { FC } from "react";
 
 const QuickActions: FC = () => {
   return (
-    <div className="flex gap-20 w-[576px] h-[187px]">
+    <div className="flex sm:flex-col sm:w-full gap-20 w-[576px] h-[187px]">
       <div className="">
-        <h5 className="font-semibold">Overview</h5>
+        <h5 className="font-semibold">Обзор</h5>
         <ul className="flex flex-col gap-3 text-[14px] opacity-80 mt-[18px]">
           <li>
-            <Link href="#">Home</Link>
+            <Link href="#">Главная</Link>
           </li>
           <li>
-            <Link href="#">Problem & Solution</Link>
+            <Link href="#">Проблема & Решение</Link>
           </li>
           <li>
-            <Link href="#">Functional</Link>
+            <Link href="#">Функционал</Link>
           </li>
           <li>
-            <Link href="#">Contact us</Link>
+            <Link href="#">Связаться с нами</Link>
           </li>
         </ul>
       </div>
       <div className="">
-        <h5 className="font-semibold">Service</h5>
+        <h5 className="font-semibold">Сервис</h5>
         <ul className="flex flex-col gap-3 text-[14px] opacity-80 mt-[18px]">
           <li>
-            <Link href="#">Dashboard</Link>
+            <Link href="/dashboard">Дашборд</Link>
           </li>
           <li>
-            <Link href="#">Search psychologist</Link>
+            <Link href="#">Поиск психолога</Link>
           </li>
           <li>
-            <Link href="#">Communications</Link>
+            <Link href="#">Коммуникации</Link>
           </li>
           <li>
-            <Link href="#">Quick support</Link>
+            <Link href="/fast-quick">Быстрая поддержка</Link>
           </li>
           <li>
-            <Link href="#">Researches</Link>
+            <Link href="#">Исследования</Link>
           </li>
         </ul>
       </div>
       <div className="">
-        <h5 className="font-semibold">Features</h5>
+        <h5 className="font-semibold">Особенности</h5>
         <ul className="flex flex-col gap-3 text-[14px] opacity-80 mt-[18px]">
           <li>
-            <Link href="#">Home</Link>
+            <Link href="#">Главная</Link>
           </li>
           <li>
-            <Link href="#">Problem & Solution</Link>
+            <Link href="#">Проблема & Решение</Link>
           </li>
           <li>
-            <Link href="#">Functional</Link>
+            <Link href="#">Функционал</Link>
           </li>
           <li>
-            <Link href="#">Contact us</Link>
+            <Link href="#">Связаться с нами</Link>
           </li>
         </ul>
       </div>

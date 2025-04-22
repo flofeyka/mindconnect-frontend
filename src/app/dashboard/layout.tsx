@@ -3,11 +3,13 @@ import Icon from "@components/Icon";
 import Logo from "@components/Logo";
 import Link from "next/link";
 import React, { Suspense, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Spinner, Tooltip } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 import Loading from "./loading";
 import { MessageSquare } from "lucide-react";
+import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 
 export default function DashBoardLayout({
   children,
@@ -58,6 +60,21 @@ export default function DashBoardLayout({
     }
   }, [pathname]);
 
+  const { isAuth } = useAppSelector((state) => state.Auth);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const getUser = async () => {
+      await dispatch(getAuthUserData());
+
+      if (!isAuth) {
+        redirect("/auth/login");
+      }
+    };
+
+    getUser();
+  }, []);
+
   return (
     <div className="flex min-h-screen relative ">
       <div className="bg-[#111111] h-screen w-[75px] fixed flex flex-col justify-between items-center py-8 border-[#FFFFFF08] border-r-2 ">
@@ -65,7 +82,7 @@ export default function DashBoardLayout({
           <Logo title={false} />
         </button>
         <div className="flex flex-col gap-y-[45px] w-full ">
-          <Tooltip content="Dashboard" placement="right">
+          <Tooltip content="Дашборд" placement="right">
             <div
               className={`w-full flex justify-center relative cursor-pointer ${setBorderIcon(
                 1
@@ -80,7 +97,7 @@ export default function DashBoardLayout({
               />
             </div>
           </Tooltip>
-          <Tooltip content="Ai chat" placement="right">
+          <Tooltip content="Чат с ИИ" placement="right">
             <div
               className={`w-full flex justify-center relative cursor-pointer ${setBorderIcon(
                 2
@@ -96,7 +113,7 @@ export default function DashBoardLayout({
               />
             </div>
           </Tooltip>
-          <Tooltip content="Doctors Search" placement="right">
+          <Tooltip content="Поиск врачей" placement="right">
             <div
               className={`w-full flex justify-center relative cursor-pointer ${setBorderIcon(
                 3
@@ -114,7 +131,7 @@ export default function DashBoardLayout({
               />
             </div>
           </Tooltip>
-          <Tooltip content="Chat" placement="right">
+          <Tooltip content="Чат" placement="right">
             <div
               className={`w-full flex justify-center relative cursor-pointer ${setBorderIcon(
                 4
@@ -133,7 +150,7 @@ export default function DashBoardLayout({
           </Tooltip>
         </div>
         <div className="flex flex-col items-center gap-y-[45px] w-full">
-          <Tooltip content="Go to fast connect" placement="right">
+          <Tooltip content="Перейти к быстрой связи" placement="right">
             <Link href={"/fast-connect"} target="_blank">
               <div
                 className={`w-full flex justify-center relative cursor-pointer`}

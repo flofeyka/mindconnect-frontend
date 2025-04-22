@@ -18,9 +18,9 @@ export default function DoctorList({ doctors }: DoctorCardProps) {
   return (
     <ul>
       {doctors.map((doctor) => (
-        <li key={doctor._id} className="flex justify-center p-5">
+        <li key={doctor.id} className="flex justify-center p-5">
           <div
-            onClick={() => router.push(`/dashboard/doctor/${doctor._id}`)}
+            onClick={() => router.push(`/dashboard/doctor/${doctor.id}`)}
             className="w-[1225px] block cursor-pointer"
           >
             <Card className="max-w-[1225px] mx-auto h-48">
@@ -46,39 +46,39 @@ export default function DoctorList({ doctors }: DoctorCardProps) {
               </CardHeader>
 
               <CardBody className="px-3 py-0 text-small text-default-400">
-                <p>{doctor.description}</p>
+                {/* <p>{doctor.description}</p> */}
               </CardBody>
               <CardFooter className="gap-3">
                 <div className="flex gap-1">
                   <p className="font-semibold text-default-400 text-small">
-                    {doctor.subscribedTo.length}
+                    {/* {doctor.subscribedTo.length} */}
                   </p>
-                  <p className=" text-default-400 text-small">Following</p>
+                  <p className=" text-default-400 text-small">Подписки</p>
                 </div>
                 <div className="flex gap-1">
                   <p className="font-semibold text-default-400 text-small">
-                    {doctor.subscribers.length}
+                    {/* {doctor.subscribers.length} */}
                   </p>
-                  <p className="text-default-400 text-small">Followers</p>
+                  <p className="text-default-400 text-small">Подписчики</p>
                 </div>
                 <div className="flex gap-3 mr-0 ml-auto">
                   <Button
                     color="default"
                     variant="solid"
                     onClick={() =>
-                      router.push(`/dashboard/doctor/${doctor._id}`)
+                      router.push(`/dashboard/doctor/${doctor.id}`)
                     }
                   >
-                    Go to Profile
+                    Перейти в профиль
                   </Button>
                   <Button
                     color="primary"
                     variant="solid"
                     onClick={() =>
-                      router.push(`/dashboard/doctor-details/${doctor._id}`)
+                      router.push(`/dashboard/doctor-details/${doctor.id}`)
                     }
                   >
-                    Book an appointment
+                    Записаться на прием
                   </Button>
                 </div>
               </CardFooter>

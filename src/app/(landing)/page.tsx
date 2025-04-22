@@ -13,7 +13,7 @@ const LandingPage: FC = () => {
     <div>
       <TitleHero />
       <div className="flex justify-center gap-4 mt-[45px]">
-        <CustomButton color="primary">Get a service</CustomButton>
+        <CustomButton color="primary">Получить услугу</CustomButton>
         <Link href={"/fast-connect"} target="_blank">
           <CustomButton
             color="default"
@@ -25,7 +25,7 @@ const LandingPage: FC = () => {
               />
             }
           >
-            Quick support
+            Быстрая поддержка
           </CustomButton>
         </Link>
       </div>

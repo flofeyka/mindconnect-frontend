@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Interface for a single post
 interface Post {
-  _id: string;
+  id: string;
   owner: string;
   title: string;
   description: string;

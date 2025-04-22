@@ -65,7 +65,7 @@ export default function Profile({ user }: { user: usersDataType }) {
           <div className="flex items-center cursor-pointer">
             <Avatar src={user.image} size="md" />
             <div className="font-semibold ml-2 flex items-center gap-2">
-              {user.firstName}{" "}
+              {user.firstName} {user.lastName}{" "}
               <AnimatedIcon
                 height="10px"
                 path="/icons/vector-bottom.svg"
@@ -80,7 +80,7 @@ export default function Profile({ user }: { user: usersDataType }) {
         {user.isDoctor ? (
           <DropdownMenu>
             <DropdownItem key="settings">
-              <div onClick={onOpen}>Settings</div>
+              <div onClick={onOpen}>Настройки</div>
             </DropdownItem>
             <DropdownItem key="profile">
               <div
@@ -88,7 +88,7 @@ export default function Profile({ user }: { user: usersDataType }) {
                   router.push(`/dashboard/doctor/${user.id}`);
                 }}
               >
-                My Profile
+                Мой профиль
               </div>
             </DropdownItem>
             <DropdownItem key="extanded">
@@ -97,20 +97,20 @@ export default function Profile({ user }: { user: usersDataType }) {
                   router.push("/dashboard/edit-profile");
                 }}
               >
-                Edit Detailes
+                Редактировать детали
               </div>
             </DropdownItem>
             <DropdownItem
               className="mt-3 text-red-700 hover:text-red-700"
               key="l"
             >
-              <div onClick={modalLogout.onOpen}>Logout</div>
+              <div onClick={modalLogout.onOpen}>Выйти</div>
             </DropdownItem>
           </DropdownMenu>
         ) : (
           <DropdownMenu>
             <DropdownItem key="d">
-              <div onClick={onOpen}>My Detailes</div>
+              <div onClick={onOpen}>Мои данные</div>
             </DropdownItem>
 
             <DropdownItem
@@ -118,7 +118,7 @@ export default function Profile({ user }: { user: usersDataType }) {
               key="l"
             >
               {/* <LogoutModal /> Should be a logout modal */}
-              <div onClick={modalLogout.onOpen}>Logout</div>
+              <div onClick={modalLogout.onOpen}>Выйти</div>
             </DropdownItem>
           </DropdownMenu>
         )}
@@ -131,11 +131,11 @@ export default function Profile({ user }: { user: usersDataType }) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Do you really want to logout?
+                Вы действительно хотите выйти?
               </ModalHeader>
               <ModalBody>
                 <Button color="primary" onPress={modalLogout.onClose}>
-                  Cancel
+                  Отмена
                 </Button>
                 <Button
                   type="button"
@@ -145,7 +145,7 @@ export default function Profile({ user }: { user: usersDataType }) {
                     router.push("/");
                   }}
                 >
-                  Yes, logout
+                  Да, выйти
                 </Button>
               </ModalBody>
             </>
@@ -219,41 +219,46 @@ function EditProfileForm({
       <div className="flex my-3">
         <Input
           {...register("firstName")}
-          label="First Name"
+          label="Имя"
           size="md"
           className="mr-2"
-          placeholder="First name"
+          placeholder="Иван"
         />
         <Input
           {...register("lastName")}
-          label="Last Name"
+          label="Фамилия"
           size="md"
-          placeholder="Last name"
+          placeholder="Смирнов"
         />
       </div>
       <div className="flex">
         <Input
           {...register("phoneNumber")}
-          label="Phone Number"
+          label="Номер телефона"
           size="md"
           className="mr-2"
-          placeholder="number"
+          placeholder="+79921234567"
         />
-        <Input {...register("age")} label="Age" size="md" placeholder="Age" />
+        <Input
+          {...register("age")}
+          label="Возраст"
+          size="md"
+          placeholder="20"
+        />
       </div>
       <div className="flex mt-3">
         <Input
           {...register("city")}
           size="md"
-          label="Your City"
+          label="Ваш город"
           className="mr-2"
-          placeholder="City"
+          placeholder="Тюмень"
         />
         <Input
           {...register("country")}
-          label="Your Country"
+          label="Ваша страна"
           size="md"
-          placeholder="Country"
+          placeholder="Россия"
         />
       </div>
       <div className=" flex gap-2 w-full mt-2">
@@ -263,7 +268,7 @@ function EditProfileForm({
           className="w-full font-semibold "
           color="danger"
         >
-          Cancel
+          Отмена
         </Button>
         <Button
           size="lg"
@@ -271,7 +276,7 @@ function EditProfileForm({
           className="w-full font-semibold"
           color="primary"
         >
-          Submit
+          Отправить
         </Button>
       </div>
     </form>

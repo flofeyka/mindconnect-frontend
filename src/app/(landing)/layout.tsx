@@ -3,26 +3,25 @@ import Container from "@components/Container";
 import CustomButton from "@components/CustomButton";
 import Icon from "@components/Icon";
 import Logo from "@components/Logo";
+import ContentOver from "@containers/landing-page/content-over/ContentOver";
+import FooterBottom from "@containers/landing-page/footer/FooterBottom";
+import QuickActions from "@containers/landing-page/footer/QuickActions";
 import HeaderHav from "@containers/landing-page/header/HeaderNav";
 import TotalVolunteers from "@containers/landing-page/header/TotalVolunteers";
-import Link from "next/link";
-import { Suspense, useEffect, type ReactNode } from "react";
-import LandingPage from "./page";
-import QuickActions from "@containers/landing-page/footer/QuickActions";
-import FooterBottom from "@containers/landing-page/footer/FooterBottom";
-import ContentOver from "@containers/landing-page/content-over/ContentOver";
-import LogoutButton from "@components/LogoutButton";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
+import Link from "next/link";
+import { Suspense, useLayoutEffect, type ReactNode } from "react";
 import Loading from "./loading";
+import LandingPage from "./page";
 
 const LandingLayout = ({ children }: { children: ReactNode }) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.Auth.usersData);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(getAuthUserData());
-  }, [dispatch, user]);
+  }, [dispatch, JSON.stringify(user)]);
 
   console.log(user);
 
@@ -30,14 +29,18 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
     <div>
       <Suspense fallback={<Loading />}>
         <Container>
-          <header className="flex items-center  h-[104px]">
+          <header className="flex items-center  h-[104px] sm:px-6">
             <Link href={`/`}>
               <Logo />
             </Link>
             <HeaderHav />
             <div className="flex gap-4 items-center ml-auto">
               <TotalVolunteers />
-              <Link href={"/fast-connect"} target="_blank">
+              <Link
+                className="sm:hidden"
+                href={"/fast-connect"}
+                target="_blank"
+              >
                 <CustomButton
                   color="default"
                   startContent={
@@ -48,16 +51,16 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
                     />
                   }
                 >
-                  Quick support
+                  Быстрая поддержка
                 </CustomButton>
               </Link>
               {Object.keys(user).length === 0 ? (
                 <Link href={"/auth/login"}>
-                  <CustomButton color="primary">Sign in</CustomButton>
+                  <CustomButton color="primary">Войти</CustomButton>
                 </Link>
               ) : (
                 <Link href={"/dashboard"}>
-                  <CustomButton color="primary">Dashboard</CustomButton>
+                  <CustomButton color="primary">Дашборд</CustomButton>
                 </Link>
               )}
             </div>
@@ -66,7 +69,7 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
             <LandingPage />
           </main>
         </Container>
-        <footer className="bg-[url(/images/footer-bg.png)] h-[497px]">
+        <footer className="bg-[url(/images/footer-bg.png)] h-[497px] sm:h-full">
           <Container>
             <ContentOver />
             <div className="flex flex-col pt-[150px]">
@@ -74,7 +77,8 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
                 <div className="">
                   <Logo />
                   <p className="w-[270px] mt-[18px] text-[14px] text-[#FFFFFF]/80">
-                    Start working on your mental health with our app.
+                    Начните работу над своим психическим здоровьем с нашим
+                    приложением.
                   </p>
                 </div>
                 <div className="">

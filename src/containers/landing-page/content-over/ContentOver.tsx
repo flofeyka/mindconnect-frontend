@@ -11,13 +11,13 @@ const ContentOver: FC = () => {
   return (
     <div className="relative">
       <CustomModal
-        title="Contact us"
+        title="Связаться с нами"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       >
         <ContentOverModal />
       </CustomModal>
-      <div className="w-full flex h-[216px] rounded-[22px] bg-[url(/images/modal-bg.png)] bg-[#161616]/80 absolute bottom-[-100px]">
+      <div className="w-full flex h-[216px] rounded-[22px] bg-[url(/images/modal-bg.png)] bg-[#161616]/80 absolute -bottom-[100px]">
         <div className="p-[42px]">
           <button
             onClick={onOpen}
@@ -27,14 +27,14 @@ const ContentOver: FC = () => {
               "hover:after:translate-x-2 after:transition-all"
             )}
           >
-            Get in touch with us in a <br /> couple of clicks
+            Свяжитесь с нами всего в <br /> несколько кликов
           </button>
           <div className="flex items-center gap-3 text-[#FFFFFF]/30">
-            <p>Suggest an idea</p>
+            <p>Предложить идею</p>
             <div className="w-1 h-1 bg-[#FFFFFF]/30 rounded-3xl"></div>
-            <p>Report problems </p>
+            <p>Сообщить о проблемах</p>
             <div className="w-1 h-1 bg-[#FFFFFF]/30 rounded-3xl"></div>
-            <p>Cooperate with us</p>
+            <p>Сотрудничество с нами</p>
           </div>
         </div>
         <div className="h-[180px] mt-auto">
@@ -42,7 +42,7 @@ const ContentOver: FC = () => {
             className="h-full"
             width={595}
             height={100}
-            alt="content over image"
+            alt="изображение контента"
             src="/images/content-over-bg.png"
           />
         </div>

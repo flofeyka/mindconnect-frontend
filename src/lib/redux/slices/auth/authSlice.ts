@@ -95,10 +95,9 @@ export const { setUser, setCaptchaUrl } = authSlice.actions;
 export const getAuthUserData = createAsyncThunk(
   "auth/getAuthUserData",
   async () => {
-    const tokenUpdated = await authAPI.refresh();
-    if (tokenUpdated.success) {
-      const { success, user } = await authAPI.getUsersData();
-      if (success) return user;
+    const userData = await authAPI.refresh();
+    if (userData.success) {
+      return userData.user;
     }
   }
 );
@@ -125,20 +124,20 @@ export const signUp = createAsyncThunk(
     firstName,
     email,
     password,
-    username,
+    lastName,
     isDoctor,
   }: {
     firstName: string;
     email: string;
     password: string;
-    username: string;
+    lastName: string;
     isDoctor: boolean;
   }) => {
     const data: usersDataType = await authAPI.register({
       firstName,
       email,
       password,
-      username,
+      lastName,
       isDoctor,
     });
     return data;

@@ -63,7 +63,7 @@ export default function CreateMeetingPage() {
       const memberIds: string[] = resultAction.payload as string[];
 
       const members: MemberRequest[] = memberIds
-        .map((id: string) => ({
+        ?.map((id: string) => ({
           user_id: id,
           role: "call_member",
         }))
@@ -112,11 +112,11 @@ export default function CreateMeetingPage() {
           onChange={setParticipantsInput}
         />
         {user.isDoctor ? (
-          <CustomButton onClick={createMeeting} className="w-full">
+          <CustomButton onPress={createMeeting} className="w-full">
             Create meeting
           </CustomButton>
         ) : (
-          <CustomButton onClick={createMeeting} className="w-full">
+          <CustomButton onPress={createMeeting} className="w-full">
             Enter meeting with doctor
           </CustomButton>
         )}
@@ -214,8 +214,10 @@ function StartTimeInput({ value, onChange, setValue }: StartTimeInputProps) {
             className="max-w-md"
             granularity="second"
             label="Date and time"
-            value={value} // Pass the correct ZonedDateTime value here
-            onChange={setValue} // Update the ZonedDateTime value in state
+            value={value as any}
+            onChange={(date: any) => {
+              if (date) setValue(date);
+            }}
           />
         </label>
       )}
