@@ -1,10 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -15,40 +11,24 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "jsxImportSource": "react",
     "incremental": true,
-    "types": [
-      "socket.io-client"
-    ],
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "types": ["socket.io-client"],
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@app/*": [
-        "./src/app/*"
-      ],
-      "@assets/*": [
-        "./src/assets/*"
-      ],
-      "@components/*": [
-        "./src/components/*"
-      ],
-      "@containers/*": [
-        "./src/containers/*"
-      ],
-      "@helpers/*": [
-        "./src/helpers/*"
-      ],
-      "@hooks/*": [
-        "./src/hooks/*"
-      ],
-      "@lib/*": [
-        "./src/lib/*"
-      ],
-      "@models/*": [
-        "./src/models/*"
-      ]
+      "@app/*": ["./src/app/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@containers/*": ["./src/containers/*"],
+      "@helpers/*": ["./src/helpers/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@models/*": ["./src/models/*"]
     },
     "target": "ES2017"
   },
@@ -56,12 +36,11 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "types/**/*.d.ts",
     ".next/types/**/*.ts",
     "src/data/ProblemData.ts",
     "src/data/specialities.ts",
     "src/data/types.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
