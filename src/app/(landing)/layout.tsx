@@ -17,13 +17,14 @@ import LandingPage from "./page";
 
 const LandingLayout = ({ children }: { children: ReactNode }) => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.Auth.usersData);
+  const {usersData, isPending} = useAppSelector((state) => state.Auth);
 
   useLayoutEffect(() => {
     dispatch(getAuthUserData());
-  }, [dispatch, JSON.stringify(user)]);
+  }, [dispatch, JSON.stringify(usersData)]);
 
-  console.log(user);
+
+  if(isPending) return <Loading/>
 
   return (
     <div>
@@ -54,7 +55,7 @@ const LandingLayout = ({ children }: { children: ReactNode }) => {
                   Быстрая поддержка
                 </CustomButton>
               </Link>
-              {Object.keys(user).length === 0 ? (
+              {Object.keys(usersData).length === 0 ? (
                 <Link href={"/auth/login"}>
                   <CustomButton color="primary">Войти</CustomButton>
                 </Link>

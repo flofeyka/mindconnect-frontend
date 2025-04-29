@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button, Checkbox, Input, Link, Spinner } from "@nextui-org/react";
 import InputForm from "@components/InputForm";
-import { getAuthUserData, signIn } from "@lib/redux/slices/auth/authSlice";
+import { signIn } from "@lib/redux/slices/auth/authSlice";
 import Vector from "@components/Vector";
 import Title from "@components/Title";
 import { redirect } from "next/navigation";

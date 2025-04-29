@@ -2,14 +2,14 @@
 import Icon from "@components/Icon";
 import Logo from "@components/Logo";
 import Link from "next/link";
-import React, { Suspense, useEffect, useState } from "react";
+import React, {Suspense, useEffect, useLayoutEffect, useState} from "react";
 import { redirect, useRouter } from "next/navigation";
 import { Spinner, Tooltip } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 import Loading from "./loading";
 import { MessageSquare } from "lucide-react";
-import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
+import {getAuthUserData} from "@lib/redux/slices/auth/authSlice";
 
 export default function DashBoardLayout({
   children,
@@ -60,20 +60,23 @@ export default function DashBoardLayout({
     }
   }, [pathname]);
 
-  const { isAuth } = useAppSelector((state) => state.Auth);
+  const { isAuth, isPending } = useAppSelector((state) => state.Auth);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const getUser = async () => {
-      await dispatch(getAuthUserData());
-
-      if (!isAuth) {
+      if (!isAuth && !isPending) {
         redirect("/auth/login");
       }
-    };
 
-    getUser();
-  }, []);
+  }, [isAuth, isPending]);
+
+
+  useLayoutEffect(() => {
+    dispatch(getAuthUserData());
+  }, [dispatch, isAuth]);
+
+
+  if(isPending) return <Loading/>
 
   return (
     <div className="flex min-h-screen relative ">

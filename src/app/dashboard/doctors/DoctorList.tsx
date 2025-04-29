@@ -30,8 +30,9 @@ export default function DoctorList({ doctors }: DoctorCardProps) {
                     isBordered
                     radius="full"
                     size="lg"
+                    showFallback
                     src={
-                      doctor.image || "https://nextui.org/avatars/avatar-1.png"
+                      doctor.image
                     }
                   />
                   <div className="flex flex-col gap-1 items-start justify-center">
