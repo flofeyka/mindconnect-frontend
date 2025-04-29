@@ -13,13 +13,13 @@ export default function AuthLayout({
 
 
   useEffect(() => {
-    if (!isPending && !isAuth) {
+    if (!isPending && isAuth) {
       redirect("/dashboard");
     }
   }, [isAuth, isPending]);
   return (
     <div className="flex flex-col h-screen justify-center items-center">
-      {isPending ? <Spinner color="white" size="lg" /> : children}
+      {children}
     </div>
   );
 }

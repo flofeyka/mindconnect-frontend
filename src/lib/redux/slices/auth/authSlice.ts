@@ -59,6 +59,13 @@ const authSlice = createSlice({
       }
     );
     builder.addCase(
+      getAuthUserData.rejected,
+      (state: authType) => {
+          state.isAuth = false
+          state.isPending = false;
+      }
+    );
+    builder.addCase(
       checkVerifyToken.fulfilled,
       (state: authType, action: PayloadAction<boolean>) => {
         state.tokenIsValid = action.payload;
