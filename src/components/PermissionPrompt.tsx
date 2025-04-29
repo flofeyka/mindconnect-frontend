@@ -8,7 +8,7 @@ export default function PermissionPrompt() {
 				<Mic size={40} />
 			</div>
 			<p className='text-center'>
-				Please allow access to your microphone and camera to join the call
+				Пожалуйста, разрешите доступ к микрофону и камере, чтобы присоединиться к звонку
 			</p>
 		</div>
 	)
