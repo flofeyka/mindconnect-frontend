@@ -44,34 +44,48 @@ function useInitializeVideoClient() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!user) return;
-
-    let streamUser: User;
-
-    if (user?.id) {
-      streamUser = {
-        id: user.id,
-        name: user.firstName || user.id,
-        image: user.image,
-      };
-    } else {
-      const id = nanoid();
-      streamUser = {
-        id,
-        type: "guest",
-        name: `Гость ${id}`,
-      };
-    }
+    // Генерируем идентификатор для пользователя
+    const id = nanoid();
+    // Создаем объект пользователя, используя обычный тип (не гостевой)
+    const streamUser: User = {
+      id,
+      name: `Пользователь ${id.substring(0, 5)}`,
+      // Убираем тип "guest", чтобы использовать стандартный тип пользователя
+    };
 
     const apiKey = process.env.NEXT_PUBLIC_STREAM_VIDEO_API_KEY;
     if (!apiKey) {
       throw new Error("ключ api stream не установлен");
     }
 
+    // Простая функция для создания временного токена на клиенте
+    // ПРИМЕЧАНИЕ: Это только для тестирования, в продакшн нужно использовать серверную генерацию
+    const tokenProvider = async () => {
+      try {
+        // Попытка получить токен с сервера (если доступно)
+        const tokenResponse = await fetch('/api/stream-token?user_id=' + id, { 
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' } 
+        });
+        
+        if (tokenResponse.ok) {
+          const data = await tokenResponse.json();
+          return data.token;
+        }
+        
+        // Fallback - сообщаем об ошибке
+        console.warn('Не удалось получить токен. Используем анонимный доступ.');
+        return "";
+      } catch (error) {
+        console.error('Ошибка при получении токена:', error);
+        return "";
+      }
+    };
+
     const client = new StreamVideoClient({
       apiKey,
       user: streamUser,
-      tokenProvider: user?.id ? () => getToken(user.id) : undefined,
+      tokenProvider,
     });
 
     setVideoClient(client);
@@ -79,7 +93,7 @@ function useInitializeVideoClient() {
       client.disconnectUser();
       setVideoClient(null);
     };
-  }, [user]);
+  }, []); // Удалена зависимость от user, чтобы клиент создавался сразу
 
   return videoClient;
 }

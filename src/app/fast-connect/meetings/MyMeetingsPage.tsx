@@ -28,8 +28,8 @@ export default function MyMeetingsPage() {
 				filter_conditions: {
 					starts_at: { $exists: true },
 					$or: [
-						{ created_by_user_id: user.id },
-						{ members: { $in: [user.id] } },
+						{ created_by_user_id: String(user.id) },
+						{ members: { $in: [String(user.id)] } },
 					],
 				},
 			})

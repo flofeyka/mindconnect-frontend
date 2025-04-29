@@ -30,50 +30,37 @@ interface MeetingPageProps {
 }
 
 export default function MeetingPage({ id }: MeetingPageProps) {
-	const user = useAppSelector(state => state.Auth.usersData)
-	const dispatch = useAppDispatch()
-	useEffect(() => {
-		dispatch(getAuthUserData())
-	}, [dispatch])
-
+	const [userName, setUserName] = useState('Гость')
+	
 	const { call, callLoading } = useLoadCall(id)
 
-	if (!user || callLoading) {
+	if (callLoading) {
 		return <Loader2 className='mx-auto animate-spin' />
 	}
 
 	if (!call) {
-		return <p className='text-center font-bold'>Call not found</p>
-	}
-
-	const notAllowedToJoin =
-		call.type === 'private-meeting' &&
-		(!user || call.state.members.find(m => m.user.id === user.id))
-
-	if (notAllowedToJoin) {
-		return (
-			<p className='text-center font-bold'>
-				You are not allowed to join this meeting
-			</p>
-		)
+		return <p className='text-center font-bold'>Встреча не найдена</p>
 	}
 
 	return (
 		<>
 			<p className='text-center mb-10 text-gray-500'>
-				This call is encrypted. Noone is able to acquire information from this
-				call.
+				Этот звонок зашифрован. Никто не может получить информацию из этого звонка.
 			</p>
 			<StreamCall call={call}>
 				<StreamTheme>
-					<MeetingScreen />
+					<MeetingScreen userName={userName} />
 				</StreamTheme>
 			</StreamCall>
 		</>
 	)
 }
 
-function MeetingScreen() {
+interface MeetingScreenProps {
+	userName: string
+}
+
+function MeetingScreen({ userName }: MeetingScreenProps) {
 	const call = useStreamCall()
 
 	const { useCallEndedAt, useCallStartsAt } = useCallStateHooks()
@@ -87,8 +74,8 @@ function MeetingScreen() {
 		call.join()
 		setSetupComplete(true)
 	}
+	
 	const callIsInFuture = callStartsAt && new Date(callStartsAt) > new Date()
-
 	const callHasEnded = !!callEndedAt
 
 	if (callHasEnded) {
@@ -100,18 +87,24 @@ function MeetingScreen() {
 	}
 
 	const description = call.state.custom.description
+	const createdBy = call.state.custom.createdBy
 
 	return (
 		<div className='space-y-6'>
 			{description && (
 				<p className='text-center'>
-					Meeting description: <span className='font-bold'>{description}</span>
+					Описание встречи: <span className='font-bold'>{description}</span>
+				</p>
+			)}
+			{createdBy && (
+				<p className='text-center'>
+					Создатель: <span className='font-bold'>{createdBy}</span>
 				</p>
 			)}
 			{setupComplete ? (
 				<CallUI />
 			) : (
-				<SetupUI onSetupComplete={handleSetupComplete} />
+				<SetupUI onSetupComplete={handleSetupComplete} userName={userName} />
 			)}
 		</div>
 	)
@@ -119,10 +112,12 @@ function MeetingScreen() {
 
 interface SetupUIProps {
 	onSetupComplete: () => void
+	userName: string
 }
 
-function SetupUI({ onSetupComplete }: SetupUIProps) {
+function SetupUI({ onSetupComplete, userName }: SetupUIProps) {
 	const call = useStreamCall()
+	const [name, setName] = useState(userName)
 
 	const { useMicrophoneState, useCameraState } = useCallStateHooks()
 
@@ -147,7 +142,16 @@ function SetupUI({ onSetupComplete }: SetupUIProps) {
 
 	return (
 		<div className='flex flex-col items-center gap-3'>
-			<h1 className='text-center text-2xl font-bold'>Setup</h1>
+			<h1 className='text-center text-2xl font-bold'>Настройка</h1>
+			<label className='block space-y-1 w-full max-w-md'>
+				<span className='font-medium'>Ваше имя</span>
+				<input
+					type='text'
+					className='w-full p-2 border rounded'
+					value={name}
+					onChange={(e) => setName(e.target.value)}
+				/>
+			</label>
 			<VideoPreview />
 			<div className='flex h-16 items-center gap-3'>
 				<AudioVolumeIndicator />
@@ -159,9 +163,9 @@ function SetupUI({ onSetupComplete }: SetupUIProps) {
 					checked={micCamDisabled}
 					onChange={e => setMicCamDisabled(e.target.checked)}
 				/>
-				Join with mic and cam off
+				Присоединиться с выключенными микрофоном и камерой
 			</label>
-			<CustomButton onClick={onSetupComplete}>Join meeting</CustomButton>
+			<CustomButton onClick={onSetupComplete}>Присоединиться к встрече</CustomButton>
 		</div>
 	)
 }
@@ -183,18 +187,24 @@ function UpcomingMeetingScreen() {
 	return (
 		<div className='flex flex-col items-center gap-6'>
 			<p>
-				This meeting has not started yet. It will start at
+				Эта встреча еще не началась. Она начнется в 
 				<span className='font-bold'>
 					{call.state.startsAt?.toLocaleString()}
 				</span>
 			</p>
 			{call.state.custom.description && (
 				<p>
-					Description:{' '}
+					Описание:{' '}
 					<span className='font-bold'>{call.state.custom.description}</span>
 				</p>
 			)}
-			<Link href='/'>Go home</Link>
+			{call.state.custom.createdBy && (
+				<p>
+					Создатель:{' '}
+					<span className='font-bold'>{call.state.custom.createdBy}</span>
+				</p>
+			)}
+			<Link href='/'>На главную</Link>
 		</div>
 	)
 }
@@ -202,8 +212,8 @@ function UpcomingMeetingScreen() {
 function MeetingEndedScreen() {
 	return (
 		<div className='flex flex-col items-center gap-6'>
-			<p className='font-bold'>This meeting has ended</p>
-			<Link href='/'>Go home</Link>
+			<p className='font-bold'>Эта встреча завершена</p>
+			<Link href='/'>На главную</Link>
 		</div>
 	)
 }
