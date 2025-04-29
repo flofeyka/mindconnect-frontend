@@ -2,36 +2,18 @@
 import Icon from "@components/Icon";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 import {
-  Button,
   calendar,
   Card,
   CardBody,
   CardHeader,
-  Divider,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Input,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ScrollShadow,
   useDisclosure,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import {
-  getOneCalendar,
-  getPrevCalendar,
-  getNextCalendar,
-  addNote,
-  addTodayCalendar,
-} from "@lib/redux/slices/calendar/calendarSlice";
-import NoteItem from "./Note/NoteItem";
-import ModalWrapper from "@components/Modal";
-import formatDateToTime from "@helpers/formatDateToTime";
 import CalendarItem from "./CalendarItem";
+import {
+  addTodayCalendar,
+  getOneCalendar,
+} from "@lib/redux/slices/calendar/calendarSlice";
 
 export default function Calendar() {
   const [addNoteValue, setAddNoteValue] = useState("");
@@ -43,9 +25,9 @@ export default function Calendar() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   console.log(calendar);
-  // useEffect(() => {
-  //   dispatch(getOneCalendar(calendar?.id as any));
-  // }, [dispatch, calendar?.id]);
+  useEffect(() => {
+    dispatch(addTodayCalendar({ date: new Date().toISOString() }));
+  }, [dispatch]);
 
   useEffect(() => {
     const date = new Date().toISOString();

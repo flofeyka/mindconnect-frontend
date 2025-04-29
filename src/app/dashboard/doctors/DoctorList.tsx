@@ -51,13 +51,13 @@ export default function DoctorList({ doctors }: DoctorCardProps) {
               <CardFooter className="gap-3">
                 <div className="flex gap-1">
                   <p className="font-semibold text-default-400 text-small">
-                    {/* {doctor.subscribedTo.length} */}
+                     {doctor.subscriptions.length}
                   </p>
                   <p className=" text-default-400 text-small">Подписки</p>
                 </div>
                 <div className="flex gap-1">
                   <p className="font-semibold text-default-400 text-small">
-                    {/* {doctor.subscribers.length} */}
+                     {doctor.followers.length}
                   </p>
                   <p className="text-default-400 text-small">Подписчики</p>
                 </div>
@@ -65,7 +65,7 @@ export default function DoctorList({ doctors }: DoctorCardProps) {
                   <Button
                     color="default"
                     variant="solid"
-                    onClick={() =>
+                    onPress={() =>
                       router.push(`/dashboard/doctor/${doctor.id}`)
                     }
                   >
@@ -74,7 +74,7 @@ export default function DoctorList({ doctors }: DoctorCardProps) {
                   <Button
                     color="primary"
                     variant="solid"
-                    onClick={() =>
+                    onPress={() =>
                       router.push(`/dashboard/doctor-details/${doctor.id}`)
                     }
                   >

@@ -1,8 +1,9 @@
 import { useAppDispatch } from "@lib/redux/hooks";
 import { updateNote } from "@lib/redux/slices/calendar/calendarSlice";
-import { Button, ModalFooter, Textarea } from "@nextui-org/react";
+import {Button, ModalFooter, Spinner, Textarea} from "@nextui-org/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import CustomButton from "@components/CustomButton";
 
 export default function NoteForm({
   currentCalendar,
@@ -22,8 +23,11 @@ export default function NoteForm({
 
   const dispatch = useAppDispatch();
 
-  const onSubmit = (data: any) => {
-    dispatch(
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const onSubmit = async (data: any) => {
+      setIsLoading(true);
+    await dispatch(
       updateNote({
         noteId: note.id,
         date: currentCalendar.date,
@@ -31,6 +35,7 @@ export default function NoteForm({
         calendarId: currentCalendar.id,
       })
     );
+    setIsLoading(false)
     onClose();
   };
 
@@ -40,15 +45,16 @@ export default function NoteForm({
         {...register("note")}
         value={newNote}
         onChange={(e) => setNewNote(e.target.value)}
+        disabled={isLoading}
       />
 
       <ModalFooter>
-        <Button color="danger" onClick={onClose}>
+        <CustomButton color="danger" disabled={isLoading} onPress={onClose}>
           Отмена
-        </Button>
-        <Button color="primary" type="submit">
-          Сохранить
-        </Button>
+        </CustomButton>
+        <CustomButton color="primary" disabled={isLoading} type="submit">
+            { isLoading ? 'Загрузка...' : 'Сохранить' }
+        </CustomButton>
       </ModalFooter>
     </form>
   );

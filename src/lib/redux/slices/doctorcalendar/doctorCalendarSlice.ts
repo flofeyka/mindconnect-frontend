@@ -118,11 +118,11 @@ const doctorCalendarSlice = createSlice({
         ) => {
           state.isPending = false;
           state.calendar = state.calendar.map((cal) =>
-            cal._id === action.payload.calendarId
+            cal.id === action.payload.calendarId
               ? {
                   ...cal,
                   timeSlots: cal.timeSlots.filter(
-                    (slot) => slot._id !== action.payload.timeSlotId
+                    (slot) => slot.id !== action.payload.timeSlotId
                   ),
                 }
               : cal

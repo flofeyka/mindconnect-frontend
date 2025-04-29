@@ -54,13 +54,13 @@ export default function NoteItem({
       </ModalWrapper>
       <div className="bg-[#1CA66F] bg-opacity-[0.1] p-2 flex items-center justify-between rounded-md mb-2 cursor-pointer">
         <div className="flex gap-x-2" onClick={onOpen}>
-          <span className="text-gray-500 break-keep w-full">
+          <span className="text-gray-500 break-keep">
             {new Date(note.createdAt).toLocaleTimeString("default", {
               minute: "2-digit",
               hour: "2-digit",
             })}
           </span>
-          <span>{note.note}</span>
+          <span className={'text-center break-all'}>{note.note}</span>
         </div>
         <div onClick={modalDelete.onOpen}>
           <Icon path="/icons/trash.svg" width="30" color="#FF0000" />

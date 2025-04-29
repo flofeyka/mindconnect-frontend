@@ -41,7 +41,11 @@ export const authAPI = {
     return data.user;
   },
   async logout() {
-    const { data } = await baseAPI.post("auth/logout");
+    const { data } = await baseAPI.delete("auth/logout", {
+      data: {
+      refreshToken: localStorage.getItem('refreshToken')
+      }
+    });
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
     return data;

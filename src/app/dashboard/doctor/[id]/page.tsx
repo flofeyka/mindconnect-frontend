@@ -36,33 +36,31 @@ export default function Profile() {
     router.prefetch("/dashboard/add");
   }, [router]);
   const currentUserId = useAppSelector((state) => state.Auth.usersData.id);
-  useEffect(() => {
-    dispatch(getAuthUserData());
-  }, [dispatch]);
   const doctorId = params.id as string;
 
   useEffect(() => {
     if (doctorId) {
       dispatch(fetchDoctorProfileById(doctorId));
-      dispatch(fetchPostsFromDoctor(doctorId));
+      // dispatch(fetchPostsFromDoctor(doctorId));
     }
   }, [dispatch, doctorId]);
 
   useEffect(() => {
     if (profile && currentUserId) {
-      setIsSubscribed(profile.subscribers.includes(currentUserId));
-      setSubscriberCount(profile.subscribers.length);
+      setIsSubscribed(profile.followers.find(follower => follower.id === currentUserId));
+      setSubscriberCount(profile.followers.length);
     }
   }, [profile, currentUserId]);
+
+  console.log(profile?.followers);
+  console.log(currentUserId)
 
   const handleSubscribeToggle = async () => {
     const doctorId = params.id as string;
     if (isSubscribed) {
       await dispatch(unsubscribeFromDoctor(doctorId));
-      setSubscriberCount((prev) => prev - 1);
     } else {
       await dispatch(subscribeToDoctor(doctorId));
-      setSubscriberCount((prev) => prev + 1);
     }
     setIsSubscribed(!isSubscribed);
   };
@@ -115,7 +113,7 @@ export default function Profile() {
             variant={isSubscribed ? "bordered" : "solid"}
             onPress={handleSubscribeToggle}
           >
-            {isSubscribed ? "Unsubscribe" : "Subscribe"}
+            {isSubscribed ? "Отписаться" : "Подписаться"}
           </Button>
         </CardHeader>
 
@@ -125,15 +123,15 @@ export default function Profile() {
         <CardFooter className="gap-3 items-center flex">
           <div className="flex gap-1">
             <p className="font-semibold text-default-400 text-small">
-              {profile.subscribedTo.length}
+              {profile.subscriptions.length}
             </p>
-            <p className=" text-default-400 text-small">Following</p>
+            <p className=" text-default-400 text-small">Подписки</p>
           </div>
           <div className="flex gap-1">
             <p className="font-semibold text-default-400 text-small">
-              {subscriberCount}
+              {profile.followers.length}
             </p>
-            <p className="text-default-400 text-small">Followers</p>
+            <p className="text-default-400 text-small">Подписчики</p>
           </div>
           <Button
             color="primary"
@@ -141,7 +139,7 @@ export default function Profile() {
             className="mr-0 ml-auto"
             onClick={() => router.push(`/dashboard/doctor-details/${doctorId}`)}
           >
-            Book an appointment
+            Забронировать время
           </Button>
           {(params.id as string) === currentUserId && (
             <Button
@@ -150,7 +148,7 @@ export default function Profile() {
               className="mr-0 ml-auto"
               onClick={() => router.push(`/dashboard/add`)}
             >
-              Add Post
+              Добавить пост
             </Button>
           )}
         </CardFooter>

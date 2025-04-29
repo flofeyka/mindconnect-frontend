@@ -1,10 +1,10 @@
 "use client";
 import cn from "@helpers/cn";
 import { Button, ButtonProps } from "@nextui-org/react";
-import { FC } from "react";
+import React, { FC } from "react";
 
 interface CustomButtonProps extends ButtonProps {
-  children: string;
+  children: React.ReactNode;
 }
 
 const CustomButton: FC<CustomButtonProps> = ({ children, color, ...props }) => {
@@ -21,7 +21,7 @@ const CustomButton: FC<CustomButtonProps> = ({ children, color, ...props }) => {
             : "",
           color === "danger"
             ? "bg-danger-400 px-[14px]  border border-separator"
-            : ""
+            : "",
         )}
         {...props}
       >
