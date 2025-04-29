@@ -7,7 +7,6 @@ import { redirect, useParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 import { fetchPostById } from "@lib/redux/slices/post/onePostslice";
 import { fetchDoctorProfileById } from "@lib/redux/slices/doctorprofile/doctorProfileSlice";
-import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
 import { Heart, MessageCircle, RefreshCw, Send, Upload } from "lucide-react";
 import {
   Button,
@@ -63,10 +62,6 @@ export default function Post() {
   const [image, setImage] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-
-  useEffect(() => {
-    dispatch(getAuthUserData());
-  }, [dispatch]);
 
   const handlePhotoUpload = (file: File) => {
     setImage(file);
@@ -150,10 +145,6 @@ export default function Post() {
   }, [dispatch, postId, post]);
 
   useEffect(() => {
-    dispatch(getAuthUserData());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchDoctorProfileById(params.id as string));
   }, [dispatch, params.id]);
 
@@ -218,19 +209,19 @@ export default function Post() {
             >
               <img
                 className="h-10 w-10 rounded-full mr-2"
-                src={profile?.image}
-                alt={profile?.firstName}
+                src={post.user?.image}
+                alt={post.user?.firstName}
               />
               <div className="text-sm">
                 <p className="text-gray-100 font-semibold">
-                  {profile?.firstName}
+                  {post.user?.firstName}
                 </p>
                 <p className="text-gray-400">{formatDate(post.createdAt)}</p>
               </div>
             </div>
             {post.owner == currentUserId && (
               <>
-                <Button onPress={modalEdit.onOpen}>Edit</Button>
+                <Button onPress={modalEdit.onOpen}>Редактировать</Button>
                 <Modal
                   isOpen={modalEdit.isOpen}
                   onOpenChange={modalEdit.onOpenChange}
@@ -239,7 +230,7 @@ export default function Post() {
                     {(onClose) => (
                       <>
                         <ModalHeader className="flex flex-col gap-1">
-                          Edit post {post.title}
+                          Редактировать пост {post.title}
                         </ModalHeader>
                         <ModalBody>
                           <form onSubmit={handleSubmit} className="space-y-4">
@@ -340,12 +331,12 @@ export default function Post() {
                               />
                             </div>
                             <div className="flex justify-end space-x-2">
-                              <Button type="button" onClick={modalEdit.onClose}>
+                              <Button type="button" onPress={modalEdit.onClose}>
                                 Cancel
                               </Button>
                               <Button type="submit">
                                 <Send className="w-4 h-4 mr-2" />
-                                Edit
+                                Изменить
                               </Button>
                             </div>
                           </form>
@@ -358,7 +349,7 @@ export default function Post() {
                   onPress={modal1.onOpen}
                   className="text-white bg-red-500 px-2 py-1 "
                 >
-                  Delete Post
+                  Удалить
                 </Button>
                 <Modal
                   isOpen={modal1.isOpen}
@@ -388,12 +379,11 @@ export default function Post() {
           <img
             className="w-full object-cover mb-4"
             src={post.image as any}
-            alt={post.title}
+            alt={post.id}
           />
           <h1 className="block mt-1 text-lg leading-tight font-medium text-white">
-            {post.title}
           </h1>
-          <p className="mt-2 text-gray-200">{post.description}</p>
+          <p className="mt-2 text-gray-200">{post.value}</p>
 
           <div className="mt-4 flex items-center">
             <button
@@ -402,7 +392,7 @@ export default function Post() {
                 liked ? "text-red-500" : "text-gray-300"
               }`}
             >
-              <span className="text-gray-300 mr-1">{likes}</span>
+              {/*<span className="text-gray-300 mr-1">{likes}</span>*/}
               <Heart className="mr-1" size={20} />
               {liked ? "Unlike" : "Like"}
             </button>

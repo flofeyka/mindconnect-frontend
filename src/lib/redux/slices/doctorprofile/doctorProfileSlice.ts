@@ -88,10 +88,10 @@ export const fetchAllDoctors = createAsyncThunk(
 export const fetchPostsFromDoctor = createAsyncThunk(
     "doctorProfile/fetchPosts",
     async (doctorId: string) => {
-        const response = await baseAPI.get(
-            `https://mindconnect-vebk.onrender.com/api/post/${doctorId}`,
+        const {data} = await baseAPI.get(
+            `/post/${doctorId}`,
         );
-        return response.data;
+        return data;
     }
 );
 

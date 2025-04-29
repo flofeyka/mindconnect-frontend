@@ -19,7 +19,6 @@ import {
   unsubscribeFromDoctor,
 } from "@lib/redux/slices/doctorprofile/doctorProfileSlice";
 import { useParams } from "next/navigation";
-import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
 import { useRouter } from "next/navigation";
 
 export default function UserCard() {
@@ -32,9 +31,6 @@ export default function UserCard() {
   const params = useParams();
 
   const currentUserId = useAppSelector((state) => state.Auth.usersData.id);
-  useEffect(() => {
-    dispatch(getAuthUserData());
-  }, [dispatch]);
   const doctorId = params.id as string;
 
   useEffect(() => {

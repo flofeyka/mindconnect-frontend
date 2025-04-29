@@ -6,7 +6,6 @@ import { Button, Input, Textarea } from "@nextui-org/react";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 import { addPost } from "@lib/redux/slices/posts/postSlice";
 import { useRouter } from "next/navigation";
-import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
 import { fetchPostsFromDoctor } from "@lib/redux/slices/doctorprofile/doctorProfileSlice";
 import Image from "next/image";
 
@@ -19,10 +18,6 @@ export default function AddPage() {
   const [image, setImage] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-
-  useEffect(() => {
-    dispatch(getAuthUserData());
-  }, [dispatch]);
 
   const handlePhotoUpload = (file: File) => {
     setImage(file);
@@ -75,8 +70,8 @@ export default function AddPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (title && description && image) {
-      const postData = { title, description, image };
+    if (description) {
+      const postData = { description};
 
       await dispatch(addPost(postData));
       setTimeout(() => {

@@ -1,6 +1,7 @@
 import { commentType, PostType } from "@lib/types";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import baseAPI from "@lib/API/api";
 
 interface PostsState {
   posts: PostType[];
@@ -17,33 +18,24 @@ const initialState: PostsState = {
 
 // Async thunks
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
-  const response = await axios.get(
-    "https://mindconnect-vebk.onrender.com/api/post/last-posts",
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }
+  const response = await baseAPI.get(
+    "/post/"
   );
   return response.data;
 });
 export const addPost = createAsyncThunk(
   "posts/addPost",
-  async (postData: { title: string; description: string; image: File }) => {
+  async (postData: { description: string}) => {
     const formData = new FormData();
-    formData.append("title", postData.title);
-    formData.append("description", postData.description);
-    formData.append("image", postData.image);
+    //formData.append("title", postData.title);
+    formData.append("value", postData.description);
+    // formData.append("image", postData.image);
 
-    const response = await axios.post(
-      "https://mindconnect-vebk.onrender.com/api/post/add-post",
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
+    const response = await baseAPI.post(
+      "/post/",
+        {
+            value: postData.description
+        }
     );
     return response.data;
   }
@@ -64,15 +56,9 @@ export const updatePost = createAsyncThunk(
       formData.append("description", postData.description);
     if (postData.image) formData.append("image", postData.image);
 
-    const response = await axios.patch(
-      `https://mindconnect-vebk.onrender.com/api/post/update-post/${postId}`,
+    const response = await baseAPI.put(
+      `/update-post/${postId}`,
       formData,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
     );
     return response.data;
   }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
-import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
 import { Card, CardHeader, Avatar } from "@nextui-org/react";
 import { Bot } from "lucide-react";
 import { useEffect } from "react";
@@ -10,10 +9,6 @@ import { Message } from "./page";
 export default function MessageItem({ message }: { message: Message }) {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.Auth.usersData);
-
-  useEffect(() => {
-    dispatch(getAuthUserData());
-  }, [dispatch]);
 
   const { role, content } = message;
   if (role === "assistant") {

@@ -8,7 +8,6 @@ import { Spinner, Tooltip } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 import Loading from "./loading";
 import { MessageSquare } from "lucide-react";
-import { getAuthUserData } from "@lib/redux/slices/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
 
 export default function DashBoardLayout({
@@ -60,19 +59,14 @@ export default function DashBoardLayout({
     }
   }, [pathname]);
 
-  const { isAuth } = useAppSelector((state) => state.Auth);
+  const { isAuth, isPending } = useAppSelector((state) => state.Auth);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const getUser = async () => {
-      await dispatch(getAuthUserData());
-
-      if (!isAuth) {
+      if (!isAuth && !isPending) {
         redirect("/auth/login");
       }
-    };
 
-    getUser();
   }, []);
 
   return (
