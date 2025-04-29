@@ -41,8 +41,7 @@ export default function Doctors() {
         problems: [problem],
         languages: [language],
         gender,
-      })
-    );
+      }));
   }, [dispatch, search, problem, language, gender]);
 
   useEffect(() => {

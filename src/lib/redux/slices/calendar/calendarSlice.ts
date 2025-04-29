@@ -68,7 +68,7 @@ const calendarSlice = createSlice({
           console.log("action.payload", action.payload);
           state.calendar = state.calendar.map((calendar) => {
             if (calendar.id === action.payload.calendarId) {
-              calendar.notes.push(action.payload)
+              calendar.notes.push(action.payload);
             }
             return calendar;
           });
@@ -77,20 +77,34 @@ const calendarSlice = createSlice({
       )
 
       // deleteNote
-      .addCase(deleteNote.fulfilled, (state, action: PayloadAction<{success: boolean, message: string, noteId: number}>) => {
-        state.calendar = state.calendar.map((calendar) => {
-          if(calendar.notes.find(note => note.id === action.payload.noteId)){
-            calendar.notes = calendar.notes.filter(note => note.id !== action.payload.noteId)
-          }
-          return calendar;
-        })
-        state.isPending = false;
-      })
+      .addCase(
+        deleteNote.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            success: boolean;
+            message: string;
+            noteId: number;
+          }>
+        ) => {
+          state.calendar = state.calendar.map((calendar) => {
+            if (
+              calendar.notes.find((note) => note.id === action.payload.noteId)
+            ) {
+              calendar.notes = calendar.notes.filter(
+                (note) => note.id !== action.payload.noteId
+              );
+            }
+            return calendar;
+          });
+          state.isPending = false;
+        }
+      )
 
       // updateNote
       .addCase(updateNote.fulfilled, (state, action) => {
         state.calendar = state.calendar.map((calendar) => {
-          if (calendar.id === action.payload?.id) {
+          if (calendar.id === action.payload?.note.calendarId) {
             return {
               ...calendar,
               notes: calendar.notes.map((note) =>
@@ -129,8 +143,14 @@ const calendarSlice = createSlice({
       .addCase(
         addTodayCalendar.fulfilled,
         (state, action: PayloadAction<calendarType>) => {
-          state.calendar.push(action.payload);
-          state.oneCalendar = action.payload;
+          if (
+            !state.calendar.find(
+              (calendar) => calendar.id === action.payload.id
+            )
+          ) {
+            state.calendar.push(action.payload);
+            state.oneCalendar = action.payload;
+          }
           state.isPending = false;
         }
       )
@@ -187,23 +207,18 @@ export const addTodayCalendar = createAsyncThunk<
   calendarType,
   { date: string },
   { rejectValue: string }
->(
-  "calendar/addTodayCalendar",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await calendarAPI.createTodayCalendar();
-      if (response.success) {
-        return response.calendar;
-      } else {
-        return rejectWithValue("Failed to create today's calendar");
-      }
-    } catch (error) {
-      return rejectWithValue(
-        "An error occurred while creating today's calendar"
-      );
+>("calendar/addTodayCalendar", async (_, { rejectWithValue }) => {
+  try {
+    const response = await calendarAPI.createTodayCalendar();
+    if (response.success) {
+      return response.calendar;
+    } else {
+      return rejectWithValue("Failed to create today's calendar");
     }
+  } catch (error) {
+    return rejectWithValue("An error occurred while creating today's calendar");
   }
-);
+});
 
 export const getCalendarByDates = createAsyncThunk(
   "calendar/getCalendarByDates",

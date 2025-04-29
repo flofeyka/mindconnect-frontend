@@ -2,7 +2,7 @@
 
 import Icon from "@components/Icon";
 import { useAppDispatch, useAppSelector } from "@lib/redux/hooks";
-import { Button, Input, Link } from "@nextui-org/react";
+import { Button, Input, Link, Spinner } from "@nextui-org/react";
 import { FormikValues, useFormik } from "formik";
 import * as Yup from "yup";
 import InputForm from "@components/InputForm";
@@ -10,9 +10,11 @@ import InputCheckBox from "@components/InputCheckBox";
 import { signUp } from "@lib/redux/slices/auth/authSlice";
 import Vector from "@components/Vector";
 import Title from "@components/Title";
+import { useState } from "react";
 
 export default function Register() {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const formik = useFormik({
     initialValues: {
@@ -34,9 +36,13 @@ export default function Register() {
         .oneOf([Yup.ref("password")], "Пароли должны совпадать"),
       isDoctor: Yup.boolean(),
     }),
-    onSubmit: (values: FormikValues) => {
+    onSubmit: async (values: FormikValues) => {
+      setLoading(true);
       const { firstName, email, password, lastName, isDoctor } = values;
-      dispatch(signUp({ firstName, email, password, lastName, isDoctor }));
+      await dispatch(
+        signUp({ firstName, email, password, lastName, isDoctor })
+      );
+      setLoading(false);
       // setTimeout(() => {
       //   window.open("/auth/login", "_self");
       // }, 1000);
@@ -63,6 +69,7 @@ export default function Register() {
         </div>
         <div className="flex flex-col gap-[10px]">
           <InputForm
+            disabled={loading}
             name="firstName"
             value={formik.values.firstName}
             onChange={formik.handleChange}
@@ -75,6 +82,7 @@ export default function Register() {
             <div className="error">{formik.errors.firstName as any}</div>
           )}
           <InputForm
+            disabled={loading}
             name="lastName"
             value={formik.values.lastName}
             onChange={formik.handleChange}
@@ -87,6 +95,7 @@ export default function Register() {
             <div className="error">{formik.errors.lastName as any}</div>
           )}
           <InputForm
+            disabled={loading}
             name="email"
             value={formik.values.email}
             onChange={formik.handleChange}
@@ -99,6 +108,7 @@ export default function Register() {
             <div className="error">{formik.errors.email as any}</div>
           )}
           <InputForm
+            disabled={loading}
             name="password"
             value={formik.values.password}
             onChange={formik.handleChange}
@@ -111,6 +121,7 @@ export default function Register() {
             <div className="error">{formik.errors.password as any}</div>
           )}
           <InputForm
+            disabled={loading}
             name="repeatPassword"
             value={formik.values.repeatPassword}
             onChange={formik.handleChange}
@@ -123,6 +134,7 @@ export default function Register() {
             <div className="error">{formik.errors.repeatPassword as any}</div>
           )}
           <InputCheckBox
+            disabled={loading}
             name="isDoctor" // Link this checkbox to formik's state
             checked={formik.values.isDoctor}
             onChange={formik.handleChange}
@@ -130,7 +142,7 @@ export default function Register() {
           >
             <span className="text-sm">Вы врач?</span>
           </InputCheckBox>
-          <InputCheckBox color="success">
+          <InputCheckBox disabled={loading} color="success">
             <span className="text-sm">Я согласен с </span>
             <a
               href="#"
@@ -140,15 +152,16 @@ export default function Register() {
             </a>
           </InputCheckBox>
           <div className="flex gap-2">
-            <Button onClick={() => window.history.back()}>
+            <Button disabled={loading} onPress={() => window.history.back()}>
               <Vector />
             </Button>
             <Button
+              disabled={loading}
               className="w-full text-white font-bold border-green-600 border-1"
               color="success"
               type="submit"
             >
-              Создать аккаунт
+              {loading ? <Spinner color="white" /> : "Создать аккаунт"}
             </Button>
           </div>
           <div className="text-center mt-2">

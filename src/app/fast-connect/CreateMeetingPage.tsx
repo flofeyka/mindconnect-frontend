@@ -111,15 +111,15 @@ export default function CreateMeetingPage() {
           value={participantsInput}
           onChange={setParticipantsInput}
         />
-        {user.isDoctor ? (
+        {/*{user.isDoctor ? (*/}
           <CustomButton onPress={createMeeting} className="w-full">
             Create meeting
           </CustomButton>
-        ) : (
-          <CustomButton onPress={createMeeting} className="w-full">
-            Enter meeting with doctor
-          </CustomButton>
-        )}
+        {/*) : (*/}
+        {/*  <CustomButton onPress={createMeeting} className="w-full">*/}
+        {/*    Enter meeting with doctor*/}
+        {/*  </CustomButton>*/}
+        {/*)}*/}
       </Card>
       {call && <MeetingLink call={call} />}
     </div>

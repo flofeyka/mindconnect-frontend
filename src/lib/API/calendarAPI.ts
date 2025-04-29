@@ -3,8 +3,8 @@ import baseAPI from "./api";
 
 export const calendarAPI = {
   async addNote(body: { calendar_id: number; note: string }) {
-    const {data} = await baseAPI.post(`calendar/note`, {
-      ...body
+    const { data } = await baseAPI.post(`calendar/note`, {
+      ...body,
     });
     return data;
   },
@@ -13,18 +13,17 @@ export const calendarAPI = {
     //   `calendar/dates-calendar?startDate=${data.startDate}&endDate=${data.endDate}`
     // );
     // return Response.data;
+    let end = new Date(body.endDate).setHours(23, 59, 59);
     const { data } = await baseAPI.get(`calendar/all/by-dates`, {
       params: {
         start_date: body.startDate,
-        end_date: body.endDate,
+        end_date: new Date(end),
       },
     });
     return data;
   },
   async deleteNote(body: { date: string; noteId: number }) {
-    const {data} = await baseAPI.delete(
-      `calendar/note/${body.noteId}`
-    );
+    const { data } = await baseAPI.delete(`calendar/note/${body.noteId}`);
     return data;
   },
   async getOneCalendar(calendar_id: number) {
@@ -42,16 +41,15 @@ export const calendarAPI = {
     note: string;
   }) {
     const { data, status } = await baseAPI.put(
-      `calendar/update-note/${date}/notes/${noteId} `,
+      `calendar/note`,
       {
-        date,
-        noteId,
+        note_id: noteId,
         note,
       }
     );
     return {
       success: status === 200,
-      note: data.note,
+      note: data,
     };
   },
   async deleteCalendar({ calendarId }: { calendarId: number }) {

@@ -46,8 +46,8 @@ export default function UserCard() {
 
   useEffect(() => {
     if (profile && currentUserId) {
-      setIsSubscribed(profile.subscribers.includes(currentUserId));
-      setSubscriberCount(profile.subscribers.length);
+      setIsSubscribed(profile.followers.includes(currentUserId));
+      setSubscriberCount(profile.followers.length);
     }
   }, [profile, currentUserId]);
 
@@ -121,7 +121,7 @@ export default function UserCard() {
         <CardFooter className="gap-3 items-center flex">
           <div className="flex gap-1">
             <p className="font-semibold text-default-400 text-small">
-              {profile.subscribedTo.length}
+              {profile.subscriptions.length}
             </p>
             <p className=" text-default-400 text-small">Following</p>
           </div>

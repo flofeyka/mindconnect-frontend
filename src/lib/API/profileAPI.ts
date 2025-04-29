@@ -1,5 +1,14 @@
-import axios from "axios";
+import baseAPI from "@lib/API/api";
 
-const intance = axios.create({
-    baseURL: ""
-})
+export const UserAPI = {
+    async getFollowers(id: number) {
+        const {data} = await baseAPI.get(`/user/${id}/followers`);
+
+        return data;
+    },
+    async getSubscriptions(id: number) {
+        const {data} = await baseAPI.get(`/user/${id}/subscriptions`);
+
+        return data;
+    }
+}
